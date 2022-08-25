@@ -1,7 +1,7 @@
 # Hey 👋🏿
 
 Sou Desenvolvedor Front end, com aproximadamente 1 ano de experiência na área, mas estou disposto a aprender cada vez mais.
-Sou formado em Sistemas de informação e atualmente estou cursando uma segunda graduação no curso de engeharia de software. Tenho certeza que esse é apenas o início de uma grande jornada de aprendizado e troca de conhecimento.
+Sou formado em Sistemas de informação e atualmente estou cursando uma segunda graduação no curso de engenharia de software. Tenho certeza que esse é apenas o início de uma grande jornada de aprendizado e troca de conhecimento.
 
 Sempre desenvolvo projetos pessoais visando consolidar os novos aprendizados e disponibilizo para o público no meu Github.
 
