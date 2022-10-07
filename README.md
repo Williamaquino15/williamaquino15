@@ -5,7 +5,7 @@ Sou formado em Sistemas de informação e atualmente estou cursando uma segunda 
 
 Sempre desenvolvo projetos pessoais visando consolidar os novos aprendizados e disponibilizo para o público no meu Github.
 
-#### 🌍 "Quanto mais eu sei, mais eu sou"🧠
+### 🌍 "Quanto mais eu sei, mais eu sou"🧠
 
 #### Connect with me:
 <a href="https://www.linkedin.com/in/william-aquino-7ba42a165/">
