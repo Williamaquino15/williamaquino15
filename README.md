@@ -5,6 +5,8 @@ Sou formado em Sistemas de informação e atualmente estou cursando uma segunda 
 
 Sempre desenvolvo projetos pessoais visando consolidar os novos aprendizados e disponibilizo para o público no meu Github.
 
+[![@williamaquino15's Holopin board](https://holopin.me/williamaquino15)](https://holopin.io/@williamaquino15)
+
 ### 🌍 "Quanto mais eu sei, mais eu sou"🧠
 
 #### Connect with me:
