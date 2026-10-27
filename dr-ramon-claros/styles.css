@@ -92,6 +92,7 @@ strong { font-weight: 600; }
 .hero p { color: var(--muted); max-width: 460px; margin-bottom: 32px; }
 .hero p strong { color: var(--text); }
 .ph--hero { aspect-ratio: 4 / 5; max-width: 420px; margin-left: auto; box-shadow: 0 30px 80px rgba(0,0,0,.6); }
+.ph--hero > img { object-position: center 30%; }
 
 /* Ribbon */
 .ribbon { background: var(--gold-grad); overflow: hidden; padding: 10px 0; }
