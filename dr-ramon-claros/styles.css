@@ -167,7 +167,8 @@ strong { font-weight: 600; }
 /* Carousel */
 .carousel { overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 8px; scrollbar-width: thin; scrollbar-color: var(--gold) transparent; }
 .carousel__track { display: flex; gap: 14px; width: max-content; }
-.result { width: 200px; aspect-ratio: 4 / 5; scroll-snap-align: start; border-radius: 14px; }
+.result { width: 240px; aspect-ratio: 9 / 14; scroll-snap-align: start; border-radius: 14px; }
+.result > img { object-fit: contain; }
 
 /* FAQ */
 .dots { letter-spacing: .3em; margin-bottom: 4px; }
