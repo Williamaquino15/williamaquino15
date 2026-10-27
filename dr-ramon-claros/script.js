@@ -51,7 +51,7 @@ document.querySelectorAll(".faq details").forEach((d) => {
   const slides = [...carousel.querySelectorAll(".result")];
   const dotsWrap = document.querySelector(".slider__dots");
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const INTERVAL = 3000;
+  const INTERVAL = 2000;
   let timer = null;
   let hovering = false;
 
