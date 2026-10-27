@@ -244,6 +244,7 @@ strong { font-weight: 600; }
   .split--about .ph--about { max-width: 420px; margin: 0 auto; }
   .list-dots { grid-template-columns: 1fr; }
   .step { flex-basis: 100%; }
+  .split__text .btn { display: flex; width: fit-content; margin-inline: auto; }
   .slider__btn--prev { left: 4px; }
   .slider__btn--next { right: 4px; }
   .result { width: 72vw; max-width: 300px; scroll-snap-align: center; }

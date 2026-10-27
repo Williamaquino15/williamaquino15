@@ -98,3 +98,11 @@ document.querySelectorAll(".faq details").forEach((d) => {
   updateDots();
   start();
 })();
+
+// Na prévia, o vídeo é carregado inteiro antes de tocar (o servidor não envia por partes, o que trava o player no celular)
+document.querySelectorAll("video[data-src]").forEach((v) => {
+  fetch(v.dataset.src)
+    .then((r) => r.blob())
+    .then((b) => { v.src = URL.createObjectURL(b); })
+    .catch(() => { v.src = v.dataset.src; });
+});
