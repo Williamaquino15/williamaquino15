@@ -108,22 +108,6 @@ strong { font-weight: 600; }
 .videos { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
 .video-card { width: min(280px, 100%); }
 .ph--video { aspect-ratio: 9 / 16; border-radius: 20px; }
-.video-card--ig { width: min(360px, 100%); display: grid; gap: 12px; justify-items: center; }
-.ig-embed {
-  width: 100%; height: 640px; border: 0; border-radius: 20px;
-  background: #fff; box-shadow: 0 20px 60px rgba(0,0,0,.5);
-}
-.ig-link { font-size: .8rem; color: var(--gold); border-bottom: 1px solid currentColor; }
-.ig-card {
-  width: 100%; aspect-ratio: 9 / 16; border-radius: 20px;
-  display: grid; place-content: center; gap: 16px; text-align: center; padding: 24px;
-  background: radial-gradient(circle at 50% 35%, rgba(217,168,91,.18), transparent 60%), var(--bg-soft);
-  border: 1px solid var(--border);
-}
-.ig-card__play {
-  width: 72px; height: 72px; margin: 0 auto; border-radius: 50%;
-  background: var(--gold-grad); color: #1a1205; display: grid; place-items: center; font-size: 1.6rem;
-}
 
 /* Panel */
 .panel {
