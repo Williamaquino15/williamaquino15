@@ -1,8 +1,8 @@
 // ===== CONFIGURAÇÃO — edite aqui =====
 const CONFIG = {
   // Número do WhatsApp com DDI + DDD, só dígitos (ex.: 5519999999999)
-  whatsapp: "5519000000000",
-  whatsappMessage: "Olá! Vim pelo site e gostaria de agendar uma consulta com o Dr. Ramon Claros.",
+  whatsapp: "5519991545887",
+  whatsappMessage: "Oii vim do Instagram!\nQuero agendar uma consulta",
   instagram: "https://www.instagram.com/drramonclaros/",
 };
 
