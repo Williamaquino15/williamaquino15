@@ -146,7 +146,8 @@ strong { font-weight: 600; }
 .collage > :nth-child(2) { grid-area: 1 / 2 / 3 / 3; }
 .collage > :nth-child(3) { grid-area: 2 / 1; }
 .split--about { grid-template-columns: 1.1fr .9fr; }
-.ph--about { aspect-ratio: 4 / 4.2; }
+.ph--about { aspect-ratio: 4 / 5; }
+.ph--about > img { object-position: center 20%; }
 
 /* Steps */
 .steps { display: flex; flex-wrap: wrap; justify-content: center; gap: 16px; }
