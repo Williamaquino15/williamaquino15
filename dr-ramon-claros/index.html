@@ -132,7 +132,9 @@
       <div class="container">
         <h2 class="title title--caps reveal">Resultados reais<br /><span class="gold">de pacientes reais</span></h2>
         <p class="muted lead reveal">Transformações conquistadas com acompanhamento médico, estratégia e constância.</p>
-        <div class="carousel reveal">
+        <div class="slider reveal">
+          <button class="slider__btn slider__btn--prev" type="button" aria-label="Resultado anterior">‹</button>
+          <div class="carousel">
           <div class="carousel__track">
             <div class="result ph" data-label="Resultado 1"><img src="assets/fotos/resultado-1.webp" alt="Resultado de paciente" onerror="this.remove()" /></div>
             <div class="result ph" data-label="Resultado 2"><img src="assets/fotos/resultado-2.webp" alt="Resultado de paciente" onerror="this.remove()" /></div>
@@ -144,7 +146,10 @@
             <div class="result ph" data-label="Resultado 8"><img src="assets/fotos/resultado-8.webp" alt="Resultado de paciente" onerror="this.remove()" /></div>
             <div class="result ph" data-label="Resultado 9"><img src="assets/fotos/resultado-9.webp" alt="Resultado de paciente" onerror="this.remove()" /></div>
           </div>
+          </div>
+          <button class="slider__btn slider__btn--next" type="button" aria-label="Próximo resultado">›</button>
         </div>
+        <div class="slider__dots" aria-hidden="true"></div>
         <a href="#" class="btn btn--gold js-whatsapp reveal">Agendar consulta <span aria-hidden="true">↗</span></a>
       </div>
     </section>
