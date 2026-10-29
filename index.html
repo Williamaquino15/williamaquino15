@@ -721,11 +721,23 @@
     });
   });
 
-  // Carrossel de resultados
+  // Carrossel de resultados: passa sozinho e volta ao início no fim
   const track = document.getElementById("ba-track");
-  const step = () => track.querySelector(".ba").offsetWidth + 24;
-  document.getElementById("ba-prev").addEventListener("click", () => track.scrollBy({ left: -step() }));
-  document.getElementById("ba-next").addEventListener("click", () => track.scrollBy({ left: step() }));
+  const cards = track.querySelectorAll(".ba");
+  const step = () => cards[1].offsetLeft - cards[0].offsetLeft;
+  const atEnd = () => track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+  const next = () => atEnd() ? track.scrollTo({ left: 0 }) : track.scrollBy({ left: step() });
+  const prev = () => track.scrollLeft <= 4 ? track.scrollTo({ left: track.scrollWidth }) : track.scrollBy({ left: -step() });
+  let paused = false;
+  let timer;
+  const restart = () => { clearInterval(timer); timer = setInterval(() => { if (!paused && !document.hidden) next(); }, 3200); };
+  document.getElementById("ba-prev").addEventListener("click", () => { prev(); restart(); });
+  document.getElementById("ba-next").addEventListener("click", () => { next(); restart(); });
+  track.addEventListener("mouseenter", () => { paused = true; });
+  track.addEventListener("mouseleave", () => { paused = false; });
+  track.addEventListener("touchstart", () => { paused = true; }, { passive: true });
+  track.addEventListener("touchend", () => { setTimeout(() => { paused = false; restart(); }, 2500); });
+  if (!matchMedia("(prefers-reduced-motion: reduce)").matches) restart();
 
   const io = new IntersectionObserver((entries) => {
     entries.forEach((en) => {
