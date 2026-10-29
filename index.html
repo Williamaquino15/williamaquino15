@@ -663,7 +663,7 @@
       <div>
         <h4>Contato</h4>
         <ul>
-          <li><a href="#" data-wa>WhatsApp: (00) 00000-0000</a></li>
+          <li><a href="#" data-wa>Agendar pelo WhatsApp</a></li>
           <li><a href="https://www.instagram.com/ed_rabelo/" target="_blank" rel="noopener">@ed_rabelo</a></li>
           <li>Rua Exemplo, 000 · Sala 00</li>
           <li>Cidade · UF</li>
@@ -689,12 +689,11 @@
 </a>
 
 <script>
-  // Número do WhatsApp com DDI + DDD, só dígitos (ex: 5511999999999)
-  const WHATSAPP = "5500000000000";
-  const WA_MSG = "Olá, Dr. Ed! Vim pelo site e gostaria de agendar uma consulta.";
+  // Link de agendamento pelo WhatsApp (o mesmo da bio do Instagram)
+  const WHATSAPP_URL = "https://w.app/4z8jbm";
 
   document.querySelectorAll("[data-wa]").forEach((a) => {
-    a.href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(WA_MSG)}`;
+    a.href = WHATSAPP_URL;
     a.target = "_blank";
     a.rel = "noopener";
   });
