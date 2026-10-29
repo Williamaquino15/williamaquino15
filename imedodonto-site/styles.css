@@ -1,28 +1,28 @@
 /* =========================================================
    IMED Odonto — estilos
-   Paleta: azul petróleo profundo + dourado champanhe + marfim
+   Paleta: verde-lodo (musgo) profundo + dourado champanhe + marfim
    ========================================================= */
 
 :root {
-  --navy-900: #0b1f2e;
-  --navy-800: #0f2a3d;
-  --navy-700: #163a52;
-  --teal-500: #2f7d86;
+  --moss-900: #1e261b;
+  --moss-800: #2a3524;
+  --moss-700: #3b4a32;
+  --olive-500: #6e7a48;
   --gold-500: #c6a467;
   --gold-400: #d8bd88;
   --gold-100: #f3ead9;
-  --ivory: #faf7f2;
+  --ivory: #f6f4ec;
   --white: #ffffff;
-  --ink: #1b2a35;
-  --muted: #5d6b75;
-  --line: rgba(15, 42, 61, .1);
+  --ink: #23291f;
+  --muted: #646a5a;
+  --line: rgba(42, 53, 36, .1);
 
   --serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
   --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 
   --radius: 18px;
-  --shadow-sm: 0 2px 10px rgba(11, 31, 46, .06);
-  --shadow-lg: 0 30px 60px -20px rgba(11, 31, 46, .28);
+  --shadow-sm: 0 2px 10px rgba(30, 38, 27, .06);
+  --shadow-lg: 0 30px 60px -20px rgba(30, 38, 27, .28);
   --ease: cubic-bezier(.2, .7, .2, 1);
   --header-h: 84px;
 }
@@ -65,7 +65,7 @@ em {
   font-weight: 600;
   letter-spacing: .22em;
   text-transform: uppercase;
-  color: var(--teal-500);
+  color: var(--olive-500);
 }
 .eyebrow::before {
   content: "";
@@ -79,7 +79,7 @@ em {
 .section__title {
   font-family: var(--serif);
   font-size: clamp(2.2rem, 4.4vw, 3.4rem);
-  color: var(--navy-800);
+  color: var(--moss-800);
   letter-spacing: -.01em;
 }
 
@@ -109,7 +109,7 @@ em {
 
 .btn--gold {
   background: linear-gradient(135deg, var(--gold-400), var(--gold-500));
-  color: var(--navy-900);
+  color: var(--moss-900);
   box-shadow: 0 10px 30px -10px rgba(198, 164, 103, .7);
 }
 .btn--gold:hover { box-shadow: 0 16px 36px -10px rgba(198, 164, 103, .85); }
@@ -120,15 +120,15 @@ em {
 }
 .btn--ghost:hover { background: rgba(255, 255, 255, .08); border-color: var(--white); }
 
-.btn--dark { background: var(--navy-800); color: var(--white); }
-.btn--dark:hover { background: var(--navy-700); }
+.btn--dark { background: var(--moss-800); color: var(--white); }
+.btn--dark:hover { background: var(--moss-700); }
 
 .link-arrow {
   display: inline-flex;
   gap: .5rem;
   margin-top: 1rem;
   font-weight: 500;
-  color: var(--navy-800);
+  color: var(--moss-800);
   border-bottom: 1px solid var(--gold-500);
   padding-bottom: .25rem;
 }
@@ -147,7 +147,7 @@ em {
 }
 .header.is-scrolled {
   --header-h: 70px;
-  background: rgba(11, 31, 46, .88);
+  background: rgba(30, 38, 27, .88);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   box-shadow: 0 1px 0 rgba(255, 255, 255, .06);
@@ -204,15 +204,15 @@ em {
   align-items: center;
   padding: calc(var(--header-h) + 3rem) 0 6rem;
   color: var(--white);
-  background: var(--navy-900);
+  background: var(--moss-900);
   overflow: hidden;
 }
 .hero__bg {
   position: absolute; inset: 0;
   background:
-    radial-gradient(60% 70% at 85% 30%, rgba(47, 125, 134, .45), transparent 70%),
+    radial-gradient(60% 70% at 85% 30%, rgba(110, 122, 72, .45), transparent 70%),
     radial-gradient(50% 60% at 10% 100%, rgba(198, 164, 103, .18), transparent 70%),
-    linear-gradient(160deg, var(--navy-800), var(--navy-900));
+    linear-gradient(160deg, var(--moss-800), var(--moss-900));
 }
 .hero__bg::after {
   content: "";
@@ -263,7 +263,7 @@ em {
   border-radius: 220px 220px var(--radius) var(--radius);
   background:
     radial-gradient(circle at 50% 38%, rgba(255,255,255,.22), transparent 55%),
-    linear-gradient(170deg, var(--teal-500), var(--navy-700) 75%);
+    linear-gradient(170deg, var(--olive-500), var(--moss-700) 75%);
   background-size: cover;
   background-position: center;
   box-shadow: var(--shadow-lg);
@@ -290,7 +290,7 @@ em {
   box-shadow: var(--shadow-lg);
   animation: float 6s ease-in-out infinite;
 }
-.hero__badge strong { display: block; font-size: .92rem; color: var(--navy-800); }
+.hero__badge strong { display: block; font-size: .92rem; color: var(--moss-800); }
 .hero__badge small { font-size: .78rem; color: var(--muted); }
 .hero__badge-icon {
   display: grid; place-items: center;
@@ -337,7 +337,7 @@ em {
 }
 .pillar + .pillar { border-left: 1px solid var(--line); }
 .pillar svg { flex: none; width: 30px; height: 30px; color: var(--gold-500); }
-.pillar strong { display: block; color: var(--navy-800); font-weight: 600; font-size: .95rem; }
+.pillar strong { display: block; color: var(--moss-800); font-weight: 600; font-size: .95rem; }
 .pillar span { font-size: .85rem; color: var(--muted); line-height: 1.5; }
 
 /* ---------- Sobre ---------- */
@@ -351,10 +351,10 @@ em {
 }
 .about__img--a {
   inset: 0 22% 18% 0;
-  background-color: var(--navy-700);
+  background-color: var(--moss-700);
   background-image:
     radial-gradient(circle at 30% 25%, rgba(255,255,255,.18), transparent 50%),
-    linear-gradient(150deg, var(--teal-500), var(--navy-800));
+    linear-gradient(150deg, var(--olive-500), var(--moss-800));
 }
 .about__img--b {
   inset: 45% 0 0 40%;
@@ -375,7 +375,7 @@ em {
 .checklist li {
   position: relative;
   padding: .55rem 0 .55rem 2.1rem;
-  color: var(--navy-800);
+  color: var(--moss-800);
   font-weight: 500;
 }
 .checklist li::before {
@@ -428,14 +428,14 @@ em {
   margin-bottom: .8rem;
   font-family: var(--serif);
   font-size: 1.6rem;
-  color: var(--navy-800);
+  color: var(--moss-800);
 }
 .card p { margin: 0; font-size: .92rem; color: var(--muted); line-height: 1.65; }
 
 /* ---------- Jornada ---------- */
 .journey {
   position: relative;
-  background: var(--navy-800);
+  background: var(--moss-800);
   color: var(--white);
   overflow: hidden;
 }
@@ -445,7 +445,7 @@ em {
   right: -15%; top: -40%;
   width: 60%; aspect-ratio: 1;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(47, 125, 134, .35), transparent 70%);
+  background: radial-gradient(circle, rgba(110, 122, 72, .35), transparent 70%);
 }
 .steps {
   position: relative;
@@ -469,7 +469,7 @@ em {
   margin-bottom: 1.75rem;
   border-radius: 50%;
   border: 1px solid var(--gold-400);
-  background: var(--navy-800);
+  background: var(--moss-800);
   font-family: var(--serif);
   font-size: 1.5rem;
   color: var(--gold-400);
@@ -494,7 +494,7 @@ em {
 /* Quando houver fotos: <div class="member__photo" style="background-image:url('assets/dra-nome.jpg')"></div> */
 .member:hover .member__photo { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
 .member figcaption { padding-top: 1.25rem; }
-.member strong { display: block; font-family: var(--serif); font-size: 1.5rem; font-weight: 600; color: var(--navy-800); }
+.member strong { display: block; font-family: var(--serif); font-size: 1.5rem; font-weight: 600; color: var(--moss-800); }
 .member span { font-size: .88rem; color: var(--muted); }
 
 /* ---------- Instagram ---------- */
@@ -522,7 +522,7 @@ em {
   font-family: var(--serif);
   font-size: 1.4rem;
   font-weight: 600;
-  color: var(--navy-800);
+  color: var(--moss-800);
 }
 .faq summary::-webkit-details-marker { display: none; }
 .faq summary::after {
@@ -552,8 +552,8 @@ em {
   border-bottom: 1px solid var(--line);
 }
 .contact__list svg { flex: none; width: 24px; height: 24px; margin-top: .2rem; color: var(--gold-500); }
-.contact__list strong { display: block; font-size: .75rem; letter-spacing: .14em; text-transform: uppercase; color: var(--teal-500); }
-.contact__list span, .contact__list a { color: var(--navy-800); }
+.contact__list strong { display: block; font-size: .75rem; letter-spacing: .14em; text-transform: uppercase; color: var(--olive-500); }
+.contact__list span, .contact__list a { color: var(--moss-800); }
 .contact__list a:hover { color: var(--gold-500); }
 .contact__map {
   min-height: 460px;
@@ -564,7 +564,7 @@ em {
 .contact__map iframe { width: 100%; height: 100%; min-height: 460px; border: 0; filter: grayscale(.35) contrast(1.05); }
 
 /* ---------- Footer ---------- */
-.footer { background: var(--navy-900); color: rgba(255, 255, 255, .6); padding: 3rem 0; }
+.footer { background: var(--moss-900); color: rgba(255, 255, 255, .6); padding: 3rem 0; }
 .footer__inner { display: flex; align-items: center; justify-content: space-between; gap: 2rem; }
 .footer__legal { margin: 0; font-size: .82rem; text-align: center; line-height: 1.8; }
 .footer__social {
@@ -575,7 +575,7 @@ em {
   color: var(--white);
   transition: background .3s, border-color .3s, color .3s;
 }
-.footer__social:hover { background: var(--gold-500); border-color: var(--gold-500); color: var(--navy-900); }
+.footer__social:hover { background: var(--gold-500); border-color: var(--gold-500); color: var(--moss-900); }
 .footer__social svg { width: 20px; height: 20px; }
 
 /* ---------- WhatsApp flutuante ---------- */
@@ -631,7 +631,7 @@ em {
     flex-direction: column;
     justify-content: center;
     gap: 1.8rem;
-    background: var(--navy-900);
+    background: var(--moss-900);
     opacity: 0;
     visibility: hidden;
     transition: opacity .4s, visibility .4s;
