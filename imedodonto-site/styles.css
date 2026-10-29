@@ -342,22 +342,13 @@ em {
 }
 .about__img--a {
   inset: 0 22% 18% 0;
-  background-color: var(--moss-700);
-  background-image:
-    radial-gradient(circle at 30% 25%, rgba(255,255,255,.18), transparent 50%),
-    linear-gradient(150deg, var(--olive-500), var(--moss-800));
+  background: url("assets/clinica-recepcao.jpg") 55% 45% / cover no-repeat, var(--moss-700);
 }
 .about__img--b {
   inset: 45% 0 0 40%;
   border: 8px solid var(--ivory);
-  background-color: var(--gold-100);
-  background-image:
-    radial-gradient(circle at 70% 30%, rgba(255,255,255,.7), transparent 50%),
-    linear-gradient(150deg, var(--gold-400), var(--gold-100));
+  background: url("assets/clinica-consultorio.jpg") 40% 60% / cover no-repeat, var(--gold-100);
 }
-/* Quando houver fotos:
-   .about__img--a { background-image: url("assets/clinica-1.jpg"); }
-   .about__img--b { background-image: url("assets/clinica-2.jpg"); } */
 
 .about__text p { color: var(--muted); }
 .about__text .section__title { margin-bottom: 1.75rem; }
