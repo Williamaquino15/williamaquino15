@@ -1,28 +1,28 @@
 /* =========================================================
    IMED Odonto — estilos
-   Paleta: verde-lodo (musgo) profundo + dourado champanhe + marfim
+   Paleta: verde IMED (#435F4A) + dourado champanhe + branco
    ========================================================= */
 
 :root {
-  --moss-900: #1e261b;
-  --moss-800: #2a3524;
-  --moss-700: #3b4a32;
-  --olive-500: #6e7a48;
+  --moss-900: #2c3f31;
+  --moss-800: #435f4a;
+  --moss-700: #557560;
+  --olive-500: #435f4a;
   --gold-500: #c6a467;
   --gold-400: #d8bd88;
   --gold-100: #f3ead9;
-  --ivory: #f6f4ec;
+  --ivory: #f4f7f4;
   --white: #ffffff;
-  --ink: #23291f;
-  --muted: #646a5a;
-  --line: rgba(42, 53, 36, .1);
+  --ink: #1f2b23;
+  --muted: #5c6a60;
+  --line: rgba(67, 95, 74, .1);
 
   --serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
   --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 
   --radius: 18px;
-  --shadow-sm: 0 2px 10px rgba(30, 38, 27, .06);
-  --shadow-lg: 0 30px 60px -20px rgba(30, 38, 27, .28);
+  --shadow-sm: 0 2px 10px rgba(44, 63, 49, .06);
+  --shadow-lg: 0 30px 60px -20px rgba(44, 63, 49, .28);
   --ease: cubic-bezier(.2, .7, .2, 1);
   --header-h: 84px;
 }
@@ -147,7 +147,7 @@ em {
 }
 .header.is-scrolled {
   --header-h: 70px;
-  background: rgba(30, 38, 27, .88);
+  background: rgba(44, 63, 49, .88);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   box-shadow: 0 1px 0 rgba(255, 255, 255, .06);
@@ -210,7 +210,7 @@ em {
 .hero__bg {
   position: absolute; inset: 0;
   background:
-    radial-gradient(60% 70% at 85% 30%, rgba(110, 122, 72, .45), transparent 70%),
+    radial-gradient(60% 70% at 85% 30%, rgba(122, 160, 132, .45), transparent 70%),
     radial-gradient(50% 60% at 10% 100%, rgba(198, 164, 103, .18), transparent 70%),
     linear-gradient(160deg, var(--moss-800), var(--moss-900));
 }
@@ -445,7 +445,7 @@ em {
   right: -15%; top: -40%;
   width: 60%; aspect-ratio: 1;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(110, 122, 72, .35), transparent 70%);
+  background: radial-gradient(circle, rgba(122, 160, 132, .35), transparent 70%);
 }
 .steps {
   position: relative;
