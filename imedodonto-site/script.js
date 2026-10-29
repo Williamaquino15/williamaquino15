@@ -4,8 +4,8 @@
 // Ex.: "5598999999999"
 // =========================================================
 const CONFIG = {
-  whatsapp: "5598991215974",
-  whatsappLabel: "(98) 99121-5974",
+  whatsapp: "5598988330276",
+  whatsappLabel: "(98) 98833-0276",
   whatsappMessage: "Olá! Gostaria de agendar uma avaliação na IMED Odonto.",
   instagram: "https://www.instagram.com/imedodontoslz/",
 };
