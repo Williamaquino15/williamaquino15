@@ -261,23 +261,14 @@ em {
 .hero__photo {
   position: absolute; inset: 0;
   border-radius: 220px 220px var(--radius) var(--radius);
-  background:
-    radial-gradient(circle at 50% 38%, rgba(255,255,255,.22), transparent 55%),
-    linear-gradient(170deg, var(--olive-500), var(--moss-700) 75%);
-  background-size: cover;
-  background-position: center;
+  background: url("assets/dra.jpg") 50% 0 / cover no-repeat, var(--moss-700);
   box-shadow: var(--shadow-lg);
   overflow: hidden;
 }
-/* Quando houver foto: .hero__photo { background-image: url("assets/hero.jpg"); } */
 .hero__photo::after {
   content: "";
-  position: absolute;
-  left: 50%; top: 42%;
-  width: 62%; aspect-ratio: 360 / 236;
-  transform: translate(-50%, -50%);
-  background: url("assets/logo-imed-light.png") center / contain no-repeat;
-  opacity: .9;
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(44, 63, 49, .35), transparent 35%);
 }
 .hero__badge {
   position: absolute;
