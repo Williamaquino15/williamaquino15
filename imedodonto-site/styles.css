@@ -270,6 +270,19 @@ em {
   position: absolute; inset: 0;
   background: linear-gradient(to top, rgba(44, 63, 49, .35), transparent 35%);
 }
+.hero__name {
+  position: absolute;
+  right: -1.5rem; top: 3.5rem;
+  padding: .85rem 1.2rem;
+  border-radius: 14px;
+  background: rgba(44, 63, 49, .82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(216, 189, 136, .35);
+  box-shadow: var(--shadow-lg);
+}
+.hero__name strong { display: block; font-family: var(--serif); font-size: 1.2rem; font-weight: 600; color: var(--white); line-height: 1.2; }
+.hero__name small { font-size: .75rem; letter-spacing: .08em; color: var(--gold-400); }
 .hero__badge {
   position: absolute;
   left: -2.5rem; bottom: 2.5rem;
@@ -460,24 +473,28 @@ em {
 .step p { font-size: .93rem; color: rgba(255, 255, 255, .68); }
 
 /* ---------- Equipe ---------- */
-.team__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
-.member { margin: 0; }
-.member__photo {
-  aspect-ratio: 4 / 5;
-  border-radius: var(--radius);
-  background:
-    radial-gradient(circle at 50% 36%, rgba(255,255,255,.55) 0 17%, transparent 17.5%),
-    radial-gradient(ellipse at 50% 100%, rgba(255,255,255,.4) 0 38%, transparent 38.5%),
-    linear-gradient(160deg, var(--gold-100), #e6dccb);
-  background-size: cover;
-  background-position: center;
-  transition: transform .6s var(--ease), box-shadow .6s var(--ease);
+.doctor {
+  margin: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 420px) minmax(0, 1fr);
+  gap: 4.5rem;
+  align-items: center;
 }
-/* Quando houver fotos: <div class="member__photo" style="background-image:url('assets/dra-nome.jpg')"></div> */
-.member:hover .member__photo { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
-.member figcaption { padding-top: 1.25rem; }
-.member strong { display: block; font-family: var(--serif); font-size: 1.5rem; font-weight: 600; color: var(--moss-800); }
-.member span { font-size: .88rem; color: var(--muted); }
+.doctor__photo {
+  aspect-ratio: 4 / 5;
+  border-radius: 200px 200px var(--radius) var(--radius);
+  background: url("assets/dra.jpg") 50% 0 / cover no-repeat, var(--gold-100);
+  box-shadow: var(--shadow-lg);
+}
+.doctor__text { max-width: 520px; }
+.doctor__text > p:not([class]) { color: var(--muted); margin: 1.5rem 0 2rem; }
+.doctor__role {
+  margin: 0 0 .5rem;
+  font-size: .75rem; font-weight: 600; letter-spacing: .22em; text-transform: uppercase;
+  color: var(--gold-500);
+}
+.doctor__name { font-family: var(--serif); font-size: clamp(2.2rem, 4vw, 3rem); color: var(--moss-800); }
+.doctor__cro { margin: .5rem 0 0; font-size: .9rem; color: var(--muted); letter-spacing: .04em; }
 
 /* ---------- Instagram ---------- */
 .insta { padding-top: 0; }
@@ -627,7 +644,9 @@ em {
   .hero__inner, .about__grid, .faq__grid, .contact__grid { grid-template-columns: 1fr; gap: 3.5rem; }
   .hero__visual { justify-self: center; max-width: 340px; }
   .hero__badge { left: -1rem; }
-  .team__grid { grid-template-columns: repeat(2, 1fr); }
+  .doctor { grid-template-columns: 1fr; gap: 2.5rem; }
+  .doctor__photo { max-width: 420px; }
+  .hero__name { right: -.5rem; }
   .insta__inner { flex-direction: column; align-items: flex-start; padding: 2.75rem 2rem; }
 }
 
@@ -637,7 +656,8 @@ em {
   .hero__actions .btn { width: 100%; }
   .hero__scroll { display: none; }
   .pillars { margin-top: -2.5rem; }
-  .pillars__grid, .cards, .steps, .team__grid { grid-template-columns: 1fr; }
+  .pillars__grid, .cards, .steps { grid-template-columns: 1fr; }
+  .doctor__text .btn { width: 100%; }
   .pillar + .pillar { border-left: 0; border-top: 1px solid var(--line); }
   .about__media { margin-right: 1rem; }
   .footer__inner { flex-direction: column; text-align: center; }
