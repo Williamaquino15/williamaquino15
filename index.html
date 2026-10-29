@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Dr. Ed Rabelo</title>
-<meta name="description" content="Dr. Ed Rabelo — harmonização facial personalizada. Agende sua consulta.">
+<title>Dr. Ed Cleidson Rabelo</title>
+<meta name="description" content="Dr. Ed Cleidson Rabelo — harmonização facial personalizada. Agende sua consulta.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -131,8 +131,9 @@
   .arrows button:hover { border-color: var(--gold); color: var(--gold); }
   .ba-track { display: grid; grid-auto-flow: column; grid-auto-columns: calc((100% - 48px) / 3); gap: 24px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; margin-top: 44px; padding-bottom: 14px; scrollbar-width: thin; scrollbar-color: var(--gold) transparent; }
   .ba { scroll-snap-align: start; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; min-width: 0; }
-  .ba-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; border-radius: 12px; overflow: hidden; }
-  .ba-pair figure { position: relative; aspect-ratio: 1 / 2; max-width: 100%; background: var(--bg-alt); }
+  .ba-pair { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: minmax(0, 1fr); gap: 6px; aspect-ratio: 1; max-width: 100%; border-radius: 12px; overflow: hidden; }
+  .ba-pair.stack { grid-template-columns: 1fr; grid-template-rows: repeat(2, minmax(0, 1fr)); }
+  .ba-pair figure { position: relative; min-height: 0; background: var(--bg-alt); }
   .ba-pair img { width: 100%; height: 100%; object-fit: cover; }
   .ba-pair figcaption { position: absolute; left: 8px; bottom: 8px; font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; background: rgba(255,253,250,.88); color: var(--ink); padding: 3px 9px; border-radius: 999px; }
   .ba-pair figure + figure figcaption { background: var(--dark); color: var(--gold-light); }
@@ -284,7 +285,7 @@
   <div class="container nav">
     <a href="#inicio" class="brand">
       <span class="mono">ER</span>
-      <span class="brand-name">Ed Rabelo<small>Estética & Harmonização</small></span>
+      <span class="brand-name">Ed Cleidson Rabelo<small>Estética & Harmonização</small></span>
     </a>
     <ul class="nav-links" id="nav-links">
       <li><a href="#tratamentos">Tratamentos</a></li>
@@ -322,14 +323,14 @@
         <div class="seal">
           <svg viewBox="0 0 100 100" aria-hidden="true">
             <defs><path id="circle" d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0"/></defs>
-            <text font-size="8.4" letter-spacing="2.6" fill="#8c6a3c" font-family="Jost"><textPath href="#circle">ED RABELO • ESTÉTICA • HARMONIZAÇÃO •</textPath></text>
+            <text font-size="7.6" letter-spacing="1.5" fill="#8c6a3c" font-family="Jost"><textPath href="#circle">ED CLEIDSON RABELO • HARMONIZAÇÃO •</textPath></text>
           </svg>
           <span class="mono">ER</span>
         </div>
         <!-- Foto principal: salve em img/hero.jpg -->
-        <div class="arch"><span class="big-mono">ER</span><img src="img/hero.jpg" alt="Dr. Ed Rabelo" onerror="this.remove()"></div>
+        <div class="arch"><span class="big-mono">ER</span><img src="img/hero.jpg" alt="Dr. Ed Cleidson Rabelo" onerror="this.remove()"></div>
         <div class="float-card rating"><div class="stars">★★★★★</div><strong>5,0 no Google</strong><br><small>Avaliações reais</small></div>
-        <div class="float-card who"><span class="mono" style="width:34px;height:34px;font-size:.85rem">ER</span><div><strong>Dr. Ed Rabelo</strong><small>@ed_rabelo</small></div></div>
+        <div class="float-card who"><span class="mono" style="width:34px;height:34px;font-size:.85rem">ER</span><div><strong>Dr. Ed Cleidson Rabelo</strong><small>@ed_rabelo</small></div></div>
       </div>
     </div>
   </section>
@@ -345,7 +346,7 @@
   <section id="porque">
     <div class="container">
       <div class="center reveal">
-        <h2 class="title">Por que escolher<br>o <em>Dr. Ed Rabelo</em></h2>
+        <h2 class="title">Por que escolher<br>o <em>Dr. Ed Cleidson Rabelo</em></h2>
         <p class="lead">Mais do que procedimentos, um planejamento pensado para valorizar o seu rosto com naturalidade, segurança e cuidado do início ao fim.</p>
       </div>
       <div class="why-grid">
@@ -402,7 +403,7 @@
       <div class="results-head reveal">
         <div>
           <h2 class="title">Resultados<br>reais, <em>sem filtro</em></h2>
-          <p class="lead">Pacientes do Dr. Ed Rabelo. Cada caso é planejado para respeitar o contorno, a idade e o estilo de quem está na cadeira.</p>
+          <p class="lead">Pacientes do Dr. Ed Cleidson Rabelo. Cada caso é planejado para respeitar o contorno, a idade e o estilo de quem está na cadeira.</p>
         </div>
         <div class="arrows">
           <button type="button" id="ba-prev" aria-label="Resultado anterior">←</button>
@@ -412,38 +413,73 @@
       <div class="ba-track" id="ba-track">
         <article class="ba">
           <div class="ba-pair">
-            <figure><img src="img/antes-1.jpg" alt="Caso 01, antes, vista três quartos" loading="lazy"><figcaption>Antes</figcaption></figure>
-            <figure><img src="img/depois-1.jpg" alt="Caso 01, depois, vista três quartos" loading="lazy"><figcaption>Depois</figcaption></figure>
+            <figure><img src="img/antes-6.jpg" alt="Caso 01, antes, olhos" loading="lazy"><figcaption>Antes</figcaption></figure>
+            <figure><img src="img/depois-6.jpg" alt="Caso 01, depois, olhos" loading="lazy"><figcaption>Depois</figcaption></figure>
           </div>
-          <div class="ba-label"><b>Caso 01</b><span>Três quartos</span></div>
+          <div class="ba-label"><b>Caso 01</b><span>Olhos</span></div>
         </article>
         <article class="ba">
           <div class="ba-pair">
-            <figure><img src="img/antes-2.jpg" alt="Caso 02, antes, vista três quartos" loading="lazy"><figcaption>Antes</figcaption></figure>
-            <figure><img src="img/depois-2.jpg" alt="Caso 02, depois, vista três quartos" loading="lazy"><figcaption>Depois</figcaption></figure>
+            <figure><img src="img/antes-3.jpg" alt="Caso 02, antes, frontal" loading="lazy"><figcaption>Antes</figcaption></figure>
+            <figure><img src="img/depois-3.jpg" alt="Caso 02, depois, frontal" loading="lazy"><figcaption>Depois</figcaption></figure>
           </div>
-          <div class="ba-label"><b>Caso 02</b><span>Três quartos</span></div>
+          <div class="ba-label"><b>Caso 02</b><span>Frontal</span></div>
+        </article>
+        <article class="ba">
+          <div class="ba-pair stack">
+            <figure><img src="img/antes-9.jpg" alt="Caso 03, antes, lábios" loading="lazy"><figcaption>Antes</figcaption></figure>
+            <figure><img src="img/depois-9.jpg" alt="Caso 03, depois, lábios" loading="lazy"><figcaption>Depois</figcaption></figure>
+          </div>
+          <div class="ba-label"><b>Caso 03</b><span>Lábios</span></div>
         </article>
         <article class="ba">
           <div class="ba-pair">
-            <figure><img src="img/antes-3.jpg" alt="Caso 03, antes, vista frontal" loading="lazy"><figcaption>Antes</figcaption></figure>
-            <figure><img src="img/depois-3.jpg" alt="Caso 03, depois, vista frontal" loading="lazy"><figcaption>Depois</figcaption></figure>
+            <figure><img src="img/antes-2.jpg" alt="Caso 04, antes, três quartos" loading="lazy"><figcaption>Antes</figcaption></figure>
+            <figure><img src="img/depois-2.jpg" alt="Caso 04, depois, três quartos" loading="lazy"><figcaption>Depois</figcaption></figure>
           </div>
-          <div class="ba-label"><b>Caso 03</b><span>Frontal</span></div>
+          <div class="ba-label"><b>Caso 04</b><span>Três quartos</span></div>
         </article>
         <article class="ba">
-          <div class="ba-pair">
-            <figure><img src="img/antes-4.jpg" alt="Caso 04, antes, vista frontal" loading="lazy"><figcaption>Antes</figcaption></figure>
-            <figure><img src="img/depois-4.jpg" alt="Caso 04, depois, vista frontal" loading="lazy"><figcaption>Depois</figcaption></figure>
-          </div>
-          <div class="ba-label"><b>Caso 04</b><span>Frontal</span></div>
-        </article>
-        <article class="ba">
-          <div class="ba-pair">
-            <figure><img src="img/antes-5.jpg" alt="Caso 05, antes, vista perfil" loading="lazy"><figcaption>Antes</figcaption></figure>
-            <figure><img src="img/depois-5.jpg" alt="Caso 05, depois, vista perfil" loading="lazy"><figcaption>Depois</figcaption></figure>
+          <div class="ba-pair stack">
+            <figure><img src="img/antes-7.jpg" alt="Caso 05, antes, perfil" loading="lazy"><figcaption>Antes</figcaption></figure>
+            <figure><img src="img/depois-7.jpg" alt="Caso 05, depois, perfil" loading="lazy"><figcaption>Depois</figcaption></figure>
           </div>
           <div class="ba-label"><b>Caso 05</b><span>Perfil</span></div>
+        </article>
+        <article class="ba">
+          <div class="ba-pair">
+            <figure><img src="img/antes-4.jpg" alt="Caso 06, antes, frontal" loading="lazy"><figcaption>Antes</figcaption></figure>
+            <figure><img src="img/depois-4.jpg" alt="Caso 06, depois, frontal" loading="lazy"><figcaption>Depois</figcaption></figure>
+          </div>
+          <div class="ba-label"><b>Caso 06</b><span>Frontal</span></div>
+        </article>
+        <article class="ba">
+          <div class="ba-pair stack">
+            <figure><img src="img/antes-10.jpg" alt="Caso 07, antes, lábios" loading="lazy"><figcaption>Antes</figcaption></figure>
+            <figure><img src="img/depois-10.jpg" alt="Caso 07, depois, lábios" loading="lazy"><figcaption>Depois</figcaption></figure>
+          </div>
+          <div class="ba-label"><b>Caso 07</b><span>Lábios</span></div>
+        </article>
+        <article class="ba">
+          <div class="ba-pair">
+            <figure><img src="img/antes-1.jpg" alt="Caso 08, antes, três quartos" loading="lazy"><figcaption>Antes</figcaption></figure>
+            <figure><img src="img/depois-1.jpg" alt="Caso 08, depois, três quartos" loading="lazy"><figcaption>Depois</figcaption></figure>
+          </div>
+          <div class="ba-label"><b>Caso 08</b><span>Três quartos</span></div>
+        </article>
+        <article class="ba">
+          <div class="ba-pair">
+            <figure><img src="img/antes-8.jpg" alt="Caso 09, antes, três quartos" loading="lazy"><figcaption>Antes</figcaption></figure>
+            <figure><img src="img/depois-8.jpg" alt="Caso 09, depois, três quartos" loading="lazy"><figcaption>Depois</figcaption></figure>
+          </div>
+          <div class="ba-label"><b>Caso 09</b><span>Três quartos</span></div>
+        </article>
+        <article class="ba">
+          <div class="ba-pair">
+            <figure><img src="img/antes-5.jpg" alt="Caso 10, antes, perfil" loading="lazy"><figcaption>Antes</figcaption></figure>
+            <figure><img src="img/depois-5.jpg" alt="Caso 10, depois, perfil" loading="lazy"><figcaption>Depois</figcaption></figure>
+          </div>
+          <div class="ba-label"><b>Caso 10</b><span>Perfil</span></div>
         </article>
       </div>
       <p class="disclaimer">*Resultados podem variar de pessoa para pessoa. Imagens publicadas com autorização.</p>
@@ -478,10 +514,10 @@
     <div class="container about-grid">
       <div class="reveal">
         <!-- Foto: salve em img/sobre.jpg -->
-        <div class="arch"><span class="big-mono">ER</span><img src="img/sobre.jpg" alt="Dr. Ed Rabelo" onerror="this.remove()"></div>
+        <div class="arch"><span class="big-mono">ER</span><img src="img/sobre.jpg" alt="Dr. Ed Cleidson Rabelo" onerror="this.remove()"></div>
       </div>
       <div class="reveal">
-        <h2 class="title">Prazer, eu sou o<br><em>Dr. Ed Rabelo</em></h2>
+        <h2 class="title">Prazer, eu sou o<br><em>Dr. Ed Cleidson Rabelo</em></h2>
         <p>Sou especialista em estética e harmonização facial e acredito que o melhor resultado é aquele que ninguém sabe dizer exatamente o que foi feito, só que você está mais bonito, descansado e confiante.</p>
         <p>Cada atendimento começa com escuta e termina com um plano honesto, feito para o seu rosto e para a sua rotina.</p>
         <div class="stats">
@@ -528,7 +564,7 @@
     <div class="container reveal">
       <div class="clinic-banner">
         <!-- Foto do consultório: salve em img/clinica.jpg -->
-        <img src="img/clinica.jpg" alt="Consultório Dr. Ed Rabelo" onerror="this.remove()">
+        <img src="img/clinica.jpg" alt="Consultório Dr. Ed Cleidson Rabelo" onerror="this.remove()">
         <div>
           <h2>Conheça a <em>clínica</em></h2>
           <p>Um espaço acolhedor, pensado para o seu conforto, privacidade e segurança em cada atendimento.</p>
@@ -600,7 +636,7 @@
   <div class="container">
     <div class="footer-grid">
       <div>
-        <a href="#inicio" class="brand"><span class="mono">ER</span><span class="brand-name">Ed Rabelo<small>Estética & Harmonização</small></span></a>
+        <a href="#inicio" class="brand"><span class="mono">ER</span><span class="brand-name">Ed Cleidson Rabelo<small>Estética & Harmonização</small></span></a>
         <p style="margin-top:18px;max-width:320px">Harmonização Facial Personalizada e resultados naturais.</p>
         <div class="socials">
           <a href="https://www.instagram.com/ed_rabelo/" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
@@ -627,7 +663,7 @@
         </ul>
       </div>
     </div>
-    <p class="legal">© <span id="year"></span> Dr. Ed Rabelo. Todos os direitos reservados. Responsável técnico: Dr. Ed Rabelo · Registro profissional 00000.</p>
+    <p class="legal">© <span id="year"></span> Dr. Ed Cleidson Rabelo. Todos os direitos reservados. Responsável técnico: Dr. Ed Cleidson Rabelo · Registro profissional 00000.</p>
   </div>
 </footer>
 
