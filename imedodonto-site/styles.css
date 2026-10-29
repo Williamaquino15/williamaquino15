@@ -155,9 +155,9 @@ em {
 .header__inner { display: flex; align-items: center; justify-content: space-between; gap: 2rem; }
 
 .brand { display: inline-flex; align-items: center; gap: .7rem; color: var(--white); }
-.brand__mark { width: 40px; height: 40px; }
-.brand__name { font-family: var(--serif); font-size: 1.6rem; font-weight: 600; letter-spacing: .02em; }
-.brand__name em { font-weight: 500; }
+.brand__logo { width: auto; height: 54px; transition: height .4s var(--ease); }
+.header.is-scrolled .brand__logo { height: 46px; }
+.footer .brand__logo { height: 64px; }
 
 .nav { display: flex; align-items: center; gap: 2.2rem; }
 .nav a:not(.btn) {
@@ -274,9 +274,9 @@ em {
   content: "";
   position: absolute;
   left: 50%; top: 42%;
-  width: 46%; aspect-ratio: 1;
+  width: 62%; aspect-ratio: 360 / 236;
   transform: translate(-50%, -50%);
-  background: url("assets/logo.svg") center / contain no-repeat;
+  background: url("assets/logo-imed-light.png") center / contain no-repeat;
   opacity: .9;
 }
 .hero__badge {
