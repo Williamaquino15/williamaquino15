@@ -4,15 +4,15 @@
 // Ex.: "5598999999999"
 // =========================================================
 const CONFIG = {
-  whatsapp: "",
-  whatsappLabel: "",            // Ex.: "(98) 99999-9999"
+  whatsapp: "5598991215974",
+  whatsappLabel: "(98) 99121-5974",
   whatsappMessage: "Olá! Gostaria de agendar uma avaliação na IMED Odonto.",
   instagram: "https://www.instagram.com/imedodontoslz/",
 };
 
 document.documentElement.classList.remove("no-js");
 
-// Links de WhatsApp: enquanto o número não estiver configurado, levam ao Instagram.
+// Links de WhatsApp (se o número ficar vazio, levam ao Instagram).
 const waHref = CONFIG.whatsapp
   ? `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(CONFIG.whatsappMessage)}`
   : CONFIG.instagram;
