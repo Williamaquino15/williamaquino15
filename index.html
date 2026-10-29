@@ -124,21 +124,20 @@
   .treat.hide { display: none; }
 
   /* Results */
-  .results-grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: 60px; align-items: center; }
-  .ba-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  .ba { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; }
-  .ba-label { display: flex; justify-content: space-between; font-size: .7rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); padding: 4px 6px 10px; }
-  .ba-label b { background: var(--dark); color: #f1e8dc; padding: 3px 10px; border-radius: 999px; font-weight: 400; }
-  .compare { position: relative; aspect-ratio: 1; border-radius: 12px; overflow: hidden; --pos: 50%; user-select: none; }
-  .compare .after, .compare .before { position: absolute; inset: 0; display: grid; place-items: center; font-family: "Cormorant Garamond", serif; font-size: 1.3rem; color: rgba(42,35,29,.45); }
-  .compare .after { background: linear-gradient(160deg, #efe2cf, #d5bb94); }
-  .compare .before { background: linear-gradient(160deg, #e3dcd3, #bfb2a2); clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
-  .compare img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-  .compare .handle { position: absolute; top: 0; bottom: 0; left: var(--pos); width: 2px; background: #fff; transform: translateX(-1px); pointer-events: none; }
-  .compare .handle::after { content: "⇆"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 38px; height: 38px; border-radius: 50%; background: var(--gold-grad); color: #2b231d; display: grid; place-items: center; font-size: .9rem; box-shadow: 0 6px 16px rgba(0,0,0,.25); }
-  .compare input { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: ew-resize; margin: 0; }
-  .compare .corner { position: absolute; bottom: 10px; font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; background: rgba(255,255,255,.8); padding: 3px 8px; border-radius: 999px; color: var(--ink); z-index: 3; pointer-events: none; }
-  .compare .corner.l { left: 10px; } .compare .corner.r { right: 10px; }
+  .results-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 30px; flex-wrap: wrap; }
+  .results-head > div { min-width: 0; }
+  .arrows { display: flex; gap: 10px; }
+  .arrows button { width: 48px; height: 48px; border-radius: 50%; border: 1px solid var(--line); background: var(--card); color: var(--ink); cursor: pointer; font-size: 1.1rem; transition: all .2s; }
+  .arrows button:hover { border-color: var(--gold); color: var(--gold); }
+  .ba-track { display: grid; grid-auto-flow: column; grid-auto-columns: calc((100% - 48px) / 3); gap: 24px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; margin-top: 44px; padding-bottom: 14px; scrollbar-width: thin; scrollbar-color: var(--gold) transparent; }
+  .ba { scroll-snap-align: start; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; min-width: 0; }
+  .ba-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; border-radius: 12px; overflow: hidden; }
+  .ba-pair figure { position: relative; aspect-ratio: 1 / 2; max-width: 100%; background: var(--bg-alt); }
+  .ba-pair img { width: 100%; height: 100%; object-fit: cover; }
+  .ba-pair figcaption { position: absolute; left: 8px; bottom: 8px; font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; background: rgba(255,253,250,.88); color: var(--ink); padding: 3px 9px; border-radius: 999px; }
+  .ba-pair figure + figure figcaption { background: var(--dark); color: var(--gold-light); }
+  .ba-label { display: flex; justify-content: space-between; align-items: center; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); padding: 12px 6px 4px; }
+  .ba-label b { font-family: "Cormorant Garamond", serif; font-size: 1.15rem; letter-spacing: 0; text-transform: none; font-weight: 500; color: var(--ink); }
   .disclaimer { font-size: .75rem; color: var(--muted); margin-top: 18px; }
 
   /* How it works */
@@ -240,11 +239,12 @@
   .reveal.visible { opacity: 1; transform: none; }
 
   @media (max-width: 1024px) {
+    .ba-track { grid-auto-columns: calc((100% - 24px) / 2); }
     .treat-grid { grid-template-columns: repeat(3, 1fr); }
   }
   @media (max-width: 900px) {
     section { padding: 80px 0; }
-    .hero-grid, .results-grid, .how-grid, .about-grid, .faq-grid { grid-template-columns: 1fr; gap: 50px; }
+    .hero-grid, .how-grid, .about-grid, .faq-grid { grid-template-columns: 1fr; gap: 50px; }
     .hero-visual { margin: 0 auto; max-width: 400px; }
     .why-grid { grid-template-columns: 1fr 1fr; }
     .not-do { grid-row: auto; grid-column: 1 / -1; }
@@ -259,8 +259,9 @@
     .nav-cta { display: none; }
   }
   @media (max-width: 600px) {
+    .ba-track { grid-auto-columns: 82%; gap: 14px; }
     .container { padding: 0 16px; }
-    .why-grid, .ba-wrap, .plans { grid-template-columns: 1fr; }
+    .why-grid, .plans { grid-template-columns: 1fr; }
     .treat-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
     .checks { grid-template-columns: 1fr; }
     .seal { width: 92px; height: 92px; left: -6px; }
@@ -397,34 +398,55 @@
 
   <!-- RESULTADOS -->
   <section id="resultados" style="padding-top:0">
-    <div class="container results-grid">
-      <div class="reveal">
-        <h2 class="title">Resultados<br>reais, <em>sem filtro</em></h2>
-        <p class="lead">Arraste para comparar. Cada caso é planejado com cuidado para respeitar o contorno, a idade e o estilo de cada paciente.</p>
-        <p class="disclaimer">*Resultados podem variar de pessoa para pessoa. Imagens publicadas com autorização.</p>
-      </div>
-      <div class="ba-wrap reveal">
-        <div class="ba">
-          <div class="ba-label"><b>Lábios</b><span>Preenchimento</span></div>
-          <div class="compare">
-            <div class="after">Depois<img src="img/depois-1.jpg" alt="" onerror="this.remove()"></div>
-            <div class="before">Antes<img src="img/antes-1.jpg" alt="" onerror="this.remove()"></div>
-            <span class="corner l">Antes</span><span class="corner r">Depois</span>
-            <div class="handle"></div>
-            <input type="range" min="0" max="100" value="50" aria-label="Comparar antes e depois">
-          </div>
+    <div class="container">
+      <div class="results-head reveal">
+        <div>
+          <h2 class="title">Resultados<br>reais, <em>sem filtro</em></h2>
+          <p class="lead">Pacientes do Dr. Ed Rabelo. Cada caso é planejado para respeitar o contorno, a idade e o estilo de quem está na cadeira.</p>
         </div>
-        <div class="ba">
-          <div class="ba-label"><b>Full face</b><span>Harmonização</span></div>
-          <div class="compare">
-            <div class="after">Depois<img src="img/depois-2.jpg" alt="" onerror="this.remove()"></div>
-            <div class="before">Antes<img src="img/antes-2.jpg" alt="" onerror="this.remove()"></div>
-            <span class="corner l">Antes</span><span class="corner r">Depois</span>
-            <div class="handle"></div>
-            <input type="range" min="0" max="100" value="50" aria-label="Comparar antes e depois">
-          </div>
+        <div class="arrows">
+          <button type="button" id="ba-prev" aria-label="Resultado anterior">←</button>
+          <button type="button" id="ba-next" aria-label="Próximo resultado">→</button>
         </div>
       </div>
+      <div class="ba-track" id="ba-track">
+        <article class="ba">
+          <div class="ba-pair">
+            <figure><img src="img/antes-1.jpg" alt="Caso 01, antes, vista três quartos" loading="lazy"><figcaption>Antes</figcaption></figure>
+            <figure><img src="img/depois-1.jpg" alt="Caso 01, depois, vista três quartos" loading="lazy"><figcaption>Depois</figcaption></figure>
+          </div>
+          <div class="ba-label"><b>Caso 01</b><span>Três quartos</span></div>
+        </article>
+        <article class="ba">
+          <div class="ba-pair">
+            <figure><img src="img/antes-2.jpg" alt="Caso 02, antes, vista três quartos" loading="lazy"><figcaption>Antes</figcaption></figure>
+            <figure><img src="img/depois-2.jpg" alt="Caso 02, depois, vista três quartos" loading="lazy"><figcaption>Depois</figcaption></figure>
+          </div>
+          <div class="ba-label"><b>Caso 02</b><span>Três quartos</span></div>
+        </article>
+        <article class="ba">
+          <div class="ba-pair">
+            <figure><img src="img/antes-3.jpg" alt="Caso 03, antes, vista frontal" loading="lazy"><figcaption>Antes</figcaption></figure>
+            <figure><img src="img/depois-3.jpg" alt="Caso 03, depois, vista frontal" loading="lazy"><figcaption>Depois</figcaption></figure>
+          </div>
+          <div class="ba-label"><b>Caso 03</b><span>Frontal</span></div>
+        </article>
+        <article class="ba">
+          <div class="ba-pair">
+            <figure><img src="img/antes-4.jpg" alt="Caso 04, antes, vista frontal" loading="lazy"><figcaption>Antes</figcaption></figure>
+            <figure><img src="img/depois-4.jpg" alt="Caso 04, depois, vista frontal" loading="lazy"><figcaption>Depois</figcaption></figure>
+          </div>
+          <div class="ba-label"><b>Caso 04</b><span>Frontal</span></div>
+        </article>
+        <article class="ba">
+          <div class="ba-pair">
+            <figure><img src="img/antes-5.jpg" alt="Caso 05, antes, vista perfil" loading="lazy"><figcaption>Antes</figcaption></figure>
+            <figure><img src="img/depois-5.jpg" alt="Caso 05, depois, vista perfil" loading="lazy"><figcaption>Depois</figcaption></figure>
+          </div>
+          <div class="ba-label"><b>Caso 05</b><span>Perfil</span></div>
+        </article>
+      </div>
+      <p class="disclaimer">*Resultados podem variar de pessoa para pessoa. Imagens publicadas com autorização.</p>
     </div>
   </section>
 
@@ -646,11 +668,11 @@
     });
   });
 
-  // Antes e depois
-  document.querySelectorAll(".compare").forEach((c) => {
-    const input = c.querySelector("input");
-    input.addEventListener("input", () => c.style.setProperty("--pos", input.value + "%"));
-  });
+  // Carrossel de resultados
+  const track = document.getElementById("ba-track");
+  const step = () => track.querySelector(".ba").offsetWidth + 24;
+  document.getElementById("ba-prev").addEventListener("click", () => track.scrollBy({ left: -step() }));
+  document.getElementById("ba-next").addEventListener("click", () => track.scrollBy({ left: step() }));
 
   const io = new IntersectionObserver((entries) => {
     entries.forEach((en) => {
