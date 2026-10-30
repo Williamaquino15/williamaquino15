@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Manual de Criativos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,600;1,6..96,400&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --vinho: #2c0910;
+    --vinho-2: #45121b;
+    --preto: #111010;
+    --creme: #f6efe8;
+    --cobre: #c98a72;
+    --texto-suave: rgba(246, 239, 232, .78);
+    --serif: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
+    --sans: "Inter", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #000; }
+  body { font-family: var(--serif); color: var(--creme); }
+
+  /* Cada slide tem proporção 16:9 (1600x900) */
+  .slide {
+    position: relative; width: 1600px; height: 900px; margin: 0 auto 24px;
+    overflow: hidden; padding: 90px 110px;
+    background: radial-gradient(ellipse at center, var(--vinho-2) 0%, var(--vinho) 70%);
+    page-break-after: always; break-after: page;
+  }
+  .slide.escuro { background: radial-gradient(ellipse at center, #1c1b1d 0%, var(--preto) 70%); }
+  .selo {
+    position: absolute; right: 70px; bottom: 60px; width: 64px; height: 64px;
+    border: 2px solid var(--cobre); border-radius: 50%;
+    display: grid; place-items: center; color: var(--cobre);
+    font: 600 22px/1 var(--serif); letter-spacing: 1px;
+  }
+  .rodape {
+    position: absolute; left: 110px; bottom: 76px;
+    font: 400 15px/1 var(--sans); letter-spacing: 3px; text-transform: uppercase; color: rgba(246,239,232,.45);
+  }
+  h1, h2, h3 { font-weight: 400; }
+  .titulo { font-size: 58px; letter-spacing: 2px; text-transform: uppercase; }
+  .titulo-centro { text-align: center; }
+  p.lead { font-size: 28px; line-height: 1.5; color: var(--texto-suave); }
+
+  /* Fotos do William: se o arquivo não existir, aparece um espaço indicado */
+  .foto { position: relative; overflow: hidden; background: #2a2224; }
+  .foto img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .foto.vazio { border: 3px dashed rgba(201,138,114,.7); background: repeating-linear-gradient(45deg, #2a1d20, #2a1d20 14px, #241a1c 14px, #241a1c 28px); }
+  .foto.vazio img { display: none; }
+  .foto.vazio::after {
+    content: attr(data-rotulo); position: absolute; inset: 0; display: grid; place-items: center;
+    text-align: center; padding: 20px; font: 600 20px/1.4 var(--sans); color: var(--cobre);
+  }
+
+  /* Capa e divisórias com foto de fundo */
+  .capa { padding: 0; display: grid; place-items: center; text-align: center; }
+  .capa .foto { position: absolute; inset: 0; }
+  .capa .foto.vazio::after { place-items: start center; padding-top: 40px; }
+  .capa .veu { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(17,16,16,.55), rgba(17,16,16,.82)); }
+  .capa.vinho .veu { background: linear-gradient(180deg, rgba(44,9,16,.78), rgba(44,9,16,.92)); }
+  .capa .conteudo { position: relative; }
+  .monograma {
+    width: 150px; height: 150px; margin: 0 auto 50px; border-radius: 50%;
+    background: var(--creme); color: var(--vinho); display: grid; place-items: center;
+    font: 600 60px/1 var(--serif); box-shadow: 0 0 0 10px rgba(246,239,232,.15);
+  }
+  .capa h1 { font-size: 110px; letter-spacing: 3px; }
+  .capa .sub { font-size: 34px; letter-spacing: 3px; text-transform: uppercase; margin-top: 18px; }
+  .capa .autor { font: 400 20px/1 var(--sans); letter-spacing: 6px; text-transform: uppercase; color: var(--cobre); margin-top: 46px; }
+  .capa h2 { font-size: 92px; letter-spacing: 3px; text-transform: uppercase; line-height: 1.15; }
+
+  /* Estrutura do criativo */
+  .estrutura { display: grid; grid-template-columns: repeat(5, 1fr); gap: 22px; margin-top: 70px; }
+  .etapa { border-top: 2px solid var(--creme); padding-top: 26px; }
+  .etapa .num { font: 600 16px/1 var(--sans); letter-spacing: 3px; color: var(--cobre); }
+  .etapa h3 { font-size: 44px; margin: 14px 0 22px; }
+  .etapa p { font-size: 22px; line-height: 1.55; color: var(--texto-suave); }
+  .etapa.ex p { font-size: 19px; line-height: 1.6; color: var(--creme); }
+  .seta { position: relative; }
+  .seta::after { content: "→"; position: absolute; right: -18px; top: -17px; font: 400 26px/1 var(--sans); color: var(--creme); background: var(--vinho); padding: 0 4px; }
+  .escuro .seta::after { background: var(--preto); }
+
+  /* Mockups de anúncio (9:16) */
+  .ad {
+    position: relative; width: 300px; height: 533px; border-radius: 14px; overflow: hidden;
+    font-family: var(--sans); color: #fff; box-shadow: 0 20px 50px rgba(0,0,0,.45);
+    display: flex; flex-direction: column;
+  }
+  .ad.quadrado { height: 300px; }
+  .ad .cta { margin-top: auto; background: #fff; color: #222; text-align: center; font-size: 13px; padding: 14px 10px; }
+  .ad .cta b { font-weight: 800; }
+  .ad .foto { position: absolute; inset: 0; }
+  .ad .camada { position: relative; z-index: 1; height: 100%; display: flex; flex-direction: column; }
+
+  .exemplo2 { display: grid; grid-template-columns: 360px 1fr; gap: 80px; align-items: center; margin-top: 30px; }
+  .exemplo2 .ad { width: 360px; height: 640px; }
+  .rotulos { display: grid; gap: 0; height: 640px; grid-template-rows: 1.3fr 1.6fr .6fr; }
+  .rotulos div { display: flex; align-items: center; gap: 26px; font-size: 44px; }
+  .rotulos div::before { content: ""; width: 90px; height: 2px; background: var(--creme); margin-left: -60px; }
+  .rotulos small { display: block; font: 400 20px/1.5 var(--sans); color: var(--texto-suave); margin-top: 6px; }
+
+  /* Grade de formatos */
+  .grade { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; margin-top: 60px; }
+  .card { background: var(--creme); color: var(--vinho); border-radius: 22px; height: 230px; display: grid; place-items: center; align-content: center; gap: 18px; }
+  .card svg { width: 84px; height: 84px; }
+  .card span { font: 800 26px/1 var(--sans); }
+
+  /* Slides de duas colunas */
+  .duas { display: grid; grid-template-columns: 1fr 1fr; gap: 110px; height: 100%; }
+  .duas h2 { font-size: 50px; text-transform: uppercase; letter-spacing: 2px; text-align: center; }
+  .duas p.lead { font-size: 23px; margin: 24px 0 36px; }
+  .mocks { display: flex; gap: 28px; justify-content: center; align-items: flex-end; }
+  .mocks .ad { width: 225px; height: 400px; }
+  .mocks .ad.quadrado { width: 300px; height: 300px; }
+
+  .citacao { font-size: 46px; line-height: 1.45; margin-top: 30px; }
+  .citacao em { color: var(--cobre); }
+
+  .resultados { display: grid; grid-template-columns: repeat(3, 1fr); gap: 34px; margin-top: 46px; }
+  .antes-depois { display: grid; grid-template-columns: 1fr 1fr; height: 360px; border-radius: 14px; overflow: hidden; }
+  .antes-depois div { display: grid; place-items: end center; padding-bottom: 18px; font: 600 16px/1 var(--sans); letter-spacing: 3px; text-transform: uppercase; }
+  .antes-depois div:first-child { background: #3a3033; color: #d9c9c2; }
+  .antes-depois div:last-child { background: #574247; border-left: 2px solid var(--creme); }
+  .resultados p { font: 400 19px/1.55 var(--sans); color: var(--texto-suave); margin-top: 16px; }
+  .resultados h3 { font-size: 30px; margin-top: 18px; }
+
+  .reciclagem { display: grid; grid-template-columns: 1fr 1fr; gap: 90px; margin-top: 50px; }
+  .reciclagem h3 { font-size: 36px; text-transform: uppercase; letter-spacing: 1px; }
+  .reciclagem p { font-size: 23px; line-height: 1.55; color: var(--texto-suave); margin: 12px 0 40px; }
+  .linha { height: 2px; background: var(--creme); margin: 34px auto; width: 80%; }
+  .troca { display: flex; align-items: center; justify-content: center; gap: 30px; margin-top: 26px; }
+  .troca .ad { width: 200px; height: 300px; }
+  .troca .ad.quadrado { width: 250px; height: 250px; }
+  .troca .icone { font: 400 70px/1 var(--sans); }
+
+  .checklist { list-style: none; margin-top: 34px; display: grid; gap: 16px; }
+  .checklist li { font-size: 25px; line-height: 1.4; padding-left: 46px; position: relative; color: var(--texto-suave); }
+  .checklist li::before { content: ""; position: absolute; left: 0; top: 6px; width: 24px; height: 24px; border: 2px solid var(--cobre); border-radius: 6px; }
+
+  @media print {
+    @page { size: 1600px 900px; margin: 0; }
+    html, body { background: none; }
+    .slide { margin: 0; }
+  }
+  @media screen and (max-width: 1640px) {
+    body { zoom: calc(100vw / 1640px); }
+  }
+</style>
+</head>
+<body>
+
+<!-- 1. CAPA -->
+<section class="slide capa">
+  <div class="foto" data-rotulo="Foto do William para a capa — fotos/william-capa.jpg (horizontal, de preferência em ação: palestrando, atendendo, ao quadro)">
+    <img src="fotos/william-capa.jpg" alt="William Aquino" onerror="this.parentNode.classList.add('vazio')">
+  </div>
+  <div class="veu"></div>
+  <div class="conteudo">
+    <div class="monograma">WA</div>
+    <h1>MANUAL DE CRIATIVOS</h1>
+    <p class="sub">Como fazer criativos que convertem para clínicas</p>
+    <p class="autor">por William Aquino · 2026</p>
+  </div>
+</section>
+
+<!-- 2. DIVISÓRIA -->
+<section class="slide capa vinho">
+  <div class="foto" data-rotulo="Foto do William — fotos/william-2.jpg">
+    <img src="fotos/william-2.jpg" alt="" onerror="this.parentNode.classList.add('vazio')">
+  </div>
+  <div class="veu"></div>
+  <div class="conteudo"><h2>Estrutura básica<br>dos criativos</h2></div>
+  <div class="selo">WA</div>
+</section>
+
+<!-- 3. ESTRUTURA -->
+<section class="slide escuro">
+  <h2 class="titulo">A estrutura de todo criativo</h2>
+  <p class="lead" style="margin-top:18px">Todo anúncio que converte segue a mesma sequência — no vídeo e na imagem.</p>
+  <div class="estrutura">
+    <div class="etapa seta"><span class="num">01</span><h3>Introdução</h3><p>O início do anúncio. Aqui usamos um dos gatilhos de atenção (os formatos deste manual) para parar a rolagem.</p></div>
+    <div class="etapa seta"><span class="num">02</span><h3>Gancho</h3><p>O motivo pelo qual você está chamando a pessoa. É a conexão entre a introdução e o corpo.</p></div>
+    <div class="etapa seta"><span class="num">03</span><h3>Corpo</h3><p>O conteúdo em si: o que é, quando, como, quanto, para quem.</p></div>
+    <div class="etapa seta"><span class="num">04</span><h3>Gancho</h3><p>A última conexão antes de chamar para a ação.</p></div>
+    <div class="etapa"><span class="num">05</span><h3>CTA + Porquê</h3><p>A chamada para ação <em>e</em> a resposta de por que a pessoa deve realizá-la.</p></div>
+  </div>
+  <div class="selo">WA</div>
+</section>
+
+<!-- 4. EXEMPLO 1 — VÍDEO -->
+<section class="slide">
+  <h2 class="titulo">Exemplo 1 — Vídeo</h2>
+  <div class="estrutura ex" style="margin-top:56px">
+    <div class="etapa ex seta"><span class="num">INTRODUÇÃO</span><p style="margin-top:22px">“Você já se olhou no espelho e sentiu que a sua aparência transmite mais cansaço do que você realmente sente?”</p></div>
+    <div class="etapa ex seta"><span class="num">GANCHO</span><p style="margin-top:22px">“Se isso acontece com você, talvez o problema não seja exatamente envelhecer, mas a forma como algumas mudanças do rosto estão acontecendo ao longo do tempo.”</p></div>
+    <div class="etapa ex seta"><span class="num">CORPO</span><p style="margin-top:22px">“Com o passar dos anos não é só a pele que muda: temos alterações de sustentação, volume, contorno e qualidade da pele. Por isso, tratar uma região isolada nem sempre entrega um resultado natural. Na minha abordagem, eu avalio o rosto como um todo para entender o que precisa ser tratado e o que deve ser preservado.”</p></div>
+    <div class="etapa ex seta"><span class="num">GANCHO</span><p style="margin-top:22px">“E é justamente por isso que duas mulheres da mesma idade podem precisar de tratamentos completamente diferentes.”</p></div>
+    <div class="etapa ex"><span class="num">CTA + PORQUÊ</span><p style="margin-top:22px">“Se você quer entender o que faria sentido para o seu rosto, clique no botão e converse com a minha equipe para agendar sua avaliação. É nessa consulta que entendemos suas queixas, analisamos sua estrutura facial e construímos um plano pensado para você — sem seguir um protocolo pronto.”</p></div>
+  </div>
+  <div class="selo">WA</div>
+</section>
+
+<!-- 5. EXEMPLO 2 — IMAGEM -->
+<section class="slide">
+  <h2 class="titulo">Exemplo 2 — Imagem</h2>
+  <div class="exemplo2">
+    <div class="ad" style="background:linear-gradient(180deg,#1b1b1b,#4a4a4a 55%,#1b1b1b)">
+      <div class="camada">
+        <div style="text-align:center;padding-top:60px;font:600 54px/1.05 var(--serif);text-decoration:underline;text-underline-offset:8px;text-decoration-thickness:2px">OFERTA<br>ESPECIAL</div>
+        <div style="margin-top:auto;text-align:center;padding:0 20px 40px">
+          <div style="font:600 34px/1.15 var(--serif)">Micropigmentação<br><em>em Sobrancelhas</em></div>
+          <div style="font-size:17px;margin-top:10px">Você acordando sempre pronta!</div>
+          <div style="height:1px;background:rgba(255,255,255,.4);margin:24px 30px"></div>
+          <div style="font:400 22px/1 var(--serif);letter-spacing:4px">SUA CLÍNICA</div>
+        </div>
+        <div class="cta">Aperte em <b>SAIBA MAIS</b> e agende sua avaliação</div>
+      </div>
+    </div>
+    <div class="rotulos">
+      <div><span>Gancho<small>Uma promessa clara que justifica a pessoa parar.</small></span></div>
+      <div><span>Corpo<small>O que é o procedimento e o benefício principal.</small></span></div>
+      <div><span>CTA + Porquê<small>O que fazer agora e o que ela ganha com isso.</small></span></div>
+    </div>
+  </div>
+  <div class="selo">WA</div>
+</section>
+
+<!-- 6. DIVISÓRIA -->
+<section class="slide capa">
+  <div class="foto" data-rotulo="Foto do William — fotos/william-3.jpg">
+    <img src="fotos/william-3.jpg" alt="" onerror="this.parentNode.classList.add('vazio')">
+  </div>
+  <div class="veu"></div>
+  <div class="conteudo"><h2>Tipos de criativos<br>para clínicas</h2></div>
+  <div class="selo">WA</div>
+</section>
+
+<!-- 7. FORMATOS -->
+<section class="slide">
+  <h2 class="titulo titulo-centro" style="font-size:46px">Formatos de anúncios que podemos explorar</h2>
+  <div class="grade">
+    <div class="card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><path d="M13 11l7-7M17 4h3v3"/></svg><span>Direto ao ponto</span></div>
+    <div class="card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 9l4 4 4-4 4 4 4-4"/><path d="M4 17h16" stroke-dasharray="2 2"/></svg><span>Contraintuitivo</span></div>
+    <div class="card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-6-6.2-6-11a6 6 0 1112 0c0 4.8-6 11-6 11z"/><circle cx="12" cy="10" r="2.2"/></svg><span>Segmentado</span></div>
+    <div class="card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 10v4h3l7 4V6L6 10H3z"/><path d="M16 9a4 4 0 010 6M19 6a8 8 0 010 12"/></svg><span>Notícia</span></div>
+    <div class="card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 9a3 3 0 115 2.2c-1.2.8-2 1.5-2 2.8"/><circle cx="12" cy="18" r=".8" fill="currentColor"/></svg><span>Pergunta</span></div>
+    <div class="card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 5c3-1 6-1 9 1 3-2 6-2 9-1v14c-3-1-6-1-9 1-3-2-6-2-9-1z"/><path d="M12 6v14"/></svg><span>História</span></div>
+    <div class="card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="13" rx="3"/><path d="M7 12h10"/><circle cx="12" cy="5" r="1.6" fill="currentColor"/></svg><span>Caixinha de perguntas</span></div>
+    <div class="card"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20V14M10 20V10M16 20V6"/><path d="M3 11l6-5 4 3 7-6M17 3h3v3"/></svg><span>Resultados</span></div>
+  </div>
+  <div class="selo">WA</div>
+</section>
+
+<!-- 8. DIRETO AO PONTO + PERGUNTA -->
+<section class="slide">
+  <div class="duas">
+    <div>
+      <h2>Direto ao ponto</h2>
+      <p class="lead">O criativo que passa a informação de forma rápida e prática: qual é o procedimento, qual é a condição e o que a pessoa deve fazer.</p>
+      <div class="mocks">
+        <div class="ad" style="background:linear-gradient(180deg,#151515,#3d3d3d 60%,#151515)">
+          <div class="camada"><div style="text-align:center;padding-top:44px;font:600 36px/1.05 var(--serif)">OFERTA<br>ESPECIAL</div>
+          <div style="margin-top:auto;text-align:center;padding:0 14px 26px;font:600 22px/1.2 var(--serif)">Botox<br><em style="font-weight:400">preventivo</em><div style="font:400 12px/1.4 var(--sans);margin-top:8px">Condição válida até sexta</div></div>
+          <div class="cta" style="font-size:11px">Aperte em <b>SAIBA MAIS</b> e agende</div></div>
+        </div>
+        <div class="ad quadrado" style="background:linear-gradient(135deg,#6d4b45,#b38b7d)">
+          <div class="camada" style="padding:26px;text-align:center"><div style="font:400 26px/1.15 var(--serif)">Últimas vagas para<br><em>avaliação gratuita</em></div>
+          <div style="margin-top:auto;background:rgba(255,255,255,.85);color:#3b2a27;font-size:13px;line-height:1.45;padding:12px;border-radius:6px">Harmonização facial com plano individual. Agenda de novembro com <b>8 horários</b>.</div></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <h2>Pergunta</h2>
+      <p class="lead">Comece o anúncio com uma pergunta. Ela funciona como filtro: quem continua assistindo é quem tem interesse no assunto.</p>
+      <div class="mocks">
+        <div class="ad">
+          <div class="foto" data-rotulo="Foto do William (vertical) — fotos/william-4.jpg"><img src="fotos/william-4.jpg" alt="" onerror="this.parentNode.classList.add('vazio')"></div>
+          <div class="camada" style="justify-content:flex-end;padding:0 18px 70px"><div style="background:rgba(246,239,232,.92);color:#5a3d36;text-align:center;font-size:15px;line-height:1.4;padding:12px">Harmonização fica artificial?<br>Ou será que o segredo está em como ela é feita?</div></div>
+        </div>
+        <div class="ad" style="background:linear-gradient(180deg,#3b2b26,#7a5a4d 50%,#3b2b26)">
+          <div class="camada" style="justify-content:center"><div style="background:#fff;color:#222;text-align:center;padding:16px 12px"><div style="background:#111;color:#fff;font-size:10px;letter-spacing:1px;display:inline-block;padding:3px 8px">VAGAS LIMITADAS DA SEMANA</div><div style="font:600 22px/1.15 var(--serif);margin-top:8px">Está sonhando com uma pele sem manchas?</div><div style="font-size:11px;margin-top:6px">Peeling com condição especial</div></div>
+          <div class="cta" style="position:absolute;bottom:0;left:0;right:0;background:#111;color:#fff;font-size:11px">Aperte em <b>SAIBA MAIS</b> e garanta já!</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="selo">WA</div>
+</section>
+
+<!-- 9. CONTRAINTUITIVO + HISTÓRIA -->
+<section class="slide escuro">
+  <div class="duas">
+    <div>
+      <h2>Contraintuitivo</h2>
+      <p class="lead">Vá contra o senso comum: fale da contradição do mercado, ensine algo que vai contra a opinião geral.</p>
+      <div class="mocks">
+        <div class="ad quadrado">
+          <div class="foto" data-rotulo="Foto do William falando para a câmera — fotos/william-5.jpg"><img src="fotos/william-5.jpg" alt="" onerror="this.parentNode.classList.add('vazio')"></div>
+          <div class="camada"><div style="background:#111;color:#fff;font:800 17px/1.25 var(--sans);text-align:center;padding:12px">VOCÊ NÃO PRECISA DE <span style="color:var(--cobre)">MAIS PREENCHIMENTO</span></div>
+          <div style="margin-top:auto;text-align:center;font:600 14px/1.3 var(--sans);padding:12px;background:linear-gradient(transparent,rgba(0,0,0,.8))">Você precisa do ponto certo.</div></div>
+        </div>
+        <div class="ad quadrado" style="background:linear-gradient(135deg,#1f2a2a,#3d5250)">
+          <div class="camada" style="padding:26px;justify-content:center"><div style="font:800 26px/1.15 var(--sans)">É possível rejuvenescer <span style="color:#9fd3c7">sem mudar quem você é.</span></div><div style="margin-top:22px;font-size:12px;opacity:.85">Agende sua avaliação online ou presencial.</div></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <h2>História</h2>
+      <p class="lead">Quando o anúncio conta uma história, ele chama a atenção e retém a pessoa. Use o “imagine você nessa situação”.</p>
+      <p class="citacao">Ex.: <em>“Uma vez, uma paciente chegou em mim dizendo que…”</em></p>
+    </div>
+  </div>
+  <div class="selo">WA</div>
+</section>
+
+<!-- 10. SEGMENTADO -->
+<section class="slide">
+  <h2 class="titulo titulo-centro">Segmentado</h2>
+  <p class="lead" style="text-align:center;max-width:1050px;margin:22px auto 0;font-size:25px">Use a segmentação para alcançar um público específico — cidade, gênero, profissão, faixa etária. O objetivo é que a pessoa se identifique na hora.</p>
+  <div class="mocks" style="margin-top:56px;gap:46px;align-items:center">
+    <div class="ad quadrado" style="background:linear-gradient(90deg,#69705b 50%,#b49a83 50%)">
+      <div class="camada" style="padding:22px;width:55%"><div style="font:600 12px/1.4 var(--sans);letter-spacing:1px">MORA EM <span style="color:#f2c063">SUA CIDADE</span> E QUER UMA PELE MAIS FIRME?</div><div style="font:800 52px/1 var(--sans);color:#f2c063;margin-top:14px">48h</div><div style="font-size:10px;margin-top:6px">para garantir sua avaliação com condição especial</div></div>
+    </div>
+    <div class="ad" style="width:240px;height:420px;background:radial-gradient(circle at 70% 20%,#6b0f16,#0b0b0b 70%)">
+      <div class="camada" style="text-align:center;justify-content:center;padding:20px;gap:22px"><div style="font:600 20px/1.3 var(--sans)">Você é <b>noiva</b><br>e casa em 2027?</div><div style="font:800 24px/1.2 var(--sans);color:#ff5a5f">Comece o seu<br>protocolo agora</div><div style="font:600 15px/1.3 var(--sans)">Clique em<br>Saiba Mais</div></div>
+    </div>
+    <div class="ad quadrado" style="background:#fff;color:#222">
+      <div class="camada" style="padding:18px;font-size:12px;line-height:1.45"><div style="color:#e2a100;font-size:12px">‹ Notas</div><div style="font:800 19px/1.2 var(--sans);margin:8px 0">Procura-se: mulher acima de 40 🔎</div><div><b>Que quer se ver mais descansada e não sofre com:</b><br><br>Resultado artificial, rosto “congelado” ou medo de exagero.<br><br><u><b>Avaliações abertas para novembro!</b></u></div></div>
+    </div>
+    <div class="ad quadrado">
+      <div class="foto" data-rotulo="Foto do William olhando para a câmera — fotos/william-6.jpg"><img src="fotos/william-6.jpg" alt="" onerror="this.parentNode.classList.add('vazio')"></div>
+      <div class="camada" style="justify-content:flex-end;padding:18px"><div style="font:600 14px/1.3 var(--sans);text-shadow:0 1px 4px #000">Você que é de <b>[sua cidade]</b> e região…</div></div>
+    </div>
+  </div>
+  <div class="selo">WA</div>
+</section>
+
+<!-- 11. NOTÍCIAS + CAIXINHA -->
+<section class="slide">
+  <div class="duas">
+    <div>
+      <h2>Notícias</h2>
+      <p class="lead" style="text-align:center">Formato de notícia para gerar autoridade.</p>
+      <div style="background:#fff;color:#111;width:500px;margin:0 auto;border-radius:6px;overflow:hidden;font-family:var(--sans);box-shadow:0 20px 50px rgba(0,0,0,.45)">
+        <div style="background:#b3141c;color:#fff;font-size:12px;letter-spacing:1px;padding:9px 14px;display:flex;justify-content:space-between"><span>☰ MENU</span><span>SAÚDE E ESTÉTICA</span><span>🔍</span></div>
+        <div style="padding:18px 18px 20px">
+          <div style="font:800 25px/1.2 var(--sans)">Comprovado: tratar o rosto como um todo gera resultados mais naturais do que tratar regiões isoladas.</div>
+          <div style="font-size:12px;margin:10px 0 14px;border-bottom:2px solid #b3141c;display:inline-block;padding-bottom:3px">Entenda como funciona a avaliação facial completa.</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div class="foto" style="height:120px;border-radius:10px" data-rotulo="fotos/william-7.jpg"><img src="fotos/william-7.jpg" alt="" onerror="this.parentNode.classList.add('vazio')"></div>
+            <div style="height:120px;border-radius:10px;background:linear-gradient(135deg,#e7cfc4,#b98f80)"></div>
+          </div>
+          <div style="font-size:11px;color:#666;margin-top:12px"><b style="color:#111">POR WILLIAM AQUINO</b> · Atualizado há uma hora</div>
+          <div style="font-weight:600;margin-top:12px">Aperte em SAIBA MAIS e agende</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <h2>Caixinha de perguntas</h2>
+      <p class="lead" style="text-align:center">Responda caixinhas de perguntas sobre dores, desejos e objeções dos potenciais pacientes.</p>
+      <div class="ad" style="width:300px;height:490px;margin:0 auto">
+        <div class="foto" data-rotulo="Foto do William em atendimento ou palestra — fotos/william-8.jpg"><img src="fotos/william-8.jpg" alt="" onerror="this.parentNode.classList.add('vazio')"></div>
+        <div class="camada" style="padding:60px 22px 0">
+          <div style="border-radius:12px;overflow:hidden;text-align:center;box-shadow:0 6px 20px rgba(0,0,0,.4)">
+            <div style="background:#262626;font-size:13px;padding:9px">Faça uma pergunta</div>
+            <div style="background:#f1eeec;color:#222;font-size:15px;line-height:1.4;padding:14px">Toxina botulínica deixa o rosto congelado? Tenho medo de ficar sem expressão.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="selo">WA</div>
+</section>
+
+<!-- 12. RESULTADOS -->
+<section class="slide escuro">
+  <h2 class="titulo titulo-centro">Resultados</h2>
+  <p class="lead" style="text-align:center;margin-top:16px">Provas sociais e depoimentos para gerar confiança nos pacientes.</p>
+  <div class="resultados">
+    <div><div class="antes-depois"><div>Antes</div><div>Depois</div></div><h3>Antes e depois</h3><p>Mesma luz, mesmo ângulo e mesma expressão nas duas fotos. Divida a imagem ao meio ou lado a lado.</p></div>
+    <div><div class="antes-depois"><div>Depoimento</div><div>Resultado</div></div><h3>Depoimento em vídeo</h3><p>A paciente contando, com as próprias palavras, qual era a queixa e como se sente hoje.</p></div>
+    <div><div class="antes-depois"><div>Perfil</div><div>Perfil</div></div><h3>Comparativo em vídeo</h3><p>Transição suave entre antes e depois — prende a atenção e mostra a naturalidade.</p></div>
+  </div>
+  <p style="font:400 16px/1.5 var(--sans);color:rgba(246,239,232,.55);margin-top:34px;text-align:center">Use só imagens com autorização por escrito do paciente e siga as regras do seu conselho profissional sobre publicidade de antes e depois.</p>
+  <div class="selo">WA</div>
+</section>
+
+<!-- 13. RECICLAGEM -->
+<section class="slide">
+  <h2 class="titulo titulo-centro">Reciclagem</h2>
+  <div class="linha"></div>
+  <p class="lead" style="text-align:center;max-width:1150px;margin:0 auto">Reciclar é reutilizar um conteúdo que já performou bem — no orgânico ou no tráfego pago. Existem 2 formas de reaproveitar esse criativo:</p>
+  <div class="reciclagem">
+    <div>
+      <h3>Reaproveitamento orgânico</h3>
+      <p>Pegue o conteúdo orgânico que performou bem e transforme em anúncio.</p>
+      <h3>Multiplicar formatos</h3>
+      <p>Multiplique os conteúdos que performaram bem — muitas vezes é a <em>ideia</em> que está performando, e não só o formato.</p>
+    </div>
+    <div>
+      <p style="text-align:center;margin:0">Os dois anúncios abaixo usam a mesma ideia, mas passam a mensagem de formas diferentes:</p>
+      <div class="troca">
+        <div class="ad" style="background:#ece7e3;color:#222">
+          <div class="camada" style="padding:14px;gap:8px;font:600 12px/1.3 var(--sans)"><div style="background:#fff;border:1px solid #999;padding:10px">“Tenho medo de ficar artificial…”</div><div style="background:#fff;border:1px solid #999;padding:10px;text-align:right">“Já fez algum procedimento?”</div><div style="background:#fff;border:1px solid #999;padding:10px">“Nunca. Por isso o medo.”</div><div style="margin-top:auto;font:800 22px/1.05 var(--sans);color:var(--vinho)">AVALIAÇÃO<br>SEM COMPROMISSO</div></div>
+        </div>
+        <div class="icone">⇄</div>
+        <div class="ad quadrado">
+          <div class="foto" data-rotulo="fotos/william-9.jpg"><img src="fotos/william-9.jpg" alt="" onerror="this.parentNode.classList.add('vazio')"></div>
+          <div class="camada"><div style="background:#fff;color:#111;font:800 18px/1.15 var(--sans);text-align:center;padding:12px">MEDO DE FICAR <span style="color:#b3141c">ARTIFICIAL?</span></div><div style="margin-top:auto;background:var(--vinho);font:800 14px/1.2 var(--sans);text-align:center;padding:10px">AVALIAÇÃO SEM COMPROMISSO</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="selo">WA</div>
+</section>
+
+<!-- 14. CHECKLIST + ENCERRAMENTO -->
+<section class="slide escuro" style="padding:0">
+  <div style="display:grid;grid-template-columns:600px 1fr;height:100%">
+    <div class="foto" data-rotulo="Retrato do William — fotos/william-retrato.jpg (vertical)"><img src="fotos/william-retrato.jpg" alt="William Aquino" onerror="this.parentNode.classList.add('vazio')"></div>
+    <div style="padding:90px 100px">
+      <h2 class="titulo">Antes de subir o anúncio</h2>
+      <ul class="checklist">
+        <li>A introdução usa um gatilho de atenção claro?</li>
+        <li>O gancho conecta a introdução ao corpo?</li>
+        <li>O corpo responde o quê, como, quando e quanto?</li>
+        <li>Existe um segundo gancho antes da chamada?</li>
+        <li>O CTA diz o que fazer <em>e</em> por que fazer agora?</li>
+        <li>Testei mais de um formato com a mesma ideia?</li>
+      </ul>
+      <p style="margin-top:56px;font:400 18px/1.6 var(--sans);letter-spacing:4px;text-transform:uppercase;color:var(--cobre)">William Aquino · @_williamaquino</p>
+    </div>
+  </div>
+  <div class="selo">WA</div>
+</section>
+
+</body>
+</html>
