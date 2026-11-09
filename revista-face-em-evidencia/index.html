@@ -7,7 +7,7 @@
 <meta name="description" content="Revista Digital | Edição Especial — Milton Rocha, Cirurgia Plástica Facial.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   /*
     COMO TROCAR AS FOTOS
@@ -20,23 +20,25 @@
     No celular, a página vira leitura contínua e --u aumenta para manter o texto confortável.
   */
   :root {
-    --paper: #ffffff;
-    --mist: #f3f3f1;
-    --fog: #e4e4e1;
-    --stone: #9a9a96;
-    --graphite: #5c5c59;
-    --ink: #1c1c1b;
-    --body: #343432;
-    --desk: #d9d9d6;
-    --serif: "Cormorant Garamond", "Times New Roman", serif;
+    /* Paleta do site cirurgiaplasticarecife.com.br */
+    --paper: #1f1f1f;      /* fundo grafite do site */
+    --mist: #2a2a2a;
+    --fog: #424242;        /* cartões / divisórias do site */
+    --stone: #8f8f8b;
+    --graphite: #bdbcb8;
+    --ink: #ffffff;
+    --body: #d9d8d4;
+    --accent: #669998;     /* verde-água dos botões do site */
+    --desk: #141414;
+    --serif: "Marcellus", "Optima", "Candara", serif;
     --sans: "Inter", "Helvetica Neue", Arial, sans-serif;
   }
   @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) { --desk: #2a2a29; }
+    :root:not([data-theme="light"]) { --desk: #0e0e0e; }
   }
-  :root[data-theme="dark"] { --desk: #2a2a29; }
+  :root[data-theme="dark"] { --desk: #0e0e0e; }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-synthesis: none; }
   html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
   body { background: var(--desk); font-family: var(--sans); color: var(--ink); padding: 24px 16px 96px; }
 
@@ -97,18 +99,18 @@
     padding: calc(3 * var(--u)); white-space: pre-line;
     font: 400 calc(1.1 * var(--u))/1.6 var(--sans); letter-spacing: .18em; text-transform: uppercase; color: var(--stone);
     background:
-      repeating-linear-gradient(135deg, transparent 0 calc(1.4 * var(--u)), rgba(0,0,0,.025) calc(1.4 * var(--u)) calc(2.8 * var(--u))),
+      repeating-linear-gradient(135deg, transparent 0 calc(1.4 * var(--u)), rgba(255,255,255,.03) calc(1.4 * var(--u)) calc(2.8 * var(--u))),
       linear-gradient(180deg, var(--mist), var(--fog));
   }
   .tag {
     position: absolute; left: calc(1.4 * var(--u)); bottom: calc(1.4 * var(--u)); z-index: 1;
     font: 500 calc(.95 * var(--u))/1 var(--sans); letter-spacing: .22em; text-transform: uppercase;
-    color: var(--ink); background: rgba(255,255,255,.88); padding: calc(.8 * var(--u)) calc(1.1 * var(--u));
+    color: var(--ink); background: rgba(31,31,31,.85); padding: calc(.8 * var(--u)) calc(1.1 * var(--u));
   }
   .caption { margin-top: calc(1 * var(--u)); font: 400 calc(1.05 * var(--u))/1.5 var(--sans); color: var(--stone); letter-spacing: .04em; }
 
   /* ================= 01 · CAPA ================= */
-  .cover { background: linear-gradient(180deg, #ffffff 0%, #f4f4f2 55%, #e6e6e3 100%); }
+  .cover { background: linear-gradient(180deg, #1f1f1f 0%, #242424 55%, #2c2c2c 100%); }
   .cover .photo { position: absolute; right: 0; bottom: 0; width: 64%; height: 76%; background: transparent; }
   .cover .photo.missing { background: none; }
   .cover .top {
@@ -128,7 +130,7 @@
   .cover .call p { margin-top: calc(1 * var(--u)); font: 400 calc(2.15 * var(--u))/1.25 var(--serif); color: var(--graphite); }
   .cover .edition { position: absolute; right: calc(6 * var(--u)); bottom: calc(3.2 * var(--u)); z-index: 2;
     font: 400 calc(1.05 * var(--u))/1 var(--sans); letter-spacing: .25em; text-transform: uppercase; color: var(--graphite);
-    background: rgba(255,255,255,.75); padding: calc(.8 * var(--u)) calc(1.2 * var(--u)); }
+    background: rgba(31,31,31,.8); padding: calc(.8 * var(--u)) calc(1.2 * var(--u)); }
 
   /* ================= LAYOUTS EM DUAS COLUNAS ================= */
   /* foto à esquerda (02, 03, 06) ou à direita (04) ocupando a altura toda */
@@ -226,7 +228,7 @@
   .baps .quote p { font-size: calc(2.5 * var(--u)); }
 
   /* ================= 12 · ENCERRAMENTO ================= */
-  .closing { display: grid; grid-template-rows: 50% 1fr; background: linear-gradient(180deg, #fff 50%, #f1f1ef 100%); }
+  .closing { display: grid; grid-template-rows: 50% 1fr; background: linear-gradient(180deg, #1f1f1f 50%, #252525 100%); }
   .closing > .photo { grid-row: 1; }
   .closing .lower { display: grid; grid-template-columns: 1fr 30%; gap: calc(5 * var(--u)); padding: calc(5.5 * var(--u)) calc(6 * var(--u)) calc(8 * var(--u)) calc(6.5 * var(--u)); min-height: 0; }
   .closing .h2 { margin-top: calc(2 * var(--u)); font-size: calc(6.8 * var(--u)); }
@@ -237,6 +239,50 @@
   .qr { width: calc(15 * var(--u)); aspect-ratio: 1; border: 1px dashed var(--stone); display: flex; align-items: center; justify-content: center; text-align: center;
     font: 400 calc(.95 * var(--u))/1.5 var(--sans); letter-spacing: .18em; text-transform: uppercase; color: var(--stone); padding: calc(1 * var(--u)); }
   .closing .end { margin-top: auto; font: 400 calc(.95 * var(--u))/1.6 var(--sans); letter-spacing: .25em; text-transform: uppercase; color: var(--stone); }
+
+
+  /* ================= IDENTIDADE DO SITE (fonte Marcellus + verde-água) ================= */
+  .kicker { color: var(--accent); }
+  .rule { background: var(--accent); }
+  .h2 em, .cover h1 em { font-style: normal; color: var(--accent); }
+  .h2 { font-size: calc(5.4 * var(--u)); line-height: 1.04; }
+  .contents .h2 { font-size: calc(5.8 * var(--u)); }
+  .cases .h2 { font-size: calc(4.6 * var(--u)); }
+  .young .h2 { font-size: calc(4.8 * var(--u)); }
+  .baps .h2 { font-size: calc(5 * var(--u)); }
+  .closing .h2 { font-size: calc(5.2 * var(--u)); }
+  .cover h1 { font-size: calc(11.4 * var(--u)); line-height: .98; }
+  .cover h1 em { font-size: .5em; }
+  .cover .byline span { font-size: calc(2.1 * var(--u)); font-style: normal; }
+  .cover .call p { font-size: calc(1.75 * var(--u)); }
+  .deck { font-size: calc(1.95 * var(--u)); font-style: normal; }
+  .text .lead { font-size: calc(2 * var(--u)); }
+  .quote p { font-size: calc(2.3 * var(--u)); font-style: normal; line-height: 1.32; }
+  .deepneck .quote p { font-size: calc(2.5 * var(--u)); }
+  .baps .quote p { font-size: calc(2 * var(--u)); }
+  .quote { border-top-color: var(--accent); }
+  .sign strong { font-size: calc(2.6 * var(--u)); font-style: normal; }
+  .toc .n { font-size: calc(1.9 * var(--u)); color: var(--accent); }
+  .toc .d { font-size: calc(1.65 * var(--u)); font-style: normal; }
+  .cases .case { border-top-color: var(--accent); }
+  .cases .case h4 { font-size: calc(1.9 * var(--u)); font-style: normal; }
+  .editorial .text p.close, .closing .text p.close { font-size: calc(1.7 * var(--u)); font-style: normal; }
+  .pending.big { font-size: calc(2.1 * var(--u)); font-style: normal; }
+  .text .dropcap::first-letter { font-size: calc(4.6 * var(--u)); color: var(--accent); }
+  .story .patient .pending.big::before { color: var(--accent); }
+  .cover .call h3 { border-top-color: var(--accent); }
+  .compare dt.now { color: var(--accent); }
+
+  /* Logo: usa fotos/logo.png; enquanto não existir, mostra o nome em texto */
+  .logo { display: inline-flex; flex-direction: column; align-items: center; text-decoration: none; }
+  .logo img { display: block; height: calc(6 * var(--u)); width: auto; }
+  .logo .lt { display: none; font: 400 calc(2.2 * var(--u))/1 var(--serif); letter-spacing: .06em; color: var(--ink); text-align: center; }
+  .logo .lt small { display: block; margin-top: calc(0.6 * var(--u)); font: 400 calc(0.85 * var(--u))/1 var(--sans); letter-spacing: .3em; color: var(--graphite); }
+  .logo.nologo img { display: none; }
+  .logo.nologo .lt { display: block; }
+  .cover .top { align-items: center; }
+  .closing .logo { align-items: flex-start; }
+  .closing .logo .lt { text-align: left; }
 
   /* ================= NAVEGAÇÃO ================= */
   .nav {
@@ -310,12 +356,26 @@
     .qr { width: 40cqw; }
     .cases .note, .editorial .sign, .closing .end { margin-top: 6cqw; }
     .layers { padding-top: 8cqw; }
+
+    /* identidade do site no celular */
+    .h2, .contents .h2, .cases .h2, .young .h2, .baps .h2, .closing .h2 { font-size: 9.6cqw; }
+    .cover h1 { font-size: 12.4cqw; }
+    .deck { font-size: 4.8cqw; }
+    .text .lead { font-size: 5cqw; }
+    .quote p, .deepneck .quote p, .baps .quote p { font-size: 5.6cqw; }
+    .cover .byline span { font-size: 4.8cqw; }
+    .cover .call p { font-size: 4.4cqw; }
+    .toc .n { font-size: 4.8cqw; }
+    .toc .d { font-size: 4.2cqw; }
+    .logo img { height: 13cqw; }
+    .logo .lt { font-size: 4.8cqw; }
+    .logo .lt small { font-size: 2cqw; }
   }
 
   /* ================= IMPRESSÃO / PDF (A4) ================= */
   @page { size: A4; margin: 0; }
   @media print {
-    body { background: #fff; padding: 0; }
+    body { background: var(--paper); padding: 0; }
     .nav { display: none; }
     .magazine { gap: 0; }
     .page { width: 210mm; height: 297mm; box-shadow: none; break-after: page; }
@@ -329,7 +389,7 @@
 
   <!-- ===================== 01 — CAPA ===================== -->
   <section class="page cover" id="p01" aria-label="Capa">
-    <div class="top"><span>Revista Digital</span><span>Edição Especial</span></div>
+    <div class="top"><span>Revista Digital</span><a class="logo" href="#p01"><img src="fotos/logo.png" alt="Milton Rocha · Cirurgia Plástica"><span class="lt">MILTON ROCHA<small>CIRURGIA PLÁSTICA</small></span></a><span>Edição Especial</span></div>
     <h1>Face <em>em</em><br>Evidência</h1>
     <div class="byline"><strong>MILTON ROCHA</strong><span>Cirurgia Plástica Facial</span></div>
     <figure class="photo" data-label="Foto do Dr. Milton&#10;blazer escuro&#10;fotos/capa-dr-milton.jpg">
@@ -446,19 +506,19 @@
         <!-- Esquema simplificado das camadas da face. Pode ser substituído pela ilustração anatômica do cliente. -->
         <figure class="layers" aria-label="Esquema das camadas da face">
           <svg viewBox="0 0 300 150" role="img">
-            <g font-family="Inter, Arial, sans-serif" font-size="9" fill="#5c5c59" letter-spacing="1">
-              <rect x="0" y="6"   width="150" height="14" fill="#d8d8d4"/>
-              <rect x="0" y="26"  width="150" height="22" fill="#e6e6e2"/>
-              <rect x="0" y="54"  width="150" height="14" fill="#bdbdb8"/>
-              <rect x="0" y="74"  width="150" height="24" fill="#ececea"/>
-              <rect x="0" y="104" width="150" height="14" fill="#a9a9a4"/>
-              <line x1="0" y1="71" x2="150" y2="71" stroke="#1c1c1b" stroke-width="1.4" stroke-dasharray="4 3"/>
+            <g font-family="Inter, Arial, sans-serif" font-size="9" fill="#bdbcb8" letter-spacing="1">
+              <rect x="0" y="6"   width="150" height="14" fill="#5a5a5a"/>
+              <rect x="0" y="26"  width="150" height="22" fill="#4a4a4a"/>
+              <rect x="0" y="54"  width="150" height="14" fill="#6f6f6f"/>
+              <rect x="0" y="74"  width="150" height="24" fill="#3b3b3b"/>
+              <rect x="0" y="104" width="150" height="14" fill="#7d7d7d"/>
+              <line x1="0" y1="71" x2="150" y2="71" stroke="#669998" stroke-width="1.6" stroke-dasharray="4 3"/>
               <text x="162" y="16">PELE</text>
               <text x="162" y="40">GORDURA SUBCUTÂNEA</text>
               <text x="162" y="64">SMAS / MÚSCULOS</text>
               <text x="162" y="89">LIGAMENTOS E ESPAÇOS</text>
               <text x="162" y="114">PERIÓSTEO / FÁSCIA</text>
-              <text x="0" y="140" fill="#1c1c1b" font-weight="600">- - -  PLANO PROFUNDO</text>
+              <text x="0" y="140" fill="#669998" font-weight="600">- - -  PLANO PROFUNDO</text>
             </g>
           </svg>
           <figcaption class="caption">Esquema simplificado das camadas da face.</figcaption>
@@ -525,19 +585,19 @@
       </figure>
       <figure class="angle" aria-label="Esquema do ângulo cervicomentoniano">
         <svg viewBox="0 0 180 170" role="img">
-          <g fill="none" stroke="#1c1c1b" stroke-width="1.4" stroke-linecap="round">
+          <g fill="none" stroke="#ffffff" stroke-width="1.4" stroke-linecap="round">
             <path d="M18 34 L96 34"/>            <!-- linha submentoniana -->
             <path d="M96 34 L132 150"/>          <!-- linha cervical -->
           </g>
-          <path d="M80 34 A16 16 0 0 1 101 49" fill="none" stroke="#9a9a96" stroke-width="1.2"/>
-          <circle cx="18" cy="34" r="2.6" fill="#1c1c1b"/>
-          <circle cx="96" cy="34" r="2.6" fill="#1c1c1b"/>
-          <g font-family="Inter, Arial, sans-serif" font-size="8.5" fill="#5c5c59" letter-spacing="1">
+          <path d="M80 34 A16 16 0 0 1 101 49" fill="none" stroke="#669998" stroke-width="1.6"/>
+          <circle cx="18" cy="34" r="2.6" fill="#ffffff"/>
+          <circle cx="96" cy="34" r="2.6" fill="#ffffff"/>
+          <g font-family="Inter, Arial, sans-serif" font-size="8.5" fill="#bdbcb8" letter-spacing="1">
             <text x="10" y="22">QUEIXO</text>
             <text x="122" y="100">PESCOÇO</text>
-            <text x="4" y="66" fill="#1c1c1b" font-weight="600">ÂNGULO</text>
-            <text x="4" y="78" fill="#1c1c1b" font-weight="600">CERVICO-</text>
-            <text x="4" y="90" fill="#1c1c1b" font-weight="600">MENTONIANO</text>
+            <text x="4" y="66" fill="#669998" font-weight="600">ÂNGULO</text>
+            <text x="4" y="78" fill="#669998" font-weight="600">CERVICO-</text>
+            <text x="4" y="90" fill="#669998" font-weight="600">MENTONIANO</text>
           </g>
         </svg>
         <figcaption class="caption">Relação entre queixo e pescoço, avaliada no planejamento.</figcaption>
@@ -709,6 +769,7 @@
         </div>
       </div>
       <aside class="aside">
+        <a class="logo" href="#p01"><img src="fotos/logo.png" alt="Milton Rocha · Cirurgia Plástica"><span class="lt">MILTON ROCHA<small>CIRURGIA PLÁSTICA</small></span></a>
         <div class="sign"><strong>Milton Rocha</strong><span>Cirurgião Plástico<br>CRM 17964 | RQE 26</span></div>
         <div class="contact">
           <span class="h3">Contato</span>
@@ -732,6 +793,11 @@
 
 <script>
   // Mostra o espaço reservado quando a foto ainda não foi colocada na pasta.
+  document.querySelectorAll('.logo img').forEach(function (img) {
+    function mark() { img.closest('.logo').classList.add('nologo'); }
+    if (img.complete && img.naturalWidth === 0) mark();
+    img.addEventListener('error', mark);
+  });
   document.querySelectorAll('.photo img').forEach(function (img) {
     function mark() { img.closest('.photo').classList.add('missing'); }
     if (img.complete && img.naturalWidth === 0) mark();
