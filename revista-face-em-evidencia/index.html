@@ -11,20 +11,22 @@
 <style>
   /*
     COMO TROCAR AS FOTOS
-    Coloque os arquivos na pasta "fotos/" com estes nomes:
-      fotos/capa-dr-milton.jpg        → Página 01 (Dr. Milton, blazer escuro)
-      fotos/sumario-paciente.jpg      → Página 02 (paciente de óculos, perfil — fica P&B automaticamente)
-      fotos/editorial-dr-milton.jpg   → Página 03 (Dr. Milton, camisa preta, sentado)
-    Enquanto o arquivo não existir, aparece um espaço reservado cinza.
+    Coloque os arquivos na pasta "fotos/" com os nomes indicados em cada página
+    (o nome aparece no espaço cinza enquanto a foto não existir).
     Para ajustar o enquadramento, altere "object-position" no atributo style da <img>.
+    Fotos com a classe "bw" são exibidas em preto e branco (o arquivo original não é alterado).
+
+    UNIDADE: --u = 1% da largura da página no computador/impressão.
+    No celular, a página vira leitura contínua e --u aumenta para manter o texto confortável.
   */
   :root {
     --paper: #ffffff;
-    --mist: #f2f2f0;
+    --mist: #f3f3f1;
     --fog: #e4e4e1;
     --stone: #9a9a96;
     --graphite: #5c5c59;
     --ink: #1c1c1b;
+    --body: #343432;
     --desk: #d9d9d6;
     --serif: "Cormorant Garamond", "Times New Roman", serif;
     --sans: "Inter", "Helvetica Neue", Arial, sans-serif;
@@ -35,17 +37,13 @@
   :root[data-theme="dark"] { --desk: #2a2a29; }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { -webkit-text-size-adjust: 100%; }
-  body {
-    background: var(--desk);
-    font-family: var(--sans);
-    color: var(--ink);
-    padding: 24px 16px 96px;
-  }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  body { background: var(--desk); font-family: var(--sans); color: var(--ink); padding: 24px 16px 96px; }
 
-  /* ---------- Página (proporção A4) ---------- */
+  /* ================= PÁGINA ================= */
   .magazine { display: flex; flex-direction: column; align-items: center; gap: 32px; }
   .page {
+    --u: 1cqw;
     position: relative;
     width: min(100%, 820px);
     aspect-ratio: 210 / 297;
@@ -53,18 +51,42 @@
     overflow: hidden;
     container-type: inline-size;
     box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 12px 40px rgba(0,0,0,.12);
+    scroll-margin-top: 16px;
   }
-  /* unidades: 1cqw = 1% da largura da página */
   .folio {
-    position: absolute; bottom: 3.2cqw; left: 6cqw; right: 6cqw;
+    position: absolute; bottom: calc(3.2 * var(--u)); left: calc(6 * var(--u)); right: calc(6 * var(--u));
     display: flex; justify-content: space-between;
-    font: 400 1.05cqw/1 var(--sans); letter-spacing: .25em; text-transform: uppercase;
-    color: var(--stone);
+    font: 400 calc(1.05 * var(--u))/1 var(--sans); letter-spacing: .25em; text-transform: uppercase; color: var(--stone);
   }
   .folio b { font-weight: 500; color: var(--graphite); }
 
-  /* ---------- Fotos e espaço reservado ---------- */
-  .photo { position: relative; overflow: hidden; background: var(--mist); }
+  /* ================= TIPOGRAFIA COMUM ================= */
+  .kicker { display: block; font: 500 calc(1.15 * var(--u))/1 var(--sans); letter-spacing: .32em; text-transform: uppercase; color: var(--graphite); }
+  .h2 { margin-top: calc(2.6 * var(--u)); font: 300 calc(7 * var(--u))/.95 var(--serif); color: var(--ink); }
+  .h2 em { font-style: italic; }
+  .deck { margin-top: calc(1.8 * var(--u)); font: italic 400 calc(2.3 * var(--u))/1.3 var(--serif); color: var(--graphite); }
+  .rule { width: calc(7 * var(--u)); height: 1px; background: var(--ink); margin: calc(3 * var(--u)) 0 calc(2.8 * var(--u)); }
+  .text p { font: 300 calc(1.52 * var(--u))/1.66 var(--sans); color: var(--body); }
+  .text p + p { margin-top: calc(1.1 * var(--u)); }
+  .text .lead { font: 400 calc(2.4 * var(--u))/1.3 var(--serif); color: var(--ink); margin-bottom: calc(1.6 * var(--u)); }
+  .text .dropcap::first-letter { float: left; font: 400 calc(5.4 * var(--u))/.8 var(--serif); padding: calc(.5 * var(--u)) calc(1 * var(--u)) 0 0; color: var(--ink); }
+  .quote { margin-top: calc(3 * var(--u)); padding-top: calc(2.2 * var(--u)); border-top: 1px solid var(--fog); }
+  .quote small { display: block; font: 500 calc(1 * var(--u))/1 var(--sans); letter-spacing: .3em; text-transform: uppercase; color: var(--stone); margin-bottom: calc(1.4 * var(--u)); }
+  .quote p { font: italic 300 calc(2.9 * var(--u))/1.22 var(--serif); color: var(--ink); }
+  .h3 { font: 600 calc(1.25 * var(--u))/1.3 var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--ink); }
+  .sign strong { display: block; font: italic 400 calc(3.2 * var(--u))/1 var(--serif); color: var(--ink); }
+  .sign span { display: block; margin-top: calc(1 * var(--u)); font: 400 calc(1.1 * var(--u))/1.6 var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--graphite); }
+
+  /* Conteúdo ainda a enviar (aparece destacado para não passar despercebido) */
+  .pending {
+    display: block; margin-top: calc(1.2 * var(--u)); padding: calc(1.4 * var(--u)) calc(1.8 * var(--u));
+    background: var(--mist); border-left: 2px dashed var(--stone);
+    font: italic 400 calc(1.35 * var(--u))/1.55 var(--sans); color: var(--graphite);
+  }
+  .pending.big { font: italic 300 calc(2.6 * var(--u))/1.3 var(--serif); color: var(--graphite); }
+
+  /* ================= FOTOS ================= */
+  .photo { position: relative; overflow: hidden; background: var(--mist); min-height: 0; }
   .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .photo.bw img { filter: grayscale(1) contrast(1.04); }
   .photo.missing img { display: none; }
@@ -72,116 +94,225 @@
     content: attr(data-label);
     position: absolute; inset: 0;
     display: flex; align-items: center; justify-content: center; text-align: center;
-    padding: 4cqw;
-    font: 400 1.2cqw/1.6 var(--sans); letter-spacing: .2em; text-transform: uppercase;
-    color: var(--stone);
+    padding: calc(3 * var(--u)); white-space: pre-line;
+    font: 400 calc(1.1 * var(--u))/1.6 var(--sans); letter-spacing: .18em; text-transform: uppercase; color: var(--stone);
     background:
-      repeating-linear-gradient(135deg, transparent 0 1.4cqw, rgba(0,0,0,.025) 1.4cqw 2.8cqw),
+      repeating-linear-gradient(135deg, transparent 0 calc(1.4 * var(--u)), rgba(0,0,0,.025) calc(1.4 * var(--u)) calc(2.8 * var(--u))),
       linear-gradient(180deg, var(--mist), var(--fog));
-    white-space: pre-line;
   }
-
-  .kicker {
-    font: 500 1.15cqw/1 var(--sans); letter-spacing: .32em; text-transform: uppercase;
-    color: var(--graphite);
+  .tag {
+    position: absolute; left: calc(1.4 * var(--u)); bottom: calc(1.4 * var(--u)); z-index: 1;
+    font: 500 calc(.95 * var(--u))/1 var(--sans); letter-spacing: .22em; text-transform: uppercase;
+    color: var(--ink); background: rgba(255,255,255,.88); padding: calc(.8 * var(--u)) calc(1.1 * var(--u));
   }
-  .rule { width: 7cqw; height: 1px; background: var(--ink); }
+  .caption { margin-top: calc(1 * var(--u)); font: 400 calc(1.05 * var(--u))/1.5 var(--sans); color: var(--stone); letter-spacing: .04em; }
 
-  /* ---------- 01 · Capa ---------- */
+  /* ================= 01 · CAPA ================= */
   .cover { background: linear-gradient(180deg, #ffffff 0%, #f4f4f2 55%, #e6e6e3 100%); }
-  .cover .photo {
-    position: absolute; right: 0; bottom: 0;
-    width: 64%; height: 76%;
-    background: transparent;
-  }
-  .cover .photo img { object-position: 50% 0%; }
+  .cover .photo { position: absolute; right: 0; bottom: 0; width: 64%; height: 76%; background: transparent; }
   .cover .photo.missing { background: none; }
   .cover .top {
-    position: absolute; top: 5cqw; left: 6cqw; right: 6cqw;
+    position: absolute; top: calc(5 * var(--u)); left: calc(6 * var(--u)); right: calc(6 * var(--u));
     display: flex; justify-content: space-between; align-items: center;
-    border-bottom: 1px solid var(--fog); padding-bottom: 2cqw;
+    border-bottom: 1px solid var(--fog); padding-bottom: calc(2 * var(--u));
   }
-  .cover .top span { font: 400 1.05cqw/1 var(--sans); letter-spacing: .3em; text-transform: uppercase; color: var(--graphite); }
-  .cover h1 {
-    position: absolute; top: 9.5cqw; left: 5.4cqw; right: 6cqw;
-    font: 300 15.2cqw/.86 var(--serif);
-    letter-spacing: -.01em; text-transform: uppercase;
-    color: var(--ink);
-    z-index: 2;
-  }
-  .cover h1 em { font-style: italic; font-weight: 300; text-transform: none; font-size: .62em; letter-spacing: 0; color: var(--graphite); padding: 0 .08em; }
-  .cover .byline {
-    position: absolute; top: 38.5cqw; left: 6cqw; z-index: 2;
-  }
-  .cover .byline strong { display: block; font: 500 2.3cqw/1 var(--sans); letter-spacing: .42em; color: var(--ink); }
-  .cover .byline span { display: block; margin-top: 1.4cqw; font: italic 400 2.5cqw/1 var(--serif); color: var(--graphite); }
-  .cover .calls {
-    position: absolute; left: 6cqw; bottom: 8cqw; width: 33%;
-    display: flex; flex-direction: column; gap: 4.2cqw; z-index: 2;
-  }
-  .cover .call h3 {
-    font: 600 1.5cqw/1.25 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--ink);
-    padding-top: 1.6cqw; border-top: 1px solid var(--ink); display: block;
-  }
-  .cover .call p { margin-top: 1cqw; font: 400 2.15cqw/1.25 var(--serif); color: var(--graphite); }
-  .cover .edition {
-    position: absolute; right: 6cqw; bottom: 3.2cqw; z-index: 2;
-    font: 400 1.05cqw/1 var(--sans); letter-spacing: .25em; text-transform: uppercase; color: var(--graphite);
-    background: rgba(255,255,255,.75); padding: .8cqw 1.2cqw;
-  }
+  .cover .top span { font: 400 calc(1.05 * var(--u))/1 var(--sans); letter-spacing: .3em; text-transform: uppercase; color: var(--graphite); }
+  .cover h1 { position: absolute; top: calc(9.5 * var(--u)); left: calc(5.4 * var(--u)); right: calc(6 * var(--u)); z-index: 2;
+    font: 300 calc(15.2 * var(--u))/.86 var(--serif); letter-spacing: -.01em; text-transform: uppercase; }
+  .cover h1 em { font-style: italic; text-transform: none; font-size: .62em; letter-spacing: 0; color: var(--graphite); padding: 0 .08em; }
+  .cover .byline { position: absolute; top: calc(38.5 * var(--u)); left: calc(6 * var(--u)); z-index: 2; }
+  .cover .byline strong { display: block; font: 500 calc(2.3 * var(--u))/1 var(--sans); letter-spacing: .42em; }
+  .cover .byline span { display: block; margin-top: calc(1.4 * var(--u)); font: italic 400 calc(2.5 * var(--u))/1 var(--serif); color: var(--graphite); }
+  .cover .calls { position: absolute; left: calc(6 * var(--u)); bottom: calc(8 * var(--u)); width: 33%; display: flex; flex-direction: column; gap: calc(4.2 * var(--u)); z-index: 2; }
+  .cover .call h3 { display: block; font: 600 calc(1.5 * var(--u))/1.25 var(--sans); letter-spacing: .14em; text-transform: uppercase; padding-top: calc(1.6 * var(--u)); border-top: 1px solid var(--ink); }
+  .cover .call p { margin-top: calc(1 * var(--u)); font: 400 calc(2.15 * var(--u))/1.25 var(--serif); color: var(--graphite); }
+  .cover .edition { position: absolute; right: calc(6 * var(--u)); bottom: calc(3.2 * var(--u)); z-index: 2;
+    font: 400 calc(1.05 * var(--u))/1 var(--sans); letter-spacing: .25em; text-transform: uppercase; color: var(--graphite);
+    background: rgba(255,255,255,.75); padding: calc(.8 * var(--u)) calc(1.2 * var(--u)); }
 
-  /* ---------- 02 · Sumário ---------- */
-  .contents .photo { position: absolute; left: 0; top: 0; bottom: 0; width: 46%; }
-  .contents .photo img { object-position: 40% 50%; }
-  .contents .body {
-    position: absolute; left: 54%; right: 7cqw; top: 13cqw; bottom: 10cqw;
-    display: flex; flex-direction: column;
-  }
-  .contents h2 { margin-top: 3cqw; font: 300 7.4cqw/.95 var(--serif); color: var(--ink); }
-  .contents h2 em { font-style: italic; }
-  .contents .rule { margin: 4.4cqw 0 4.6cqw; }
-  .toc { list-style: none; display: flex; flex-direction: column; gap: 3.5cqw; }
-  .toc li { display: grid; grid-template-columns: 7.6cqw 1fr; align-items: baseline; }
-  .toc .n { font: 400 2.2cqw/1 var(--serif); color: var(--stone); font-variant-numeric: lining-nums; }
-  .toc .t { font: 500 1.35cqw/1.3 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--ink); }
-  .toc .d { grid-column: 2; margin-top: .7cqw; font: italic 400 2cqw/1.3 var(--serif); color: var(--graphite); }
+  /* ================= LAYOUTS EM DUAS COLUNAS ================= */
+  /* foto à esquerda (02, 03, 06) ou à direita (04) ocupando a altura toda */
+  .split { display: grid; grid-template-columns: 46% 1fr; }
+  .split.right { grid-template-columns: 1fr 46%; }
+  .split > .photo { grid-row: 1; height: 100%; }
+  .split.right > .photo { grid-column: 2; }
+  .split > .body { grid-row: 1; padding: calc(10 * var(--u)) calc(6.5 * var(--u)) calc(8 * var(--u)) calc(7 * var(--u)); display: flex; flex-direction: column; }
+  .split.right > .body { grid-column: 1; padding: calc(10 * var(--u)) calc(6 * var(--u)) calc(8 * var(--u)) calc(6.5 * var(--u)); }
 
-  /* ---------- 03 · Editorial ---------- */
-  .editorial .photo { position: absolute; left: 0; top: 0; bottom: 0; width: 48%; }
-  .editorial .photo img { object-position: 50% 30%; }
-  .editorial .body {
-    position: absolute; left: 54%; right: 6.5cqw; top: 10cqw; bottom: 8cqw;
-    display: flex; flex-direction: column;
-  }
-  .editorial h2 { margin-top: 2.6cqw; font: 300 7.2cqw/.95 var(--serif); }
-  .editorial .sub { margin-top: 2cqw; font: italic 400 2.3cqw/1.3 var(--serif); color: var(--graphite); }
-  .editorial .rule { margin: 3.2cqw 0 3cqw; }
-  .editorial .text p {
-    font: 300 1.52cqw/1.66 var(--sans); color: #333331; text-align: left; hyphens: manual;
-  }
-  .editorial .text p + p { margin-top: 1.2cqw; }
-  .editorial .text p:first-child::first-letter {
-    float: left; font: 400 5.4cqw/.8 var(--serif); padding: .5cqw 1cqw 0 0; color: var(--ink);
-  }
-  .editorial .text p.close { font: italic 400 2.05cqw/1.4 var(--serif); color: var(--ink); margin-top: 2cqw; }
-  .editorial .sign { margin-top: auto; padding-top: 2.4cqw; }
-  .editorial .sign strong { display: block; font: italic 400 3.2cqw/1 var(--serif); color: var(--ink); }
-  .editorial .sign span { display: block; margin-top: 1cqw; font: 400 1.1cqw/1.6 var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--graphite); }
+  /* 02 · Sumário */
+  .contents .body { padding-top: calc(13 * var(--u)); }
+  .contents .h2 { font-size: calc(7.4 * var(--u)); margin-top: calc(3 * var(--u)); }
+  .contents .rule { margin: calc(4.4 * var(--u)) 0 calc(4.6 * var(--u)); }
+  .toc { list-style: none; display: flex; flex-direction: column; gap: calc(3.5 * var(--u)); }
+  .toc a { display: grid; grid-template-columns: calc(7.6 * var(--u)) 1fr; align-items: baseline; text-decoration: none; color: inherit; }
+  .toc .n { font: 400 calc(2.2 * var(--u))/1 var(--serif); color: var(--stone); font-variant-numeric: lining-nums; }
+  .toc .t { font: 500 calc(1.35 * var(--u))/1.3 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--ink); }
+  .toc .d { grid-column: 2; margin-top: calc(.7 * var(--u)); font: italic 400 calc(2 * var(--u))/1.3 var(--serif); color: var(--graphite); }
+  .toc a:hover .t { text-decoration: underline; text-underline-offset: .4em; }
 
-  /* ---------- Navegação ---------- */
+  /* 03 · Editorial */
+  .editorial .text p.close { font: italic 400 calc(2.05 * var(--u))/1.4 var(--serif); color: var(--ink); margin-top: calc(2 * var(--u)); }
+  .editorial .sign { margin-top: auto; padding-top: calc(2.4 * var(--u)); }
+
+  /* ================= 05 · DEEP PLANE ================= */
+  .deepplane { display: grid; grid-template-columns: 54% 1fr; }
+  .deepplane .body { padding: calc(10 * var(--u)) calc(5 * var(--u)) calc(8 * var(--u)) calc(6.5 * var(--u)); display: flex; flex-direction: column; }
+  .deepplane .side { display: flex; flex-direction: column; background: var(--mist); }
+  .deepplane .side .photo { flex: 0 0 56%; }
+  .deepplane .side .box { padding: calc(4 * var(--u)) calc(5 * var(--u)) calc(8 * var(--u)) calc(4.5 * var(--u)); display: flex; flex-direction: column; gap: calc(2.4 * var(--u)); }
+  .compare dt { font: 600 calc(1.1 * var(--u))/1 var(--sans); letter-spacing: .28em; text-transform: uppercase; color: var(--stone); }
+  .compare dt.now { color: var(--ink); }
+  .compare dd { margin-top: calc(.9 * var(--u)); font: 300 calc(1.45 * var(--u))/1.55 var(--sans); color: var(--body); }
+  .compare dd + dt { margin-top: calc(2.2 * var(--u)); padding-top: calc(2.2 * var(--u)); border-top: 1px solid var(--fog); }
+  .layers { margin-top: auto; padding-top: calc(2.6 * var(--u)); }
+  .layers svg { width: 100%; height: auto; display: block; }
+  .layers .caption { margin-top: calc(.8 * var(--u)); }
+
+  /* ================= 07 · DEEP NECK ================= */
+  .deepneck { display: flex; flex-direction: column; padding: calc(9 * var(--u)) calc(6.5 * var(--u)) calc(8 * var(--u)); }
+  .deepneck .head { display: grid; grid-template-columns: 1fr 1fr; gap: 0 calc(5 * var(--u)); align-items: end; }
+  .deepneck .head .deck { margin-top: 0; }
+  .deepneck .rule { margin: calc(3 * var(--u)) 0 calc(3 * var(--u)); }
+  .deepneck .text { columns: 2; column-gap: calc(5 * var(--u)); }
+  .deepneck .text p { break-inside: avoid; }
+  .deepneck .quote { margin-top: calc(3.4 * var(--u)); }
+  .deepneck .quote p { font-size: calc(3.2 * var(--u)); max-width: 80%; }
+  .deepneck .band { flex: 1; min-height: 0; margin-top: calc(3.6 * var(--u)); display: grid; grid-template-columns: 1fr 1fr calc(24 * var(--u)); gap: calc(1.2 * var(--u)); }
+  .deepneck .band .photo { height: 100%; }
+  .angle { background: var(--mist); padding: calc(2.4 * var(--u)); display: flex; flex-direction: column; justify-content: center; }
+  .angle svg { width: 100%; height: auto; display: block; }
+
+  /* ================= 08 · CASOS ================= */
+  .cases { display: grid; grid-template-columns: 43% 1fr; }
+  .cases .body { padding: calc(10 * var(--u)) calc(4.5 * var(--u)) calc(8 * var(--u)) calc(6.5 * var(--u)); display: flex; flex-direction: column; }
+  .cases .h2 { font-size: calc(5.8 * var(--u)); }
+  .cases .text p { font-size: calc(1.45 * var(--u)); }
+  .cases .case { margin-top: calc(2.8 * var(--u)); padding-top: calc(2.4 * var(--u)); border-top: 1px solid var(--ink); }
+  .cases .case .h3 { color: var(--stone); }
+  .cases .case h4 { margin-top: calc(1 * var(--u)); font: italic 400 calc(2.3 * var(--u))/1.2 var(--serif); }
+  .cases .note { margin-top: auto; padding-top: calc(2 * var(--u)); font: 400 calc(1 * var(--u))/1.5 var(--sans); color: var(--stone); }
+  .cases .grid { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr; gap: calc(.8 * var(--u)); padding: 0 0 0 0; }
+  .cases .grid .photo { height: 100%; }
+
+  /* ================= 09 · EXPERIÊNCIA ================= */
+  .story { display: grid; grid-template-columns: 46% 1fr; grid-template-rows: 56% 1fr; }
+  .story > .photo { grid-column: 1; grid-row: 1; }
+  .story .intro { grid-column: 2; grid-row: 1; padding: calc(9 * var(--u)) calc(6 * var(--u)) calc(2 * var(--u)) calc(5.5 * var(--u)); }
+  .story .views { grid-column: 1 / -1; grid-row: 2; display: grid; grid-template-columns: 1.15fr 1fr; gap: calc(5 * var(--u)); padding: calc(4.4 * var(--u)) calc(6 * var(--u)) calc(8 * var(--u)) calc(6.5 * var(--u)); }
+  .story .views .h3 { padding-bottom: calc(1.6 * var(--u)); border-bottom: 1px solid var(--fog); }
+  .story .patient .pending.big { margin-top: calc(2 * var(--u)); padding: calc(2.4 * var(--u)) calc(2.4 * var(--u)); }
+  .story .patient .pending.big::before { content: "“"; display: block; font: 400 calc(7 * var(--u))/.5 var(--serif); color: var(--stone); margin: calc(1.4 * var(--u)) 0 calc(1 * var(--u)); font-style: normal; }
+
+  /* ================= 10 · PACIENTES JOVENS ================= */
+  .young { display: grid; grid-template-columns: 1fr 42%; }
+  .young .body { padding: calc(10 * var(--u)) calc(5.5 * var(--u)) calc(8 * var(--u)) calc(6.5 * var(--u)); display: flex; flex-direction: column; }
+  .young .h2 { font-size: calc(6.2 * var(--u)); }
+  .young .pair { display: grid; grid-template-rows: 1fr 1fr; gap: calc(.8 * var(--u)); }
+  .young .pair .photo { height: 100%; }
+
+  /* ================= 11 · BAPS ================= */
+  .baps { display: grid; grid-template-rows: 38% 1fr; }
+  .baps > .photo { grid-row: 1; }
+  .baps .lower { display: grid; grid-template-columns: 1fr 34%; gap: calc(4.5 * var(--u)); padding: calc(5 * var(--u)) calc(6 * var(--u)) calc(8 * var(--u)) calc(6.5 * var(--u)); min-height: 0; }
+  .baps .h2 { margin-top: calc(2 * var(--u)); font-size: calc(6.4 * var(--u)); }
+  .baps .text { margin-top: calc(2.6 * var(--u)); columns: 2; column-gap: calc(3.6 * var(--u)); }
+  .baps .text p { break-inside: avoid; }
+  .baps .aside { display: flex; flex-direction: column; gap: calc(2 * var(--u)); min-height: 0; }
+  .baps .aside .photo { flex: 0 0 calc(22 * var(--u)); }
+  .baps .facts { background: var(--mist); padding: calc(2.4 * var(--u)); display: flex; flex-direction: column; gap: calc(1.4 * var(--u)); }
+  .baps .facts dt { font: 600 calc(.95 * var(--u))/1 var(--sans); letter-spacing: .26em; text-transform: uppercase; color: var(--stone); }
+  .baps .facts dd { margin-top: calc(-.6 * var(--u)); font: italic 400 calc(1.3 * var(--u))/1.4 var(--sans); color: var(--graphite); }
+  .baps .quote { margin-top: calc(2.6 * var(--u)); }
+  .baps .quote p { font-size: calc(2.5 * var(--u)); }
+
+  /* ================= 12 · ENCERRAMENTO ================= */
+  .closing { display: grid; grid-template-rows: 50% 1fr; background: linear-gradient(180deg, #fff 50%, #f1f1ef 100%); }
+  .closing > .photo { grid-row: 1; }
+  .closing .lower { display: grid; grid-template-columns: 1fr 30%; gap: calc(5 * var(--u)); padding: calc(5.5 * var(--u)) calc(6 * var(--u)) calc(8 * var(--u)) calc(6.5 * var(--u)); min-height: 0; }
+  .closing .h2 { margin-top: calc(2 * var(--u)); font-size: calc(6.8 * var(--u)); }
+  .closing .text { margin-top: calc(2.6 * var(--u)); }
+  .closing .text p.close { margin-top: calc(1.6 * var(--u)); font: italic 400 calc(2 * var(--u))/1.4 var(--serif); color: var(--ink); }
+  .closing .aside { display: flex; flex-direction: column; gap: calc(2.4 * var(--u)); border-left: 1px solid var(--fog); padding-left: calc(3.6 * var(--u)); }
+  .closing .contact .pending { font-size: calc(1.2 * var(--u)); }
+  .qr { width: calc(15 * var(--u)); aspect-ratio: 1; border: 1px dashed var(--stone); display: flex; align-items: center; justify-content: center; text-align: center;
+    font: 400 calc(.95 * var(--u))/1.5 var(--sans); letter-spacing: .18em; text-transform: uppercase; color: var(--stone); padding: calc(1 * var(--u)); }
+  .closing .end { margin-top: auto; font: 400 calc(.95 * var(--u))/1.6 var(--sans); letter-spacing: .25em; text-transform: uppercase; color: var(--stone); }
+
+  /* ================= NAVEGAÇÃO ================= */
   .nav {
     position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%);
-    display: flex; gap: 4px; padding: 6px; border-radius: 999px;
+    display: flex; gap: 2px; padding: 6px; border-radius: 999px;
     background: rgba(28,28,27,.86); backdrop-filter: blur(8px);
-    max-width: calc(100vw - 32px); overflow-x: auto; z-index: 10;
+    max-width: calc(100vw - 32px); overflow-x: auto; z-index: 10; scrollbar-width: none;
   }
-  .nav a {
-    font: 500 12px/1 var(--sans); letter-spacing: .12em; color: #e8e8e5; text-decoration: none;
-    padding: 9px 12px; border-radius: 999px; white-space: nowrap;
-  }
+  .nav a { font: 500 12px/1 var(--sans); letter-spacing: .1em; color: #e8e8e5; text-decoration: none; padding: 9px 11px; border-radius: 999px; white-space: nowrap; }
   .nav a:hover, .nav a:focus-visible { background: rgba(255,255,255,.14); outline: none; }
 
-  /* ---------- Impressão / PDF (A4, uma página por folha) ---------- */
+  /* ================= CELULAR: leitura contínua ================= */
+  @media (max-width: 700px) {
+    body { padding: 0 0 88px; }
+    .magazine { gap: 0; }
+    .page { --u: 2.45cqw; width: 100%; aspect-ratio: auto; box-shadow: none; border-bottom: 1px solid var(--fog); padding-bottom: 12cqw; }
+    .page, .page > *, .split > .body, .deepplane .side, .story .views, .baps .lower, .closing .lower,
+    .deepneck .head, .deepneck .band, .cases .grid, .young .pair { display: block; }
+    .split > .body, .split.right > .body, .deepplane .body, .cases .body, .young .body, .story .intro, .story .views, .baps .lower, .closing .lower, .deepplane .side .box {
+      padding: 11cqw 6cqw 0;
+    }
+    .page > .folio { display: flex; left: 6cqw; right: 6cqw; bottom: 5cqw; }
+    .photo { width: 100%; height: auto !important; aspect-ratio: 4 / 5; }
+    .h2, .contents .h2, .cases .h2, .young .h2, .baps .h2, .closing .h2 { font-size: 12.5cqw; }
+    .deck { font-size: 6cqw; }
+    .text .lead { font-size: 6.2cqw; }
+    .quote p, .deepneck .quote p, .baps .quote p { font-size: 7.2cqw; max-width: none; }
+    .text, .deepneck .text, .baps .text { columns: auto; }
+    .kicker { font-size: 3cqw; }
+    .folio, .tag, .caption { font-size: 2.6cqw; }
+    .photo.missing::after { font-size: 2.8cqw; }
+
+    /* capa */
+    .cover { padding-bottom: 0; }
+    .cover > * { position: relative !important; inset: auto !important; width: auto !important; }
+    .cover .top { margin: 0 6cqw; padding: 6cqw 0 4cqw; }
+    .cover .top span { font-size: 2.6cqw; }
+    .cover h1 { margin: 6cqw 5cqw 0; font-size: 16.5cqw; }
+    .cover .byline { margin: 6cqw 6cqw 0; }
+    .cover .byline strong { font-size: 4.6cqw; }
+    .cover .byline span { font-size: 6cqw; }
+    .cover .photo { margin-top: 8cqw; aspect-ratio: 4 / 5; }
+    .cover .calls { display: flex; padding: 10cqw 6cqw 4cqw; gap: 8cqw; }
+    .cover .call h3 { font-size: 3.4cqw; }
+    .cover .call p { font-size: 5.6cqw; }
+    .cover .edition { display: block; margin: 0 6cqw 8cqw; text-align: center; font-size: 2.6cqw; padding: 3cqw; }
+
+    /* sumário */
+    .toc { gap: 6cqw; }
+    .toc a { grid-template-columns: 16cqw 1fr; }
+    .toc .n { font-size: 6cqw; }
+    .toc .t { font-size: 3.4cqw; }
+    .toc .d { font-size: 5.4cqw; }
+
+    .split.right > .photo, .young .pair { margin-top: 10cqw; }
+    .deepplane .side { background: none; }
+    .deepplane .side .photo { margin-top: 10cqw; }
+    .deepneck { padding: 11cqw 6cqw 12cqw; }
+    .deepneck .head .deck { margin-top: 1.8cqw; }
+    .deepneck .band .photo { margin-top: 3cqw; }
+    .angle { margin-top: 3cqw; }
+    .cases .grid { padding: 8cqw 0 0; }
+    .cases .grid .photo + .photo { margin-top: 2cqw; }
+    .young .pair .photo + .photo { margin-top: 2cqw; }
+    .young .pair { padding-top: 8cqw; }
+    .story .views > * + * { margin-top: 10cqw; }
+    .baps .aside { margin-top: 10cqw; }
+    .baps .aside .photo { margin-bottom: 4cqw; }
+    .closing .aside { margin-top: 10cqw; border-left: 0; padding-left: 0; border-top: 1px solid var(--fog); padding-top: 8cqw; }
+    .closing .aside > * + * { margin-top: 6cqw; }
+    .qr { width: 40cqw; }
+    .cases .note, .editorial .sign, .closing .end { margin-top: 6cqw; }
+    .layers { padding-top: 8cqw; }
+  }
+
+  /* ================= IMPRESSÃO / PDF (A4) ================= */
   @page { size: A4; margin: 0; }
   @media print {
     body { background: #fff; padding: 0; }
@@ -196,106 +327,407 @@
 
 <main class="magazine">
 
-  <!-- ===================== PÁGINA 01 — CAPA ===================== -->
+  <!-- ===================== 01 — CAPA ===================== -->
   <section class="page cover" id="p01" aria-label="Capa">
-    <div class="top">
-      <span>Revista Digital</span>
-      <span>Edição Especial</span>
-    </div>
-
+    <div class="top"><span>Revista Digital</span><span>Edição Especial</span></div>
     <h1>Face <em>em</em><br>Evidência</h1>
-
-    <div class="byline">
-      <strong>MILTON ROCHA</strong>
-      <span>Cirurgia Plástica Facial</span>
-    </div>
-
+    <div class="byline"><strong>MILTON ROCHA</strong><span>Cirurgia Plástica Facial</span></div>
     <figure class="photo" data-label="Foto do Dr. Milton&#10;blazer escuro&#10;fotos/capa-dr-milton.jpg">
       <img src="fotos/capa-dr-milton.jpg" alt="Dr. Milton Rocha" style="object-position: 50% 0%">
     </figure>
-
     <div class="calls">
-      <div class="call">
-        <h3>Deep Plane &amp; Deep Neck</h3>
-        <p>A evolução das técnicas e do planejamento cirúrgico.</p>
-      </div>
-      <div class="call">
-        <h3>Casos em Destaque</h3>
-        <p>A individualidade por trás de cada resultado.</p>
-      </div>
-      <div class="call">
-        <h3>Cirurgia Facial em Pacientes Mais Jovens</h3>
-        <p>Novas abordagens e indicações personalizadas.</p>
-      </div>
-      <div class="call">
-        <h3>Congresso BAPS</h3>
-        <p>Ciência, conhecimento e evolução profissional.</p>
-      </div>
+      <div class="call"><h3>Deep Plane &amp; Deep Neck</h3><p>A evolução das técnicas e do planejamento cirúrgico.</p></div>
+      <div class="call"><h3>Casos em Destaque</h3><p>A individualidade por trás de cada resultado.</p></div>
+      <div class="call"><h3>Cirurgia Facial em Pacientes Mais Jovens</h3><p>Novas abordagens e indicações personalizadas.</p></div>
+      <div class="call"><h3>Congresso BAPS</h3><p>Ciência, conhecimento e evolução profissional.</p></div>
     </div>
-
     <div class="edition">Casos · Técnicas · Atualizações</div>
   </section>
 
-  <!-- ===================== PÁGINA 02 — SUMÁRIO ===================== -->
-  <section class="page contents" id="p02" aria-label="Sumário">
+  <!-- ===================== 02 — SUMÁRIO ===================== -->
+  <section class="page split contents" id="p02" aria-label="Sumário">
     <figure class="photo bw" data-label="Foto da paciente&#10;de óculos, em perfil&#10;fotos/sumario-paciente.jpg">
       <img src="fotos/sumario-paciente.jpg" alt="Paciente de perfil" style="object-position: 40% 50%">
     </figure>
-
     <div class="body">
       <span class="kicker">Sumário</span>
-      <h2>Nesta<br><em>edição</em></h2>
+      <h2 class="h2">Nesta<br><em>edição</em></h2>
       <div class="rule"></div>
       <ol class="toc">
-        <li><span class="n">03</span><span class="t">Editorial</span><span class="d">Além da Face</span></li>
-        <li><span class="n">04–05</span><span class="t">Lifting Facial</span><span class="d">A evolução do Deep Plane</span></li>
-        <li><span class="n">06–07</span><span class="t">Cervicoplastia</span><span class="d">O pescoço em evidência</span></li>
-        <li><span class="n">08–09</span><span class="t">Casos em Destaque</span><span class="d">Planejamento, naturalidade e histórias reais</span></li>
-        <li><span class="n">10</span><span class="t">Cirurgia Facial em Pacientes Mais Jovens</span><span class="d">Quando a indicação vai além da idade</span></li>
-        <li><span class="n">11</span><span class="t">Congresso BAPS</span><span class="d">Ciência, troca de experiências e atualização</span></li>
-        <li><span class="n">12</span><span class="t">Além da Pele</span><span class="d">O cuidado em cada detalhe</span></li>
+        <li><a href="#p03"><span class="n">03</span><span class="t">Editorial</span><span class="d">Além da Face</span></a></li>
+        <li><a href="#p04"><span class="n">04–05</span><span class="t">Lifting Facial</span><span class="d">A evolução do Deep Plane</span></a></li>
+        <li><a href="#p06"><span class="n">06–07</span><span class="t">Cervicoplastia</span><span class="d">O pescoço em evidência</span></a></li>
+        <li><a href="#p08"><span class="n">08–09</span><span class="t">Casos em Destaque</span><span class="d">Planejamento, naturalidade e histórias reais</span></a></li>
+        <li><a href="#p10"><span class="n">10</span><span class="t">Cirurgia Facial em Pacientes Mais Jovens</span><span class="d">Quando a indicação vai além da idade</span></a></li>
+        <li><a href="#p11"><span class="n">11</span><span class="t">Congresso BAPS</span><span class="d">Ciência, troca de experiências e atualização</span></a></li>
+        <li><a href="#p12"><span class="n">12</span><span class="t">Além da Pele</span><span class="d">O cuidado em cada detalhe</span></a></li>
       </ol>
     </div>
-
     <div class="folio"><span>Face em Evidência</span><b>02</b></div>
   </section>
 
-  <!-- ===================== PÁGINA 03 — EDITORIAL ===================== -->
-  <section class="page editorial" id="p03" aria-label="Editorial">
+  <!-- ===================== 03 — EDITORIAL ===================== -->
+  <section class="page split editorial" id="p03" aria-label="Editorial">
     <figure class="photo" data-label="Foto do Dr. Milton&#10;camisa preta, sentado&#10;fotos/editorial-dr-milton.jpg">
       <img src="fotos/editorial-dr-milton.jpg" alt="Dr. Milton Rocha" style="object-position: 50% 30%">
     </figure>
-
     <div class="body">
       <span class="kicker">Editorial</span>
-      <h2>Além da Face</h2>
-      <p class="sub">Uma visão mais completa sobre a cirurgia facial contemporânea</p>
+      <h2 class="h2">Além da Face</h2>
+      <p class="deck">Uma visão mais completa sobre a cirurgia facial contemporânea</p>
       <div class="rule"></div>
-
       <div class="text">
-        <p>Durante muito tempo, o rejuvenescimento facial foi associado à ideia de corrigir rugas e remover excessos de pele. Hoje, compreendemos que o envelhecimento envolve transformações muito mais complexas, que acontecem em diferentes estruturas da face.</p>
+        <p class="dropcap">Durante muito tempo, o rejuvenescimento facial foi associado à ideia de corrigir rugas e remover excessos de pele. Hoje, compreendemos que o envelhecimento envolve transformações muito mais complexas, que acontecem em diferentes estruturas da face.</p>
         <p>A evolução do conhecimento anatômico e das técnicas cirúrgicas permitiu desenvolver abordagens cada vez mais individualizadas, capazes de considerar não apenas a aparência, mas as características que tornam cada rosto único.</p>
         <p>Mais do que buscar um aspecto rejuvenescido, a cirurgia facial contemporânea valoriza o equilíbrio entre contornos, proporções e expressões naturais.</p>
         <p>Nesta edição, reunimos temas que fazem parte da prática clínica atual: a evolução do lifting facial, as possibilidades da cervicoplastia, a cirurgia em pacientes mais jovens e casos que ilustram a importância do planejamento individualizado.</p>
         <p>Também compartilhamos a participação em encontros científicos, que fazem parte de um compromisso permanente com o estudo e o aperfeiçoamento profissional.</p>
         <p class="close">Porque a cirurgia facial não se resume à técnica. Envolve conhecimento, sensibilidade, planejamento e respeito à individualidade.</p>
       </div>
+      <div class="sign"><strong>Milton Rocha</strong><span>Cirurgião Plástico<br>CRM 17964 | RQE 26</span></div>
+    </div>
+    <div class="folio"><span>Editorial</span><b>03</b></div>
+  </section>
 
-      <div class="sign">
-        <strong>Milton Rocha</strong>
-        <span>Cirurgião Plástico<br>CRM 17964 | RQE 26</span>
+  <!-- ===================== 04 — LIFTING FACIAL ===================== -->
+  <section class="page split right" id="p04" aria-label="Lifting Facial">
+    <div class="body">
+      <span class="kicker">Lifting Facial</span>
+      <h2 class="h2">Além da<br><em>Superfície</em></h2>
+      <p class="deck">O rosto envelhece em diferentes camadas. A cirurgia também precisa compreender essa complexidade.</p>
+      <div class="rule"></div>
+      <div class="text">
+        <p class="lead">O envelhecimento facial não acontece apenas na pele.</p>
+        <p>Com o passar dos anos, surgem alterações nos compartimentos de gordura, ligamentos, músculos e estruturas de sustentação da face. Essas transformações contribuem para a perda de definição dos contornos, o aprofundamento dos sulcos e mudanças nas proporções faciais.</p>
+        <p>Durante muito tempo, o lifting foi associado principalmente à tração da pele. Entretanto, a evolução da cirurgia facial trouxe uma compreensão mais profunda da anatomia e dos mecanismos envolvidos no envelhecimento.</p>
+        <p>Atualmente, o planejamento cirúrgico pode considerar o reposicionamento das estruturas profundas, em vez de depender exclusivamente da tensão superficial.</p>
+        <p>O objetivo é buscar uma aparência mais descansada e equilibrada, preservando os traços e a identidade de cada paciente.</p>
+      </div>
+      <blockquote class="quote">
+        <p>Rejuvenescer não significa transformar. Significa compreender o que o tempo modificou e avaliar como restaurar a harmonia facial.</p>
+      </blockquote>
+    </div>
+    <figure class="photo" data-label="Dr. Milton em cirurgia&#10;touca, máscara e lupas&#10;fotos/lifting-cirurgia.jpg">
+      <img src="fotos/lifting-cirurgia.jpg" alt="Dr. Milton Rocha durante cirurgia" style="object-position: 50% 30%">
+    </figure>
+    <div class="folio"><span>Lifting Facial</span><b>04</b></div>
+  </section>
+
+  <!-- ===================== 05 — DEEP PLANE ===================== -->
+  <section class="page deepplane" id="p05" aria-label="Deep Plane">
+    <div class="body">
+      <span class="kicker">Lifting Facial</span>
+      <h2 class="h2">Deep <em>Plane</em></h2>
+      <p class="deck">Uma abordagem mais profunda do rejuvenescimento facial</p>
+      <div class="rule"></div>
+      <div class="text">
+        <p>O Deep Plane Facelift representa uma importante evolução na abordagem cirúrgica do envelhecimento facial.</p>
+        <p>A técnica trabalha em planos anatômicos profundos, permitindo a mobilização e o reposicionamento de tecidos que sofreram alterações ao longo dos anos.</p>
+        <p>Dessa forma, o tratamento não depende apenas de tracionar a pele, mas de compreender e abordar estruturas que participam da sustentação facial.</p>
+        <p>Entre os objetivos do planejamento estão a melhora dos contornos, a suavização de determinadas transições faciais e a recuperação de proporções, sempre respeitando as particularidades anatômicas do paciente.</p>
+        <p>A naturalidade não depende somente da técnica escolhida, mas também de sua indicação, da avaliação das estruturas e da experiência do cirurgião.</p>
+      </div>
+      <blockquote class="quote">
+        <p>A sofisticação de um resultado está na harmonia entre o que foi tratado e aquilo que deve ser preservado.</p>
+      </blockquote>
+    </div>
+    <div class="side">
+      <figure class="photo" data-label="Fotografia cirúrgica&#10;fotos/deep-plane-cirurgia.jpg">
+        <img src="fotos/deep-plane-cirurgia.jpg" alt="Fotografia cirúrgica" style="object-position: 50% 50%">
+      </figure>
+      <div class="box">
+        <span class="h3">O que mudou na cirurgia facial?</span>
+        <dl class="compare">
+          <dt>Antes</dt>
+          <dd>Abordagens frequentemente concentradas na retirada de excessos e na tração cutânea.</dd>
+          <dt class="now">Hoje</dt>
+          <dd>Maior compreensão dos planos profundos, das estruturas de sustentação e das possibilidades de reposicionamento dos tecidos.</dd>
+        </dl>
+        <!-- Esquema simplificado das camadas da face. Pode ser substituído pela ilustração anatômica do cliente. -->
+        <figure class="layers" aria-label="Esquema das camadas da face">
+          <svg viewBox="0 0 300 150" role="img">
+            <g font-family="Inter, Arial, sans-serif" font-size="9" fill="#5c5c59" letter-spacing="1">
+              <rect x="0" y="6"   width="150" height="14" fill="#d8d8d4"/>
+              <rect x="0" y="26"  width="150" height="22" fill="#e6e6e2"/>
+              <rect x="0" y="54"  width="150" height="14" fill="#bdbdb8"/>
+              <rect x="0" y="74"  width="150" height="24" fill="#ececea"/>
+              <rect x="0" y="104" width="150" height="14" fill="#a9a9a4"/>
+              <line x1="0" y1="71" x2="150" y2="71" stroke="#1c1c1b" stroke-width="1.4" stroke-dasharray="4 3"/>
+              <text x="162" y="16">PELE</text>
+              <text x="162" y="40">GORDURA SUBCUTÂNEA</text>
+              <text x="162" y="64">SMAS / MÚSCULOS</text>
+              <text x="162" y="89">LIGAMENTOS E ESPAÇOS</text>
+              <text x="162" y="114">PERIÓSTEO / FÁSCIA</text>
+              <text x="0" y="140" fill="#1c1c1b" font-weight="600">- - -  PLANO PROFUNDO</text>
+            </g>
+          </svg>
+          <figcaption class="caption">Esquema simplificado das camadas da face.</figcaption>
+        </figure>
       </div>
     </div>
+    <div class="folio"><span>Lifting Facial</span><b>05</b></div>
+  </section>
 
-    <div class="folio"><span>Editorial</span><b>03</b></div>
+  <!-- ===================== 06 — CERVICOPLASTIA ===================== -->
+  <section class="page split" id="p06" aria-label="Cervicoplastia">
+    <figure class="photo" data-label="Foto clínica autorizada&#10;perfil ou três quartos&#10;região cervical&#10;fotos/cervicoplastia-perfil.jpg">
+      <img src="fotos/cervicoplastia-perfil.jpg" alt="Perfil com destaque para a região cervical" style="object-position: 50% 50%">
+    </figure>
+    <div class="body">
+      <span class="kicker">Cervicoplastia</span>
+      <h2 class="h2">O Pescoço<br><em>em Evidência</em></h2>
+      <p class="deck">A importância do contorno cervical na harmonia facial</p>
+      <div class="rule"></div>
+      <div class="text">
+        <p class="lead">O pescoço exerce um papel fundamental na percepção das proporções faciais.</p>
+        <p>A definição da linha mandibular, o ângulo entre o queixo e o pescoço e a distribuição dos tecidos cervicais influenciam diretamente a harmonia do rosto.</p>
+        <p>Com o passar dos anos, essa região pode apresentar flacidez, alterações musculares, acúmulo de gordura e perda progressiva de definição.</p>
+        <p>Entretanto, nem todas essas características estão relacionadas exclusivamente ao envelhecimento. Algumas pessoas apresentam, desde mais jovens, particularidades anatômicas que interferem no contorno cervical.</p>
+        <p>A cervicoplastia reúne possibilidades cirúrgicas para o tratamento dessa região, de acordo com as estruturas envolvidas e as necessidades de cada paciente.</p>
+        <p>Em determinadas situações, o tratamento pode ser direcionado ao pescoço, sem a necessidade de realizar um lifting facial completo.</p>
+      </div>
+      <blockquote class="quote">
+        <p>Nem sempre é o rosto que precisa de intervenção. Em alguns pacientes, a principal questão está na anatomia do pescoço.</p>
+      </blockquote>
+    </div>
+    <div class="folio"><span>Cervicoplastia</span><b>06</b></div>
+  </section>
+
+  <!-- ===================== 07 — DEEP NECK ===================== -->
+  <section class="page deepneck" id="p07" aria-label="Deep Neck">
+    <div class="head">
+      <div>
+        <span class="kicker">Cervicoplastia</span>
+        <h2 class="h2">Deep <em>Neck</em></h2>
+      </div>
+      <p class="deck">Quando a anatomia profunda faz a diferença</p>
+    </div>
+    <div class="rule"></div>
+    <div class="text">
+      <p>A definição cervical depende de diferentes estruturas anatômicas, e nem todas as alterações podem ser tratadas apenas com procedimentos superficiais.</p>
+      <p>O Deep Neck permite abordar componentes profundos do pescoço em pacientes selecionados, de acordo com a avaliação cirúrgica.</p>
+      <p>O planejamento pode envolver estruturas musculares e depósitos de gordura situados em diferentes planos anatômicos, sempre considerando as características individuais e os limites de segurança.</p>
+      <p>Essa abordagem busca melhorar a relação entre a mandíbula, o queixo e o pescoço, contribuindo para um contorno cervical mais definido.</p>
+      <p>Outro conceito importante é o tratamento cervical isolado, indicado em situações específicas nas quais a face apresenta boa sustentação, mas o pescoço concentra a principal queixa.</p>
+      <p>É o princípio de uma cirurgia personalizada: não tratar todas as regiões de maneira padronizada, mas identificar o que realmente necessita de intervenção.</p>
+    </div>
+    <blockquote class="quote">
+      <p>A indicação cirúrgica começa pela anatomia, não pela escolha de uma técnica.</p>
+    </blockquote>
+    <div class="band">
+      <figure class="photo" data-label="Antes · lateral&#10;fotos/deep-neck-antes.jpg">
+        <img src="fotos/deep-neck-antes.jpg" alt="Antes, vista lateral" style="object-position: 50% 50%">
+        <span class="tag">Antes</span>
+      </figure>
+      <figure class="photo" data-label="Depois · lateral&#10;mesmo ângulo&#10;fotos/deep-neck-depois.jpg">
+        <img src="fotos/deep-neck-depois.jpg" alt="Depois, vista lateral" style="object-position: 50% 50%">
+        <span class="tag">Depois · <span class="pt">[pós-operatório]</span></span>
+      </figure>
+      <figure class="angle" aria-label="Esquema do ângulo cervicomentoniano">
+        <svg viewBox="0 0 180 170" role="img">
+          <g fill="none" stroke="#1c1c1b" stroke-width="1.4" stroke-linecap="round">
+            <path d="M18 34 L96 34"/>            <!-- linha submentoniana -->
+            <path d="M96 34 L132 150"/>          <!-- linha cervical -->
+          </g>
+          <path d="M80 34 A16 16 0 0 1 101 49" fill="none" stroke="#9a9a96" stroke-width="1.2"/>
+          <circle cx="18" cy="34" r="2.6" fill="#1c1c1b"/>
+          <circle cx="96" cy="34" r="2.6" fill="#1c1c1b"/>
+          <g font-family="Inter, Arial, sans-serif" font-size="8.5" fill="#5c5c59" letter-spacing="1">
+            <text x="10" y="22">QUEIXO</text>
+            <text x="122" y="100">PESCOÇO</text>
+            <text x="4" y="66" fill="#1c1c1b" font-weight="600">ÂNGULO</text>
+            <text x="4" y="78" fill="#1c1c1b" font-weight="600">CERVICO-</text>
+            <text x="4" y="90" fill="#1c1c1b" font-weight="600">MENTONIANO</text>
+          </g>
+        </svg>
+        <figcaption class="caption">Relação entre queixo e pescoço, avaliada no planejamento.</figcaption>
+      </figure>
+    </div>
+    <div class="folio"><span>Cervicoplastia</span><b>07</b></div>
+  </section>
+
+  <!-- ===================== 08 — CASOS EM DESTAQUE ===================== -->
+  <!-- Pedido do cliente: fotos de "antes" em P&B e "depois" coloridas (classe "bw").
+       Para deixar todas coloridas, remova "bw" das duas fotos de antes. -->
+  <section class="page cases" id="p08" aria-label="Casos em Destaque">
+    <div class="body">
+      <span class="kicker">Casos em Destaque</span>
+      <h2 class="h2">Cada Rosto,<br><em>Uma História</em></h2>
+      <p class="deck">A individualidade como ponto de partida do planejamento cirúrgico</p>
+      <div class="rule"></div>
+      <div class="text">
+        <p>Não existem dois rostos iguais. Da mesma forma, não existem planejamentos cirúrgicos que devam ser reproduzidos de maneira idêntica.</p>
+        <p>Cada paciente apresenta características anatômicas, expectativas e necessidades próprias. Por isso, a avaliação pré-operatória é uma etapa fundamental para compreender quais estruturas podem ser tratadas e quais resultados são realisticamente possíveis.</p>
+        <p>Os casos apresentados nesta edição ilustram como o planejamento individualizado pode orientar diferentes abordagens da cirurgia facial.</p>
+        <p>Mais do que observar um antes e depois, é importante compreender as particularidades de cada indicação, os objetivos do tratamento e o tempo de evolução pós-operatória.</p>
+      </div>
+      <div class="case">
+        <span class="h3">Caso clínico 01</span>
+        <h4>Naturalidade, contorno e harmonia facial</h4>
+        <span class="pending">[Inserir aqui o procedimento efetivamente realizado, a queixa principal da paciente e o tempo de pós-operatório.]</span>
+      </div>
+      <p class="note">Imagens publicadas com autorização da paciente, sem retoques. Os resultados variam de acordo com as características individuais de cada paciente.</p>
+    </div>
+    <div class="grid">
+      <figure class="photo bw" data-label="Antes · frontal&#10;fotos/caso01-antes-frontal.jpg">
+        <img src="fotos/caso01-antes-frontal.jpg" alt="Caso 01, antes, vista frontal">
+        <span class="tag">Antes · frontal</span>
+      </figure>
+      <figure class="photo" data-label="Depois · frontal&#10;fotos/caso01-depois-frontal.jpg">
+        <img src="fotos/caso01-depois-frontal.jpg" alt="Caso 01, depois, vista frontal">
+        <span class="tag">Depois · <span class="pt">[pós-operatório]</span></span>
+      </figure>
+      <figure class="photo bw" data-label="Antes · três quartos&#10;fotos/caso01-antes-34.jpg">
+        <img src="fotos/caso01-antes-34.jpg" alt="Caso 01, antes, vista em três quartos">
+        <span class="tag">Antes · três quartos</span>
+      </figure>
+      <figure class="photo" data-label="Depois · três quartos&#10;fotos/caso01-depois-34.jpg">
+        <img src="fotos/caso01-depois-34.jpg" alt="Caso 01, depois, vista em três quartos">
+        <span class="tag">Depois · <span class="pt">[pós-operatório]</span></span>
+      </figure>
+    </div>
+    <div class="folio"><span>Casos em Destaque</span><b>08</b></div>
+  </section>
+
+  <!-- ===================== 09 — A EXPERIÊNCIA DA PACIENTE ===================== -->
+  <section class="page story" id="p09" aria-label="A experiência da paciente">
+    <figure class="photo" data-label="Foto autorizada&#10;da paciente&#10;fotos/paciente-depoimento.jpg">
+      <img src="fotos/paciente-depoimento.jpg" alt="Paciente" style="object-position: 50% 30%">
+    </figure>
+    <div class="intro">
+      <span class="kicker">Casos em Destaque</span>
+      <h2 class="h2">Por Trás de<br><em>Cada Resultado</em></h2>
+      <p class="deck">Planejamento, expectativas e a experiência de quem passou pela cirurgia</p>
+      <div class="rule"></div>
+      <div class="text">
+        <p>A cirurgia facial envolve uma decisão individual, construída a partir de expectativas, informações e uma avaliação criteriosa.</p>
+        <p>Por trás de cada caso existe uma história: aquilo que motivou a busca por uma avaliação, as dúvidas que surgiram durante o processo e a maneira como cada paciente percebe a própria evolução.</p>
+        <p>Conhecer essas experiências permite compreender uma dimensão importante da cirurgia plástica que não aparece somente nas fotografias.</p>
+      </div>
+    </div>
+    <div class="views">
+      <div class="patient">
+        <span class="h3">A perspectiva da paciente</span>
+        <span class="pending big">[Inserir um trecho literal do depoimento autorizado, destacando uma percepção pessoal sobre o processo ou a recuperação.]</span>
+      </div>
+      <div class="surgeon">
+        <span class="h3">A perspectiva do cirurgião</span>
+        <span class="pending">[Inserir uma síntese da explicação gravada pelo Dr. Milton sobre o caso apresentado, identificando indicação, procedimentos realizados e particularidades do planejamento.]</span>
+      </div>
+    </div>
+    <div class="folio"><span>Casos em Destaque</span><b>09</b></div>
+  </section>
+
+  <!-- ===================== 10 — PACIENTES MAIS JOVENS ===================== -->
+  <section class="page young" id="p10" aria-label="Cirurgia facial em pacientes mais jovens">
+    <div class="body">
+      <span class="kicker">Cirurgia Facial em Pacientes Mais Jovens</span>
+      <h2 class="h2">Existe Idade Certa<br><em>para um Lifting?</em></h2>
+      <p class="deck">Quando a anatomia importa mais que a idade</p>
+      <div class="rule"></div>
+      <div class="text">
+        <p>A cirurgia facial já não deve ser compreendida como um tratamento destinado exclusivamente a pacientes de idade avançada.</p>
+        <p>Em pessoas mais jovens, algumas alterações podem estar relacionadas a características anatômicas presentes desde cedo, como pouca definição cervical ou particularidades do contorno mandibular.</p>
+        <p>Em outras situações, os primeiros sinais de envelhecimento podem motivar uma avaliação cirúrgica.</p>
+        <p>O Dr. Milton destaca que as indicações para pacientes mais jovens exigem adaptações técnicas e um planejamento diferente daquele utilizado em pacientes com envelhecimento mais acentuado.</p>
+        <p>Entre as possibilidades discutidas em sua prática está o Weekend Lift, uma abordagem direcionada a casos selecionados, especialmente quando o tratamento se concentra na região cervical e no contorno da mandíbula.</p>
+        <p>A extensão da cirurgia, as incisões, os tratamentos associados e a recuperação dependem das características de cada paciente.</p>
+        <p>Mais importante do que estabelecer uma idade específica é compreender a anatomia, as expectativas e a relação entre benefícios e riscos de uma intervenção.</p>
+      </div>
+      <blockquote class="quote">
+        <p>Nem toda cirurgia facial tem como objetivo corrigir o envelhecimento. Em alguns casos, a intenção é melhorar características anatômicas.</p>
+      </blockquote>
+    </div>
+    <div class="pair">
+      <figure class="photo" data-label="Antes · perfil&#10;paciente mais jovem&#10;fotos/jovem-antes-perfil.jpg">
+        <img src="fotos/jovem-antes-perfil.jpg" alt="Antes, perfil" style="object-position: 50% 50%">
+        <span class="tag">Antes · perfil</span>
+      </figure>
+      <figure class="photo" data-label="Depois · perfil&#10;fotos/jovem-depois-perfil.jpg">
+        <img src="fotos/jovem-depois-perfil.jpg" alt="Depois, perfil" style="object-position: 50% 50%">
+        <span class="tag">Depois · <span class="pt">[pós-operatório]</span></span>
+      </figure>
+    </div>
+    <div class="folio"><span>Pacientes Mais Jovens</span><b>10</b></div>
+  </section>
+
+  <!-- ===================== 11 — CONGRESSO BAPS ===================== -->
+  <section class="page baps" id="p11" aria-label="Congresso BAPS">
+    <figure class="photo" data-label="Dr. Milton no congresso&#10;fotos/baps-dr-milton.jpg">
+      <img src="fotos/baps-dr-milton.jpg" alt="Dr. Milton Rocha no congresso da BAPS" style="object-position: 50% 35%">
+      <span class="tag">Congresso BAPS</span>
+    </figure>
+    <div class="lower">
+      <div>
+        <span class="kicker">Congresso BAPS</span>
+        <h2 class="h2">Ciência <em>em Movimento</em></h2>
+        <p class="deck">O conhecimento como parte da evolução cirúrgica</p>
+        <div class="text">
+          <p>A cirurgia plástica está em constante transformação.</p>
+          <p>Novos estudos, debates científicos e o aperfeiçoamento das técnicas contribuem para ampliar o conhecimento sobre anatomia, planejamento e segurança dos procedimentos.</p>
+          <p>Nesse contexto, a participação em congressos científicos representa uma oportunidade de atualização e troca de experiências entre profissionais.</p>
+          <p>A participação do Dr. Milton Rocha no congresso da BAPS integra essa busca pelo aperfeiçoamento técnico e científico.</p>
+          <p>Mais do que conhecer diferentes abordagens, encontros dessa natureza estimulam a reflexão crítica sobre indicações cirúrgicas, resultados e possibilidades de evolução na prática médica.</p>
+          <p>O conhecimento adquirido e discutido nesses ambientes contribui para uma atuação fundamentada em estudo, análise e decisões individualizadas.</p>
+        </div>
+        <blockquote class="quote">
+          <p>A evolução da cirurgia começa muito antes do centro cirúrgico: começa no estudo, na troca de experiências e na busca contínua pelo conhecimento.</p>
+        </blockquote>
+      </div>
+      <aside class="aside">
+        <figure class="photo" data-label="Programação, palestra&#10;ou auditório&#10;fotos/baps-auditorio.jpg">
+          <img src="fotos/baps-auditorio.jpg" alt="Auditório do congresso" style="object-position: 50% 50%">
+        </figure>
+        <dl class="facts">
+          <dt>Evento</dt><dd>[Nome oficial e edição]</dd>
+          <dt>Data e local</dt><dd>[Data · cidade]</dd>
+          <dt>Participação</dt><dd>[Atividade realizada pelo Dr. Milton]</dd>
+          <dt>Destaques científicos</dt><dd>[Um ou dois temas relevantes]</dd>
+        </dl>
+      </aside>
+    </div>
+    <div class="folio"><span>Congresso BAPS</span><b>11</b></div>
+  </section>
+
+  <!-- ===================== 12 — ENCERRAMENTO ===================== -->
+  <section class="page closing" id="p12" aria-label="Além da Pele">
+    <figure class="photo" data-label="Mão do Dr. Milton na cirurgia&#10;instrumento azul&#10;fotos/encerramento-mao.jpg">
+      <img src="fotos/encerramento-mao.jpg" alt="Mão do Dr. Milton segurando instrumento cirúrgico" style="object-position: 50% 50%">
+    </figure>
+    <div class="lower">
+      <div>
+        <span class="kicker">Encerramento</span>
+        <h2 class="h2">Além da <em>Pele</em></h2>
+        <p class="deck">O cuidado em cada detalhe</p>
+        <div class="text">
+          <p class="lead">A cirurgia facial exige mais do que domínio técnico.</p>
+          <p>Exige atenção à anatomia, planejamento individualizado, precisão e sensibilidade para compreender as características e expectativas de cada paciente.</p>
+          <p>Cada decisão cirúrgica deve considerar não apenas o que pode ser modificado, mas também aquilo que precisa ser preservado.</p>
+          <p>A evolução das técnicas amplia as possibilidades de tratamento, mas é a avaliação criteriosa que orienta a escolha da abordagem mais adequada.</p>
+          <p>Porque, na cirurgia facial, o cuidado está presente em cada etapa: na escuta, no planejamento, na execução e no acompanhamento.</p>
+          <p class="close">Mais do que transformar aparências, o propósito é cuidar de pessoas, respeitando suas características e individualidade.</p>
+        </div>
+      </div>
+      <aside class="aside">
+        <div class="sign"><strong>Milton Rocha</strong><span>Cirurgião Plástico<br>CRM 17964 | RQE 26</span></div>
+        <div class="contact">
+          <span class="h3">Contato</span>
+          <span class="pending">[Telefone / WhatsApp · Instagram · Site · Endereço]</span>
+        </div>
+        <div class="qr">QR Code<br>de agendamento</div>
+        <p class="end">Face em Evidência<br>Edição Especial</p>
+      </aside>
+    </div>
+    <div class="folio"><span>Além da Pele</span><b>12</b></div>
   </section>
 
 </main>
 
 <nav class="nav" aria-label="Páginas">
-  <a href="#p01">Capa</a>
-  <a href="#p02">Sumário</a>
-  <a href="#p03">03</a>
+  <a href="#p01">Capa</a><a href="#p02">Sumário</a>
+  <a href="#p03">03</a><a href="#p04">04</a><a href="#p05">05</a><a href="#p06">06</a>
+  <a href="#p07">07</a><a href="#p08">08</a><a href="#p09">09</a><a href="#p10">10</a>
+  <a href="#p11">11</a><a href="#p12">12</a>
 </nav>
 
 <script>
