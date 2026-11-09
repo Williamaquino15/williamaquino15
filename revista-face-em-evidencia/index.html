@@ -284,6 +284,26 @@
   .closing .logo { align-items: flex-start; }
   .closing .logo .lt { text-align: left; }
 
+
+  /* ================= 02 · EDITORIAL + SUMÁRIO ================= */
+  .opener { display: grid; grid-template-columns: 42% 1fr; grid-template-rows: 1fr auto; }
+  .opener > .photo { grid-column: 1; grid-row: 1; }
+  .opener .body { grid-column: 2; grid-row: 1; padding: calc(9 * var(--u)) calc(6 * var(--u)) calc(4 * var(--u)) calc(6 * var(--u)); display: flex; flex-direction: column; }
+  .opener .sign { margin-top: auto; padding-top: calc(2 * var(--u)); }
+  .opener .text p.close { margin-top: calc(1.6 * var(--u)); font: 400 calc(1.7 * var(--u))/1.4 var(--serif); color: var(--ink); }
+  .contents-strip { grid-column: 1 / -1; grid-row: 2; background: var(--mist); padding: calc(4 * var(--u)) calc(6 * var(--u)) calc(8 * var(--u)); border-top: 1px solid var(--accent); }
+  .contents-strip .toc { margin-top: calc(2.8 * var(--u)); display: grid; grid-template-columns: repeat(3, 1fr); gap: calc(3 * var(--u)) calc(3.5 * var(--u)); }
+  .contents-strip .toc a { grid-template-columns: calc(4.4 * var(--u)) 1fr; }
+
+  /* 03 · caixa Antes/Hoje dentro do texto */
+  .split .compare { margin-top: calc(2.6 * var(--u)); padding: calc(2.2 * var(--u)) calc(2.4 * var(--u)); background: var(--mist); }
+  .split .compare dd + dt { margin-top: calc(1.4 * var(--u)); padding-top: calc(1.4 * var(--u)); }
+
+  /* 05 · depoimentos junto ao caso */
+  .cases .voices { margin-top: calc(2.4 * var(--u)); display: flex; flex-direction: column; }
+  .cases .voices .h3 { color: var(--stone); margin-top: calc(1.6 * var(--u)); }
+  .cases .voices .pending.big { font-size: calc(1.8 * var(--u)); }
+
   /* ================= NAVEGAÇÃO ================= */
   .nav {
     position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%);
@@ -370,6 +390,13 @@
     .logo img { height: 13cqw; }
     .logo .lt { font-size: 4.8cqw; }
     .logo .lt small { font-size: 2cqw; }
+
+    .opener, .opener .body, .contents-strip { display: block; }
+    .opener .body { padding: 11cqw 6cqw 0; }
+    .contents-strip { margin-top: 10cqw; padding: 9cqw 6cqw 4cqw; }
+    .contents-strip .toc { display: flex; flex-direction: column; gap: 6cqw; margin-top: 5cqw; }
+    .contents-strip .toc a { grid-template-columns: 12cqw 1fr; }
+    .opener .sign { margin-top: 6cqw; }
   }
 
   /* ================= IMPRESSÃO / PDF (A4) ================= */
@@ -404,65 +431,56 @@
     <div class="edition">Casos · Técnicas · Atualizações</div>
   </section>
 
-  <!-- ===================== 02 — SUMÁRIO ===================== -->
-  <section class="page split contents" id="p02" aria-label="Sumário">
-    <figure class="photo bw" data-label="Foto da paciente&#10;de óculos, em perfil&#10;fotos/sumario-paciente.jpg">
-      <img src="fotos/sumario-paciente.jpg" alt="Paciente de perfil" style="object-position: 40% 50%">
-    </figure>
-    <div class="body">
-      <span class="kicker">Sumário</span>
-      <h2 class="h2">Nesta<br><em>edição</em></h2>
-      <div class="rule"></div>
-      <ol class="toc">
-        <li><a href="#p03"><span class="n">03</span><span class="t">Editorial</span><span class="d">Além da Face</span></a></li>
-        <li><a href="#p04"><span class="n">04–05</span><span class="t">Lifting Facial</span><span class="d">A evolução do Deep Plane</span></a></li>
-        <li><a href="#p06"><span class="n">06–07</span><span class="t">Cervicoplastia</span><span class="d">O pescoço em evidência</span></a></li>
-        <li><a href="#p08"><span class="n">08–09</span><span class="t">Casos em Destaque</span><span class="d">Planejamento, naturalidade e histórias reais</span></a></li>
-        <li><a href="#p10"><span class="n">10</span><span class="t">Cirurgia Facial em Pacientes Mais Jovens</span><span class="d">Quando a indicação vai além da idade</span></a></li>
-        <li><a href="#p11"><span class="n">11</span><span class="t">Congresso BAPS</span><span class="d">Ciência, troca de experiências e atualização</span></a></li>
-        <li><a href="#p12"><span class="n">12</span><span class="t">Além da Pele</span><span class="d">O cuidado em cada detalhe</span></a></li>
-      </ol>
-    </div>
-    <div class="folio"><span>Face em Evidência</span><b>02</b></div>
-  </section>
-
-  <!-- ===================== 03 — EDITORIAL ===================== -->
-  <section class="page split editorial" id="p03" aria-label="Editorial">
+  <!-- ===================== 02 — EDITORIAL + SUMÁRIO ===================== -->
+  <section class="page opener" id="p02" aria-label="Editorial e sumário">
     <figure class="photo" data-label="Foto do Dr. Milton&#10;camisa preta, sentado&#10;fotos/editorial-dr-milton.jpg">
       <img src="fotos/editorial-dr-milton.jpg" alt="Dr. Milton Rocha" style="object-position: 50% 30%">
     </figure>
     <div class="body">
       <span class="kicker">Editorial</span>
-      <h2 class="h2">Além da Face</h2>
+      <h2 class="h2">Além da <em>Face</em></h2>
       <p class="deck">Uma visão mais completa sobre a cirurgia facial contemporânea</p>
       <div class="rule"></div>
       <div class="text">
         <p class="dropcap">Durante muito tempo, o rejuvenescimento facial foi associado à ideia de corrigir rugas e remover excessos de pele. Hoje, compreendemos que o envelhecimento envolve transformações muito mais complexas, que acontecem em diferentes estruturas da face.</p>
-        <p>A evolução do conhecimento anatômico e das técnicas cirúrgicas permitiu desenvolver abordagens cada vez mais individualizadas, capazes de considerar não apenas a aparência, mas as características que tornam cada rosto único.</p>
         <p>Mais do que buscar um aspecto rejuvenescido, a cirurgia facial contemporânea valoriza o equilíbrio entre contornos, proporções e expressões naturais.</p>
-        <p>Nesta edição, reunimos temas que fazem parte da prática clínica atual: a evolução do lifting facial, as possibilidades da cervicoplastia, a cirurgia em pacientes mais jovens e casos que ilustram a importância do planejamento individualizado.</p>
-        <p>Também compartilhamos a participação em encontros científicos, que fazem parte de um compromisso permanente com o estudo e o aperfeiçoamento profissional.</p>
         <p class="close">Porque a cirurgia facial não se resume à técnica. Envolve conhecimento, sensibilidade, planejamento e respeito à individualidade.</p>
       </div>
-      <div class="sign"><strong>Milton Rocha</strong><span>Cirurgião Plástico<br>CRM 17964 | RQE 26</span></div>
+      <div class="sign"><strong>Milton Rocha</strong><span>Cirurgião Plástico · CRM 17964 | RQE 26</span></div>
     </div>
-    <div class="folio"><span>Editorial</span><b>03</b></div>
+    <nav class="contents-strip" aria-label="Sumário">
+      <span class="kicker">Nesta edição</span>
+      <ol class="toc">
+        <li><a href="#p03"><span class="n">03</span><span class="t">Lifting Facial</span><span class="d">A evolução do Deep Plane</span></a></li>
+        <li><a href="#p04"><span class="n">04</span><span class="t">Cervicoplastia</span><span class="d">O pescoço em evidência</span></a></li>
+        <li><a href="#p05"><span class="n">05</span><span class="t">Casos em Destaque</span><span class="d">Planejamento, naturalidade e histórias reais</span></a></li>
+        <li><a href="#p06"><span class="n">06</span><span class="t">Pacientes Mais Jovens</span><span class="d">Quando a indicação vai além da idade</span></a></li>
+        <li><a href="#p07"><span class="n">07</span><span class="t">Congresso BAPS</span><span class="d">Ciência, troca de experiências e atualização</span></a></li>
+        <li><a href="#p08"><span class="n">08</span><span class="t">Além da Pele</span><span class="d">O cuidado em cada detalhe</span></a></li>
+      </ol>
+    </nav>
+    <div class="folio"><span>Editorial</span><b>02</b></div>
   </section>
 
-  <!-- ===================== 04 — LIFTING FACIAL ===================== -->
-  <section class="page split right" id="p04" aria-label="Lifting Facial">
+  <!-- ===================== 03 — LIFTING FACIAL + DEEP PLANE ===================== -->
+  <section class="page split right" id="p03" aria-label="Lifting Facial e Deep Plane">
     <div class="body">
-      <span class="kicker">Lifting Facial</span>
+      <span class="kicker">Lifting Facial · Deep Plane</span>
       <h2 class="h2">Além da<br><em>Superfície</em></h2>
       <p class="deck">O rosto envelhece em diferentes camadas. A cirurgia também precisa compreender essa complexidade.</p>
       <div class="rule"></div>
       <div class="text">
         <p class="lead">O envelhecimento facial não acontece apenas na pele.</p>
-        <p>Com o passar dos anos, surgem alterações nos compartimentos de gordura, ligamentos, músculos e estruturas de sustentação da face. Essas transformações contribuem para a perda de definição dos contornos, o aprofundamento dos sulcos e mudanças nas proporções faciais.</p>
-        <p>Durante muito tempo, o lifting foi associado principalmente à tração da pele. Entretanto, a evolução da cirurgia facial trouxe uma compreensão mais profunda da anatomia e dos mecanismos envolvidos no envelhecimento.</p>
-        <p>Atualmente, o planejamento cirúrgico pode considerar o reposicionamento das estruturas profundas, em vez de depender exclusivamente da tensão superficial.</p>
-        <p>O objetivo é buscar uma aparência mais descansada e equilibrada, preservando os traços e a identidade de cada paciente.</p>
+        <p>Com o passar dos anos, surgem alterações nos compartimentos de gordura, ligamentos, músculos e estruturas de sustentação da face, que contribuem para a perda de definição dos contornos.</p>
+        <p>O Deep Plane Facelift trabalha em planos anatômicos profundos, permitindo o reposicionamento de tecidos que sofreram alterações ao longo dos anos, em vez de depender apenas da tração da pele.</p>
+        <p>A naturalidade não depende somente da técnica escolhida, mas também de sua indicação, da avaliação das estruturas e da experiência do cirurgião.</p>
       </div>
+      <dl class="compare">
+        <dt>Antes</dt>
+        <dd>Abordagens concentradas na retirada de excessos e na tração cutânea.</dd>
+        <dt class="now">Hoje</dt>
+        <dd>Maior compreensão dos planos profundos e das possibilidades de reposicionamento dos tecidos.</dd>
+      </dl>
       <blockquote class="quote">
         <p>Rejuvenescer não significa transformar. Significa compreender o que o tempo modificou e avaliar como restaurar a harmonia facial.</p>
       </blockquote>
@@ -470,106 +488,24 @@
     <figure class="photo" data-label="Dr. Milton em cirurgia&#10;touca, máscara e lupas&#10;fotos/lifting-cirurgia.jpg">
       <img src="fotos/lifting-cirurgia.jpg" alt="Dr. Milton Rocha durante cirurgia" style="object-position: 50% 30%">
     </figure>
-    <div class="folio"><span>Lifting Facial</span><b>04</b></div>
+    <div class="folio"><span>Lifting Facial</span><b>03</b></div>
   </section>
 
-  <!-- ===================== 05 — DEEP PLANE ===================== -->
-  <section class="page deepplane" id="p05" aria-label="Deep Plane">
-    <div class="body">
-      <span class="kicker">Lifting Facial</span>
-      <h2 class="h2">Deep <em>Plane</em></h2>
-      <p class="deck">Uma abordagem mais profunda do rejuvenescimento facial</p>
-      <div class="rule"></div>
-      <div class="text">
-        <p>O Deep Plane Facelift representa uma importante evolução na abordagem cirúrgica do envelhecimento facial.</p>
-        <p>A técnica trabalha em planos anatômicos profundos, permitindo a mobilização e o reposicionamento de tecidos que sofreram alterações ao longo dos anos.</p>
-        <p>Dessa forma, o tratamento não depende apenas de tracionar a pele, mas de compreender e abordar estruturas que participam da sustentação facial.</p>
-        <p>Entre os objetivos do planejamento estão a melhora dos contornos, a suavização de determinadas transições faciais e a recuperação de proporções, sempre respeitando as particularidades anatômicas do paciente.</p>
-        <p>A naturalidade não depende somente da técnica escolhida, mas também de sua indicação, da avaliação das estruturas e da experiência do cirurgião.</p>
-      </div>
-      <blockquote class="quote">
-        <p>A sofisticação de um resultado está na harmonia entre o que foi tratado e aquilo que deve ser preservado.</p>
-      </blockquote>
-    </div>
-    <div class="side">
-      <figure class="photo" data-label="Fotografia cirúrgica&#10;fotos/deep-plane-cirurgia.jpg">
-        <img src="fotos/deep-plane-cirurgia.jpg" alt="Fotografia cirúrgica" style="object-position: 50% 50%">
-      </figure>
-      <div class="box">
-        <span class="h3">O que mudou na cirurgia facial?</span>
-        <dl class="compare">
-          <dt>Antes</dt>
-          <dd>Abordagens frequentemente concentradas na retirada de excessos e na tração cutânea.</dd>
-          <dt class="now">Hoje</dt>
-          <dd>Maior compreensão dos planos profundos, das estruturas de sustentação e das possibilidades de reposicionamento dos tecidos.</dd>
-        </dl>
-        <!-- Esquema simplificado das camadas da face. Pode ser substituído pela ilustração anatômica do cliente. -->
-        <figure class="layers" aria-label="Esquema das camadas da face">
-          <svg viewBox="0 0 300 150" role="img">
-            <g font-family="Inter, Arial, sans-serif" font-size="9" fill="#bdbcb8" letter-spacing="1">
-              <rect x="0" y="6"   width="150" height="14" fill="#5a5a5a"/>
-              <rect x="0" y="26"  width="150" height="22" fill="#4a4a4a"/>
-              <rect x="0" y="54"  width="150" height="14" fill="#6f6f6f"/>
-              <rect x="0" y="74"  width="150" height="24" fill="#3b3b3b"/>
-              <rect x="0" y="104" width="150" height="14" fill="#7d7d7d"/>
-              <line x1="0" y1="71" x2="150" y2="71" stroke="#669998" stroke-width="1.6" stroke-dasharray="4 3"/>
-              <text x="162" y="16">PELE</text>
-              <text x="162" y="40">GORDURA SUBCUTÂNEA</text>
-              <text x="162" y="64">SMAS / MÚSCULOS</text>
-              <text x="162" y="89">LIGAMENTOS E ESPAÇOS</text>
-              <text x="162" y="114">PERIÓSTEO / FÁSCIA</text>
-              <text x="0" y="140" fill="#669998" font-weight="600">- - -  PLANO PROFUNDO</text>
-            </g>
-          </svg>
-          <figcaption class="caption">Esquema simplificado das camadas da face.</figcaption>
-        </figure>
-      </div>
-    </div>
-    <div class="folio"><span>Lifting Facial</span><b>05</b></div>
-  </section>
-
-  <!-- ===================== 06 — CERVICOPLASTIA ===================== -->
-  <section class="page split" id="p06" aria-label="Cervicoplastia">
-    <figure class="photo" data-label="Foto clínica autorizada&#10;perfil ou três quartos&#10;região cervical&#10;fotos/cervicoplastia-perfil.jpg">
-      <img src="fotos/cervicoplastia-perfil.jpg" alt="Perfil com destaque para a região cervical" style="object-position: 50% 50%">
-    </figure>
-    <div class="body">
-      <span class="kicker">Cervicoplastia</span>
-      <h2 class="h2">O Pescoço<br><em>em Evidência</em></h2>
-      <p class="deck">A importância do contorno cervical na harmonia facial</p>
-      <div class="rule"></div>
-      <div class="text">
-        <p class="lead">O pescoço exerce um papel fundamental na percepção das proporções faciais.</p>
-        <p>A definição da linha mandibular, o ângulo entre o queixo e o pescoço e a distribuição dos tecidos cervicais influenciam diretamente a harmonia do rosto.</p>
-        <p>Com o passar dos anos, essa região pode apresentar flacidez, alterações musculares, acúmulo de gordura e perda progressiva de definição.</p>
-        <p>Entretanto, nem todas essas características estão relacionadas exclusivamente ao envelhecimento. Algumas pessoas apresentam, desde mais jovens, particularidades anatômicas que interferem no contorno cervical.</p>
-        <p>A cervicoplastia reúne possibilidades cirúrgicas para o tratamento dessa região, de acordo com as estruturas envolvidas e as necessidades de cada paciente.</p>
-        <p>Em determinadas situações, o tratamento pode ser direcionado ao pescoço, sem a necessidade de realizar um lifting facial completo.</p>
-      </div>
-      <blockquote class="quote">
-        <p>Nem sempre é o rosto que precisa de intervenção. Em alguns pacientes, a principal questão está na anatomia do pescoço.</p>
-      </blockquote>
-    </div>
-    <div class="folio"><span>Cervicoplastia</span><b>06</b></div>
-  </section>
-
-  <!-- ===================== 07 — DEEP NECK ===================== -->
-  <section class="page deepneck" id="p07" aria-label="Deep Neck">
+  <!-- ===================== 04 — CERVICOPLASTIA + DEEP NECK ===================== -->
+  <section class="page deepneck" id="p04" aria-label="Cervicoplastia e Deep Neck">
     <div class="head">
       <div>
-        <span class="kicker">Cervicoplastia</span>
-        <h2 class="h2">Deep <em>Neck</em></h2>
+        <span class="kicker">Cervicoplastia · Deep Neck</span>
+        <h2 class="h2">O Pescoço<br><em>em Evidência</em></h2>
       </div>
-      <p class="deck">Quando a anatomia profunda faz a diferença</p>
+      <p class="deck">A importância do contorno cervical na harmonia facial</p>
     </div>
     <div class="rule"></div>
     <div class="text">
-      <p>A definição cervical depende de diferentes estruturas anatômicas, e nem todas as alterações podem ser tratadas apenas com procedimentos superficiais.</p>
-      <p>O Deep Neck permite abordar componentes profundos do pescoço em pacientes selecionados, de acordo com a avaliação cirúrgica.</p>
-      <p>O planejamento pode envolver estruturas musculares e depósitos de gordura situados em diferentes planos anatômicos, sempre considerando as características individuais e os limites de segurança.</p>
-      <p>Essa abordagem busca melhorar a relação entre a mandíbula, o queixo e o pescoço, contribuindo para um contorno cervical mais definido.</p>
-      <p>Outro conceito importante é o tratamento cervical isolado, indicado em situações específicas nas quais a face apresenta boa sustentação, mas o pescoço concentra a principal queixa.</p>
-      <p>É o princípio de uma cirurgia personalizada: não tratar todas as regiões de maneira padronizada, mas identificar o que realmente necessita de intervenção.</p>
+      <p>A definição da linha mandibular, o ângulo entre o queixo e o pescoço e a distribuição dos tecidos cervicais influenciam diretamente a harmonia do rosto.</p>
+      <p>Nem todas essas características estão relacionadas ao envelhecimento: algumas pessoas apresentam, desde mais jovens, particularidades anatômicas que interferem no contorno cervical.</p>
+      <p>O Deep Neck permite abordar componentes profundos do pescoço em pacientes selecionados, como estruturas musculares e depósitos de gordura, sempre considerando os limites de segurança.</p>
+      <p>Em situações específicas, quando a face apresenta boa sustentação, o tratamento pode ser direcionado ao pescoço, sem a necessidade de um lifting facial completo.</p>
     </div>
     <blockquote class="quote">
       <p>A indicação cirúrgica começa pela anatomia, não pela escolha de uma técnica.</p>
@@ -586,8 +522,8 @@
       <figure class="angle" aria-label="Esquema do ângulo cervicomentoniano">
         <svg viewBox="0 0 180 170" role="img">
           <g fill="none" stroke="#ffffff" stroke-width="1.4" stroke-linecap="round">
-            <path d="M18 34 L96 34"/>            <!-- linha submentoniana -->
-            <path d="M96 34 L132 150"/>          <!-- linha cervical -->
+            <path d="M18 34 L96 34"/>
+            <path d="M96 34 L132 150"/>
           </g>
           <path d="M80 34 A16 16 0 0 1 101 49" fill="none" stroke="#669998" stroke-width="1.6"/>
           <circle cx="18" cy="34" r="2.6" fill="#ffffff"/>
@@ -603,28 +539,31 @@
         <figcaption class="caption">Relação entre queixo e pescoço, avaliada no planejamento.</figcaption>
       </figure>
     </div>
-    <div class="folio"><span>Cervicoplastia</span><b>07</b></div>
+    <div class="folio"><span>Cervicoplastia</span><b>04</b></div>
   </section>
 
-  <!-- ===================== 08 — CASOS EM DESTAQUE ===================== -->
+  <!-- ===================== 05 — CASOS EM DESTAQUE + EXPERIÊNCIA DA PACIENTE ===================== -->
   <!-- Pedido do cliente: fotos de "antes" em P&B e "depois" coloridas (classe "bw").
        Para deixar todas coloridas, remova "bw" das duas fotos de antes. -->
-  <section class="page cases" id="p08" aria-label="Casos em Destaque">
+  <section class="page cases" id="p05" aria-label="Casos em Destaque">
     <div class="body">
       <span class="kicker">Casos em Destaque</span>
       <h2 class="h2">Cada Rosto,<br><em>Uma História</em></h2>
-      <p class="deck">A individualidade como ponto de partida do planejamento cirúrgico</p>
       <div class="rule"></div>
       <div class="text">
         <p>Não existem dois rostos iguais. Da mesma forma, não existem planejamentos cirúrgicos que devam ser reproduzidos de maneira idêntica.</p>
-        <p>Cada paciente apresenta características anatômicas, expectativas e necessidades próprias. Por isso, a avaliação pré-operatória é uma etapa fundamental para compreender quais estruturas podem ser tratadas e quais resultados são realisticamente possíveis.</p>
-        <p>Os casos apresentados nesta edição ilustram como o planejamento individualizado pode orientar diferentes abordagens da cirurgia facial.</p>
         <p>Mais do que observar um antes e depois, é importante compreender as particularidades de cada indicação, os objetivos do tratamento e o tempo de evolução pós-operatória.</p>
       </div>
       <div class="case">
         <span class="h3">Caso clínico 01</span>
         <h4>Naturalidade, contorno e harmonia facial</h4>
-        <span class="pending">[Inserir aqui o procedimento efetivamente realizado, a queixa principal da paciente e o tempo de pós-operatório.]</span>
+        <span class="pending">[Procedimento realizado, queixa principal e tempo de pós-operatório.]</span>
+      </div>
+      <div class="voices">
+        <span class="h3">A perspectiva da paciente</span>
+        <span class="pending big">[Trecho literal do depoimento autorizado.]</span>
+        <span class="h3">A perspectiva do cirurgião</span>
+        <span class="pending">[Síntese da explicação do Dr. Milton sobre o caso.]</span>
       </div>
       <p class="note">Imagens publicadas com autorização da paciente, sem retoques. Os resultados variam de acordo com as características individuais de cada paciente.</p>
     </div>
@@ -646,52 +585,20 @@
         <span class="tag">Depois · <span class="pt">[pós-operatório]</span></span>
       </figure>
     </div>
-    <div class="folio"><span>Casos em Destaque</span><b>08</b></div>
+    <div class="folio"><span>Casos em Destaque</span><b>05</b></div>
   </section>
 
-  <!-- ===================== 09 — A EXPERIÊNCIA DA PACIENTE ===================== -->
-  <section class="page story" id="p09" aria-label="A experiência da paciente">
-    <figure class="photo" data-label="Foto autorizada&#10;da paciente&#10;fotos/paciente-depoimento.jpg">
-      <img src="fotos/paciente-depoimento.jpg" alt="Paciente" style="object-position: 50% 30%">
-    </figure>
-    <div class="intro">
-      <span class="kicker">Casos em Destaque</span>
-      <h2 class="h2">Por Trás de<br><em>Cada Resultado</em></h2>
-      <p class="deck">Planejamento, expectativas e a experiência de quem passou pela cirurgia</p>
-      <div class="rule"></div>
-      <div class="text">
-        <p>A cirurgia facial envolve uma decisão individual, construída a partir de expectativas, informações e uma avaliação criteriosa.</p>
-        <p>Por trás de cada caso existe uma história: aquilo que motivou a busca por uma avaliação, as dúvidas que surgiram durante o processo e a maneira como cada paciente percebe a própria evolução.</p>
-        <p>Conhecer essas experiências permite compreender uma dimensão importante da cirurgia plástica que não aparece somente nas fotografias.</p>
-      </div>
-    </div>
-    <div class="views">
-      <div class="patient">
-        <span class="h3">A perspectiva da paciente</span>
-        <span class="pending big">[Inserir um trecho literal do depoimento autorizado, destacando uma percepção pessoal sobre o processo ou a recuperação.]</span>
-      </div>
-      <div class="surgeon">
-        <span class="h3">A perspectiva do cirurgião</span>
-        <span class="pending">[Inserir uma síntese da explicação gravada pelo Dr. Milton sobre o caso apresentado, identificando indicação, procedimentos realizados e particularidades do planejamento.]</span>
-      </div>
-    </div>
-    <div class="folio"><span>Casos em Destaque</span><b>09</b></div>
-  </section>
-
-  <!-- ===================== 10 — PACIENTES MAIS JOVENS ===================== -->
-  <section class="page young" id="p10" aria-label="Cirurgia facial em pacientes mais jovens">
+  <!-- ===================== 06 — PACIENTES MAIS JOVENS ===================== -->
+  <section class="page young" id="p06" aria-label="Cirurgia facial em pacientes mais jovens">
     <div class="body">
-      <span class="kicker">Cirurgia Facial em Pacientes Mais Jovens</span>
+      <span class="kicker">Pacientes Mais Jovens</span>
       <h2 class="h2">Existe Idade Certa<br><em>para um Lifting?</em></h2>
       <p class="deck">Quando a anatomia importa mais que a idade</p>
       <div class="rule"></div>
       <div class="text">
         <p>A cirurgia facial já não deve ser compreendida como um tratamento destinado exclusivamente a pacientes de idade avançada.</p>
         <p>Em pessoas mais jovens, algumas alterações podem estar relacionadas a características anatômicas presentes desde cedo, como pouca definição cervical ou particularidades do contorno mandibular.</p>
-        <p>Em outras situações, os primeiros sinais de envelhecimento podem motivar uma avaliação cirúrgica.</p>
-        <p>O Dr. Milton destaca que as indicações para pacientes mais jovens exigem adaptações técnicas e um planejamento diferente daquele utilizado em pacientes com envelhecimento mais acentuado.</p>
-        <p>Entre as possibilidades discutidas em sua prática está o Weekend Lift, uma abordagem direcionada a casos selecionados, especialmente quando o tratamento se concentra na região cervical e no contorno da mandíbula.</p>
-        <p>A extensão da cirurgia, as incisões, os tratamentos associados e a recuperação dependem das características de cada paciente.</p>
+        <p>Entre as possibilidades discutidas na prática do Dr. Milton está o Weekend Lift, uma abordagem direcionada a casos selecionados, especialmente quando o tratamento se concentra na região cervical e no contorno da mandíbula.</p>
         <p>Mais importante do que estabelecer uma idade específica é compreender a anatomia, as expectativas e a relação entre benefícios e riscos de uma intervenção.</p>
       </div>
       <blockquote class="quote">
@@ -708,11 +615,11 @@
         <span class="tag">Depois · <span class="pt">[pós-operatório]</span></span>
       </figure>
     </div>
-    <div class="folio"><span>Pacientes Mais Jovens</span><b>10</b></div>
+    <div class="folio"><span>Pacientes Mais Jovens</span><b>06</b></div>
   </section>
 
-  <!-- ===================== 11 — CONGRESSO BAPS ===================== -->
-  <section class="page baps" id="p11" aria-label="Congresso BAPS">
+  <!-- ===================== 07 — CONGRESSO BAPS ===================== -->
+  <section class="page baps" id="p07" aria-label="Congresso BAPS">
     <figure class="photo" data-label="Dr. Milton no congresso&#10;fotos/baps-dr-milton.jpg">
       <img src="fotos/baps-dr-milton.jpg" alt="Dr. Milton Rocha no congresso da BAPS" style="object-position: 50% 35%">
       <span class="tag">Congresso BAPS</span>
@@ -723,12 +630,9 @@
         <h2 class="h2">Ciência <em>em Movimento</em></h2>
         <p class="deck">O conhecimento como parte da evolução cirúrgica</p>
         <div class="text">
-          <p>A cirurgia plástica está em constante transformação.</p>
-          <p>Novos estudos, debates científicos e o aperfeiçoamento das técnicas contribuem para ampliar o conhecimento sobre anatomia, planejamento e segurança dos procedimentos.</p>
-          <p>Nesse contexto, a participação em congressos científicos representa uma oportunidade de atualização e troca de experiências entre profissionais.</p>
+          <p>A cirurgia plástica está em constante transformação. Novos estudos, debates científicos e o aperfeiçoamento das técnicas ampliam o conhecimento sobre anatomia, planejamento e segurança dos procedimentos.</p>
           <p>A participação do Dr. Milton Rocha no congresso da BAPS integra essa busca pelo aperfeiçoamento técnico e científico.</p>
-          <p>Mais do que conhecer diferentes abordagens, encontros dessa natureza estimulam a reflexão crítica sobre indicações cirúrgicas, resultados e possibilidades de evolução na prática médica.</p>
-          <p>O conhecimento adquirido e discutido nesses ambientes contribui para uma atuação fundamentada em estudo, análise e decisões individualizadas.</p>
+          <p>Encontros dessa natureza estimulam a reflexão crítica sobre indicações cirúrgicas, resultados e possibilidades de evolução na prática médica.</p>
         </div>
         <blockquote class="quote">
           <p>A evolução da cirurgia começa muito antes do centro cirúrgico: começa no estudo, na troca de experiências e na busca contínua pelo conhecimento.</p>
@@ -746,11 +650,11 @@
         </dl>
       </aside>
     </div>
-    <div class="folio"><span>Congresso BAPS</span><b>11</b></div>
+    <div class="folio"><span>Congresso BAPS</span><b>07</b></div>
   </section>
 
-  <!-- ===================== 12 — ENCERRAMENTO ===================== -->
-  <section class="page closing" id="p12" aria-label="Além da Pele">
+  <!-- ===================== 08 — ENCERRAMENTO ===================== -->
+  <section class="page closing" id="p08" aria-label="Além da Pele">
     <figure class="photo" data-label="Mão do Dr. Milton na cirurgia&#10;instrumento azul&#10;fotos/encerramento-mao.jpg">
       <img src="fotos/encerramento-mao.jpg" alt="Mão do Dr. Milton segurando instrumento cirúrgico" style="object-position: 50% 50%">
     </figure>
@@ -763,8 +667,6 @@
           <p class="lead">A cirurgia facial exige mais do que domínio técnico.</p>
           <p>Exige atenção à anatomia, planejamento individualizado, precisão e sensibilidade para compreender as características e expectativas de cada paciente.</p>
           <p>Cada decisão cirúrgica deve considerar não apenas o que pode ser modificado, mas também aquilo que precisa ser preservado.</p>
-          <p>A evolução das técnicas amplia as possibilidades de tratamento, mas é a avaliação criteriosa que orienta a escolha da abordagem mais adequada.</p>
-          <p>Porque, na cirurgia facial, o cuidado está presente em cada etapa: na escuta, no planejamento, na execução e no acompanhamento.</p>
           <p class="close">Mais do que transformar aparências, o propósito é cuidar de pessoas, respeitando suas características e individualidade.</p>
         </div>
       </div>
@@ -779,16 +681,15 @@
         <p class="end">Face em Evidência<br>Edição Especial</p>
       </aside>
     </div>
-    <div class="folio"><span>Além da Pele</span><b>12</b></div>
+    <div class="folio"><span>Além da Pele</span><b>08</b></div>
   </section>
 
 </main>
 
 <nav class="nav" aria-label="Páginas">
-  <a href="#p01">Capa</a><a href="#p02">Sumário</a>
-  <a href="#p03">03</a><a href="#p04">04</a><a href="#p05">05</a><a href="#p06">06</a>
-  <a href="#p07">07</a><a href="#p08">08</a><a href="#p09">09</a><a href="#p10">10</a>
-  <a href="#p11">11</a><a href="#p12">12</a>
+  <a href="#p01">Capa</a><a href="#p02">Editorial</a>
+  <a href="#p03">03</a><a href="#p04">04</a><a href="#p05">05</a>
+  <a href="#p06">06</a><a href="#p07">07</a><a href="#p08">08</a>
 </nav>
 
 <script>
