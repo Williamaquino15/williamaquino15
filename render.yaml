@@ -1,0 +1,25 @@
+# Blueprint do Render: publica o Clínica CRM com disco persistente para o banco SQLite.
+services:
+  - type: web
+    name: clinica-crm
+    runtime: node
+    rootDir: clinica-crm
+    plan: starter
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: "22"
+      - key: DATA_DIR
+        value: /var/data
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+    disk:
+      name: crm-data
+      mountPath: /var/data
+      sizeGB: 1

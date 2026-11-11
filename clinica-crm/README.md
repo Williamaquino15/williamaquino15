@@ -29,6 +29,31 @@ Variáveis opcionais: `PORT` (padrão 3000), `DATA_DIR` (pasta do banco, padrão
 
 O banco fica em `data/crm.db`. Para backup, copie esse arquivo com o servidor parado.
 
+## Publicar na web
+
+### Render (recomendado)
+
+O arquivo `render.yaml` na raiz do repositório cria o serviço com um disco persistente de 1 GB para o banco.
+
+1. Crie uma conta em https://render.com e conecte seu GitHub.
+2. No painel: **New › Blueprint**, escolha este repositório e o branch onde está o sistema.
+3. Preencha `ADMIN_EMAIL` e `ADMIN_PASSWORD` (o administrador inicial) e confirme.
+4. Ao terminar, o Render mostra o endereço `https://clinica-crm-xxxx.onrender.com`.
+
+O disco persistente só existe em planos pagos do Render; sem ele, os dados se perdem a cada reinício. Para usar um domínio próprio, adicione-o em **Settings › Custom Domains** do serviço.
+
+### Outros serviços (Docker)
+
+```bash
+docker build -t clinica-crm clinica-crm
+```
+
+```bash
+docker run -p 3000:3000 -v crm-data:/data -e ADMIN_EMAIL=voce@clinica.com -e ADMIN_PASSWORD=umaSenhaForte clinica-crm
+```
+
+Funciona em Railway, Fly.io ou qualquer VPS. Monte sempre um volume em `/data`, onde fica o banco.
+
 ## Testes
 
 ```bash

@@ -8,6 +8,8 @@ const reports = require('./reports');
 
 const app = express();
 app.use(express.json({ limit: '20mb' }));
+app.set('trust proxy', 1);
+app.get('/healthz', (req, res) => res.json({ ok: true }));
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // ---------------------------------------------------------------- auth
