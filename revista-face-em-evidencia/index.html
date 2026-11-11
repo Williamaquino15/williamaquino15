@@ -175,7 +175,7 @@
   .deepneck .head { display: grid; grid-template-columns: 1fr 1fr; gap: 0 calc(5 * var(--u)); align-items: end; }
   .deepneck .head .deck { margin-top: 0; }
   .deepneck .rule { margin: calc(3 * var(--u)) 0 calc(3 * var(--u)); }
-  .deepneck .text { columns: 2; column-gap: calc(5 * var(--u)); }
+  .deepneck .text { columns: 2; max-width: 100%; column-gap: calc(5 * var(--u)); }
   .deepneck .text p { break-inside: avoid; }
   .deepneck .quote { margin-top: calc(3.4 * var(--u)); }
   .deepneck .quote p { font-size: calc(3.2 * var(--u)); max-width: 80%; }
@@ -304,6 +304,27 @@
   .cases .voices .h3 { color: var(--stone); margin-top: calc(1.6 * var(--u)); }
   .cases .voices .pending.big { font-size: calc(1.8 * var(--u)); }
 
+
+  /* ================= CAPA CENTRALIZADA ================= */
+  .cover .top { display: grid; grid-template-columns: 1fr auto 1fr; }
+  .cover .top span:last-child { text-align: right; }
+  .cover .top .mid { font: 400 calc(1.5 * var(--u))/1 var(--serif); letter-spacing: .32em; color: var(--ink); text-transform: uppercase; }
+  .cover h1 { left: 0; right: 0; top: calc(11.5 * var(--u)); text-align: center; line-height: 1.14; letter-spacing: .02em; }
+  .cover h1 em { padding: 0 .12em; }
+  .cover .byline { left: 0; right: 0; top: calc(41 * var(--u)); text-align: center; }
+  .cover .byline .author { font: 400 calc(2.4 * var(--u))/1 var(--serif); letter-spacing: .3em; text-transform: uppercase; color: var(--ink); }
+  .cover .byline .author small { font: 400 calc(1.1 * var(--u))/1 var(--sans); letter-spacing: .2em; text-transform: lowercase; color: var(--accent); margin-right: calc(0.6 * var(--u)); vertical-align: middle; }
+  .cover .byline span { margin-top: calc(1.6 * var(--u)); font-size: calc(1.7 * var(--u)); color: var(--graphite); letter-spacing: .06em; }
+  .cover .photo { left: 50%; right: auto; transform: translateX(-50%); width: 52%; height: 62%; }
+  .cover .calls { width: 20%; bottom: calc(9 * var(--u)); gap: calc(5 * var(--u)); }
+  .cover .calls.left { left: calc(5 * var(--u)); }
+  .cover .calls.right { left: auto; right: calc(5 * var(--u)); text-align: right; }
+  .cover .edition { right: 50%; transform: translateX(50%); white-space: nowrap; }
+
+  /* textos mais curtos → corpo um pouco maior para equilibrar a página */
+  .text p, .cases .text p { font-size: calc(1.75 * var(--u)); line-height: 1.62; }
+  .text .lead { font-size: calc(2.3 * var(--u)); }
+
   /* ================= NAVEGAÇÃO ================= */
   .nav {
     position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%);
@@ -397,6 +418,18 @@
     .contents-strip .toc { display: flex; flex-direction: column; gap: 6cqw; margin-top: 5cqw; }
     .contents-strip .toc a { grid-template-columns: 12cqw 1fr; }
     .opener .sign { margin-top: 6cqw; }
+
+    .cover .top { display: grid; }
+    .cover .top .mid { font-size: 3cqw; }
+    .cover h1 { margin: 8cqw 0 0; text-align: center; }
+    .cover .byline { margin: 6cqw 0 0; text-align: center; }
+    .cover .byline .author { font-size: 5cqw; }
+    .cover .byline .author small { font-size: 2.6cqw; }
+    .cover .byline span { font-size: 4cqw; }
+    .cover .photo { transform: none; left: auto; width: 100% !important; }
+    .cover .calls, .cover .calls.right { padding: 8cqw 6cqw 0; text-align: left; }
+    .cover .calls.right { padding-bottom: 6cqw; }
+    .cover .edition { transform: none; }
   }
 
   /* ================= IMPRESSÃO / PDF (A4) ================= */
@@ -416,15 +449,17 @@
 
   <!-- ===================== 01 — CAPA ===================== -->
   <section class="page cover" id="p01" aria-label="Capa">
-    <div class="top"><span>Revista Digital</span><a class="logo" href="#p01"><img src="fotos/logo.png" alt="Milton Rocha · Cirurgia Plástica"><span class="lt">MILTON ROCHA<small>CIRURGIA PLÁSTICA</small></span></a><span>Edição Especial</span></div>
+    <div class="top"><span>Revista Digital</span><span class="mid">Milton Rocha</span><span>Edição Especial</span></div>
     <h1>Face <em>em</em><br>Evidência</h1>
-    <div class="byline"><strong>MILTON ROCHA</strong><span>Cirurgia Plástica Facial</span></div>
+    <div class="byline"><p class="author"><small>por</small> Milton Rocha</p><span>Cirurgia Plástica Facial</span></div>
     <figure class="photo" data-label="Foto do Dr. Milton&#10;blazer escuro&#10;fotos/capa-dr-milton.jpg">
       <img src="fotos/capa-dr-milton.jpg" alt="Dr. Milton Rocha" style="object-position: 50% 0%">
     </figure>
-    <div class="calls">
+    <div class="calls left">
       <div class="call"><h3>Deep Plane &amp; Deep Neck</h3><p>A evolução das técnicas e do planejamento cirúrgico.</p></div>
       <div class="call"><h3>Casos em Destaque</h3><p>A individualidade por trás de cada resultado.</p></div>
+    </div>
+    <div class="calls right">
       <div class="call"><h3>Cirurgia Facial em Pacientes Mais Jovens</h3><p>Novas abordagens e indicações personalizadas.</p></div>
       <div class="call"><h3>Congresso BAPS</h3><p>Ciência, conhecimento e evolução profissional.</p></div>
     </div>
@@ -442,8 +477,7 @@
       <p class="deck">Uma visão mais completa sobre a cirurgia facial contemporânea</p>
       <div class="rule"></div>
       <div class="text">
-        <p class="dropcap">Durante muito tempo, o rejuvenescimento facial foi associado à ideia de corrigir rugas e remover excessos de pele. Hoje, compreendemos que o envelhecimento envolve transformações muito mais complexas, que acontecem em diferentes estruturas da face.</p>
-        <p>Mais do que buscar um aspecto rejuvenescido, a cirurgia facial contemporânea valoriza o equilíbrio entre contornos, proporções e expressões naturais.</p>
+        <p class="dropcap">Durante muito tempo, o rejuvenescimento facial foi associado à ideia de corrigir rugas e remover excessos de pele. Hoje, compreendemos que o envelhecimento envolve transformações muito mais complexas.</p>
         <p class="close">Porque a cirurgia facial não se resume à técnica. Envolve conhecimento, sensibilidade, planejamento e respeito à individualidade.</p>
       </div>
       <div class="sign"><strong>Milton Rocha</strong><span>Cirurgião Plástico · CRM 17964 | RQE 26</span></div>
@@ -471,7 +505,6 @@
       <div class="rule"></div>
       <div class="text">
         <p class="lead">O envelhecimento facial não acontece apenas na pele.</p>
-        <p>Com o passar dos anos, surgem alterações nos compartimentos de gordura, ligamentos, músculos e estruturas de sustentação da face, que contribuem para a perda de definição dos contornos.</p>
         <p>O Deep Plane Facelift trabalha em planos anatômicos profundos, permitindo o reposicionamento de tecidos que sofreram alterações ao longo dos anos, em vez de depender apenas da tração da pele.</p>
         <p>A naturalidade não depende somente da técnica escolhida, mas também de sua indicação, da avaliação das estruturas e da experiência do cirurgião.</p>
       </div>
@@ -503,9 +536,7 @@
     <div class="rule"></div>
     <div class="text">
       <p>A definição da linha mandibular, o ângulo entre o queixo e o pescoço e a distribuição dos tecidos cervicais influenciam diretamente a harmonia do rosto.</p>
-      <p>Nem todas essas características estão relacionadas ao envelhecimento: algumas pessoas apresentam, desde mais jovens, particularidades anatômicas que interferem no contorno cervical.</p>
-      <p>O Deep Neck permite abordar componentes profundos do pescoço em pacientes selecionados, como estruturas musculares e depósitos de gordura, sempre considerando os limites de segurança.</p>
-      <p>Em situações específicas, quando a face apresenta boa sustentação, o tratamento pode ser direcionado ao pescoço, sem a necessidade de um lifting facial completo.</p>
+      <p>O Deep Neck permite abordar componentes profundos do pescoço em pacientes selecionados. Em situações específicas, o tratamento pode ser direcionado ao pescoço, sem a necessidade de um lifting facial completo.</p>
     </div>
     <blockquote class="quote">
       <p>A indicação cirúrgica começa pela anatomia, não pela escolha de uma técnica.</p>
@@ -552,7 +583,6 @@
       <div class="rule"></div>
       <div class="text">
         <p>Não existem dois rostos iguais. Da mesma forma, não existem planejamentos cirúrgicos que devam ser reproduzidos de maneira idêntica.</p>
-        <p>Mais do que observar um antes e depois, é importante compreender as particularidades de cada indicação, os objetivos do tratamento e o tempo de evolução pós-operatória.</p>
       </div>
       <div class="case">
         <span class="h3">Caso clínico 01</span>
@@ -596,9 +626,8 @@
       <p class="deck">Quando a anatomia importa mais que a idade</p>
       <div class="rule"></div>
       <div class="text">
-        <p>A cirurgia facial já não deve ser compreendida como um tratamento destinado exclusivamente a pacientes de idade avançada.</p>
         <p>Em pessoas mais jovens, algumas alterações podem estar relacionadas a características anatômicas presentes desde cedo, como pouca definição cervical ou particularidades do contorno mandibular.</p>
-        <p>Entre as possibilidades discutidas na prática do Dr. Milton está o Weekend Lift, uma abordagem direcionada a casos selecionados, especialmente quando o tratamento se concentra na região cervical e no contorno da mandíbula.</p>
+        <p>Entre as possibilidades discutidas na prática do Dr. Milton está o Weekend Lift, direcionado a casos selecionados, especialmente na região cervical e no contorno da mandíbula.</p>
         <p>Mais importante do que estabelecer uma idade específica é compreender a anatomia, as expectativas e a relação entre benefícios e riscos de uma intervenção.</p>
       </div>
       <blockquote class="quote">
@@ -630,9 +659,8 @@
         <h2 class="h2">Ciência <em>em Movimento</em></h2>
         <p class="deck">O conhecimento como parte da evolução cirúrgica</p>
         <div class="text">
-          <p>A cirurgia plástica está em constante transformação. Novos estudos, debates científicos e o aperfeiçoamento das técnicas ampliam o conhecimento sobre anatomia, planejamento e segurança dos procedimentos.</p>
+          <p>A cirurgia plástica está em constante transformação. Novos estudos e debates científicos ampliam o conhecimento sobre anatomia, planejamento e segurança dos procedimentos.</p>
           <p>A participação do Dr. Milton Rocha no congresso da BAPS integra essa busca pelo aperfeiçoamento técnico e científico.</p>
-          <p>Encontros dessa natureza estimulam a reflexão crítica sobre indicações cirúrgicas, resultados e possibilidades de evolução na prática médica.</p>
         </div>
         <blockquote class="quote">
           <p>A evolução da cirurgia começa muito antes do centro cirúrgico: começa no estudo, na troca de experiências e na busca contínua pelo conhecimento.</p>
@@ -665,7 +693,6 @@
         <p class="deck">O cuidado em cada detalhe</p>
         <div class="text">
           <p class="lead">A cirurgia facial exige mais do que domínio técnico.</p>
-          <p>Exige atenção à anatomia, planejamento individualizado, precisão e sensibilidade para compreender as características e expectativas de cada paciente.</p>
           <p>Cada decisão cirúrgica deve considerar não apenas o que pode ser modificado, mas também aquilo que precisa ser preservado.</p>
           <p class="close">Mais do que transformar aparências, o propósito é cuidar de pessoas, respeitando suas características e individualidade.</p>
         </div>
