@@ -325,6 +325,11 @@
   .text p, .cases .text p { font-size: calc(1.75 * var(--u)); line-height: 1.62; }
   .text .lead { font-size: calc(2.3 * var(--u)); }
 
+  /* capa sem a faixa superior */
+  .cover h1 { top: calc(8 * var(--u)); }
+  .cover .byline { top: calc(37.5 * var(--u)); }
+  .cover .photo { height: 65%; }
+
   /* ================= NAVEGAÇÃO ================= */
   .nav {
     position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%);
@@ -430,6 +435,7 @@
     .cover .calls, .cover .calls.right { padding: 8cqw 6cqw 0; text-align: left; }
     .cover .calls.right { padding-bottom: 6cqw; }
     .cover .edition { transform: none; }
+    .cover h1 { margin-top: 12cqw; }
   }
 
   /* ================= IMPRESSÃO / PDF (A4) ================= */
@@ -449,7 +455,6 @@
 
   <!-- ===================== 01 — CAPA ===================== -->
   <section class="page cover" id="p01" aria-label="Capa">
-    <div class="top"><span>Revista Digital</span><span class="mid">Milton Rocha</span><span>Edição Especial</span></div>
     <h1>Face <em>em</em><br>Evidência</h1>
     <div class="byline"><p class="author"><small>por</small> Milton Rocha</p><span>Cirurgia Plástica Facial</span></div>
     <figure class="photo" data-label="Foto do Dr. Milton&#10;blazer escuro&#10;fotos/capa-dr-milton.jpg">
