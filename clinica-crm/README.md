@@ -54,6 +54,14 @@ docker run -p 3000:3000 -v crm-data:/data -e ADMIN_EMAIL=voce@clinica.com -e ADM
 
 Funciona em Railway, Fly.io ou qualquer VPS. Monte sempre um volume em `/data`, onde fica o banco.
 
+### Demonstração em página única
+
+```bash
+npm run build:web
+```
+
+Gera `dist/clinica-crm.html`, com o sistema inteiro rodando no navegador (SQLite em WebAssembly) e dados de exemplo. Os dados ficam salvos só no navegador de quem abre. Serve para apresentar o sistema, não para uso real com a equipe.
+
 ## Testes
 
 ```bash

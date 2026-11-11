@@ -790,12 +790,13 @@ app.post('/api/campaigns/:id/cancel', h((req) => {
 }));
 app.delete('/api/campaigns/:id', h((req) => { db.prepare('DELETE FROM campaigns WHERE id=?').run(+req.params.id); return { ok: true }; }));
 // Agendador simples: dispara campanhas cuja data/hora já passou.
-setInterval(() => {
+const schedTimer = setInterval(() => {
   try {
     const due = db.prepare("SELECT id FROM campaigns WHERE status='Agendada' AND (data || ' ' || COALESCE(hora,'00:00')) <= ?").all(now().slice(0, 16));
     due.forEach((c) => runCampaign(c.id));
   } catch (e) { console.error('scheduler', e); }
-}, 60 * 1000).unref();
+}, 60 * 1000);
+if (schedTimer.unref) schedTimer.unref();
 
 app.get('/api/templates', h(() => db.prepare('SELECT * FROM templates ORDER BY nome').all()));
 app.post('/api/templates', admin, h((req) => ({ id: insert('templates', req.body, ['nome', 'meta_id', 'categoria', 'idioma', 'conteudo']) })));
@@ -908,7 +909,7 @@ app.get('/api/notifications', h((req) => {
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, '..', 'public', 'index.html')));
 
 const PORT = process.env.PORT || 3000;
-if (require.main === module) {
+if (typeof require !== 'undefined' && require.main === module) {
   app.listen(PORT, () => console.log(`CRM rodando em http://localhost:${PORT}`));
 }
 module.exports = app;

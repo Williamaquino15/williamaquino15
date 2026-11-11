@@ -68,8 +68,9 @@ function renderLogin() {
     <form class="login-card" id="loginForm">
       <div class="brand big">${logo()}<span>Clínica CRM</span></div>
       <p class="muted">Entre com sua conta para acessar o sistema.</p>
-      <label class="field"><span>E-mail</span><input name="email" type="email" required autocomplete="username"></label>
-      <label class="field"><span>Senha</span><input name="password" type="password" required autocomplete="current-password"></label>
+      ${window.__DEMO__ ? '<p class="demo-hint">Demonstração: e-mail <b>admin@clinica.com</b>, senha <b>admin123</b></p>' : ''}
+      <label class="field"><span>E-mail</span><input id="loginEmail" name="email" type="email" required autocomplete="username" value="${window.__DEMO__ ? 'admin@clinica.com' : ''}"></label>
+      <label class="field"><span>Senha</span><input id="loginPass" name="password" type="password" required autocomplete="current-password" value="${window.__DEMO__ ? 'admin123' : ''}"></label>
       <button class="btn btn-primary btn-block">Entrar</button>
     </form></div>`;
   document.getElementById('loginForm').onsubmit = async (e) => {
@@ -110,6 +111,7 @@ function renderShell() {
             </div></div>
         </div>
       </header>
+      ${window.__DEMO__ ? `<div class="demo-bar">Versão de demonstração com dados de exemplo. Tudo fica salvo só neste navegador. <button class="btn btn-sm" id="demoReset">Apagar e recomeçar</button></div>` : ''}
       <main id="view" class="view"></main>
     </div>
     <button class="fab" id="fab" aria-label="Ajuda e atalhos">?</button>
@@ -128,6 +130,9 @@ function renderShell() {
   document.getElementById('fab').addEventListener('click', () => setTimeout(() => document.querySelectorAll('.quick-links a').forEach((a) => a.addEventListener('click', () => document.querySelector('.modal-wrap')?.remove())), 0));
   setupInstall();
   loadNotifications();
+  const dr = document.getElementById('demoReset');
+  if (dr) dr.onclick = () => modal({ title: 'Apagar dados da demonstração', body: '<p>Todos os dados deste navegador serão apagados e os exemplos recriados.</p>',
+    buttons: [{ label: 'Cancelar' }, { label: 'Apagar e recomeçar', cls: 'btn-danger', onClick: async () => { await window.__DEMO__.reset(); } }] });
 }
 
 async function loadNotifications() {
@@ -147,7 +152,7 @@ function setupInstall() {
   btn.onclick = async () => { if (!deferredPrompt) return; deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt = null; btn.hidden = true; };
 }
 window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; const b = document.getElementById('installBtn'); if (b) b.hidden = false; });
-if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => {});
+try { if (!window.__DEMO__ && 'serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => {}); } catch { /* sem service worker */ }
 
 async function route() {
   const hash = location.hash.slice(1) || '/home';
