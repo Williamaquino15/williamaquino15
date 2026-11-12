@@ -66,7 +66,7 @@ function match(path) {
 function renderLogin() {
   document.getElementById('app').innerHTML = `<div class="login">
     <form class="login-card" id="loginForm">
-      <div class="brand big">${logo()}<span>Clínica CRM</span></div>
+      <div class="brand big">${logo()}<span>Exclusive Odontologia</span></div>
       <p class="muted">Entre com sua conta para acessar o sistema.</p>
       ${window.__DEMO__ ? '<p class="demo-hint">Demonstração: e-mail <b>admin@clinica.com</b>, senha <b>admin123</b></p>' : ''}
       <label class="field"><span>E-mail</span><input id="loginEmail" name="email" type="email" required autocomplete="username" value="${window.__DEMO__ ? 'admin@clinica.com' : ''}"></label>
@@ -90,7 +90,7 @@ function renderShell() {
   document.getElementById('app').innerHTML = `
   <div class="shell">
     <aside class="sidebar" id="sidebar">
-      <a class="brand" href="#/home">${logo()}<span>Clínica CRM</span></a>
+      <a class="brand" href="#/home">${logo()}<span>Exclusive Odontologia</span></a>
       <nav>${MENU.filter((m) => !m.perm || can(m.perm)).map((m) => `<a href="${m.href}" data-nav="${m.href}">${icon(m.icon)}<span>${m.label}</span></a>`).join('')}</nav>
       <div class="side-foot muted">${esc(state.clinica.nome || '')}</div>
     </aside>

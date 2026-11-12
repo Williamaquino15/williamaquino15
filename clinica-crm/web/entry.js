@@ -40,7 +40,7 @@ const day = (offset) => { const d = new Date(); d.setDate(d.getDate() + offset);
 async function seed(call) {
   const lists = (await call('GET', '/lists')).body;
   const id = (type, name) => lists.find((l) => l.type === type && l.name === name)?.id;
-  await call('PUT', '/settings/clinica', { nome: 'Clínica Sorriso Exemplo', cidade: 'São Paulo', estado: 'SP' });
+  await call('PUT', '/settings/clinica', { nome: 'Exclusive Odontologia', cidade: 'São Paulo', estado: 'SP' });
   const people = [
     ['Ana Beatriz Souza', '11987651234', 'Instagram', 'Quente', 'Atendeu', -9, 1, 'compareceu', 6800, 'Fechado', 'Implantes'],
     ['Carlos Eduardo Lima', '11991237788', 'Google', 'Muito quente', 'Agendado', -7, 2, 'compareceu', 12500, 'Em Aberto', 'Protocolo'],
@@ -94,6 +94,8 @@ async function boot() {
     },
   };
   const app = require('../server/index.js');
+  // Navegadores que já abriram a demonstração antes da troca de nome.
+  if (saved) globalThis.__SQL__.db.raw.exec("UPDATE settings SET value=replace(replace(value,'Clínica Sorriso Exemplo','Exclusive Odontologia'),'Minha Clínica','Exclusive Odontologia') WHERE key IN ('clinica','ia')");
 
   let sid = lsGet('crm_sid');
   const call = async (method, url, body) => {

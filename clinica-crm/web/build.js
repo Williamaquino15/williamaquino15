@@ -23,8 +23,8 @@ const plugin = {
   });
   const js = out.outputFiles[0].text.replace(/<\/script/gi, '<\\/script');
   const css = fs.readFileSync(path.join(root, 'public/css/app.css'), 'utf8');
-  const html = `<title>Clínica CRM</title>
-<meta name="description" content="CRM de leads e pacientes para clínicas (demonstração)">
+  const html = `<title>Exclusive Odontologia</title>
+<meta name="description" content="CRM da Exclusive Odontologia (demonstração)">
 <style>${css}</style>
 <div id="app"><div class="loading">Carregando o sistema…</div></div>
 <div id="toasts"></div>

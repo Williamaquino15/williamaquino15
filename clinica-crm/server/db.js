@@ -184,10 +184,10 @@ function seed() {
     'Lembrete de consulta', 'tpl_lembrete', 'UTILITY', 'pt_BR', 'Olá {{nome}}, lembrando da sua consulta em {{data}} às {{hora}}.');
   for (let i = 1; i <= 3; i++) db.prepare('INSERT INTO chips(id,nome,tipo) VALUES(?,?,?)').run(i, `Chip ${i}`, i === 1 ? 'Agendamento' : 'Comercial');
 
-  setSetting('clinica', { nome: 'Minha Clínica', fantasia: '', email: '', cnpj: '', telefone: '', endereco: '', cidade: '', estado: '', cep: '' });
+  setSetting('clinica', { nome: 'Exclusive Odontologia', fantasia: '', email: '', cnpj: '', telefone: '', endereco: '', cidade: '', estado: '', cep: '' });
   setSetting('leads', { telefone_obrigatorio: true, repetir_nome: true, temperatura_manual: true, duracao_agendamento: 30 });
   setSetting('integracoes', { cloudia: { link: '', sobrescrever: false }, clinicorp: { ativo: false, usuario: '', token: '', clinica: '', categorias: '' }, icombot: { ativo: false }, controle_odonto: { ativo: false } });
-  setSetting('ia', { nome: 'Minha Clínica', secretaria: 'Ana', cidade: '', estado: '', dias_agendar: 7 });
+  setSetting('ia', { nome: 'Exclusive Odontologia', secretaria: 'Ana', cidade: '', estado: '', dias_agendar: 7 });
   setSetting('metricas', { dias: [1, 2, 3, 4, 5] });
 }
 seed();
