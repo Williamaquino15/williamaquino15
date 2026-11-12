@@ -62,7 +62,8 @@ export async function runAi(leadId, kind) {
       ok = !String(msg.status).startsWith("erro");
     }
     if (kind === "followup") db.updateLead(leadId, { followups_sent: lead.followups_sent + 1 });
-    if (d.handoff) systemNote(leadId, `🔔 Handoff para humano: ${updated.attention_reason}`);
+    // Aviso só no painel — nada é enviado ao lead.
+    if (d.handoff) systemNote(leadId, `🔔 Passado para você (o lead não foi avisado): ${updated.attention_reason}`);
     changed(leadId);
   } catch (err) {
     console.error(`[IA] lead ${leadId}:`, err);

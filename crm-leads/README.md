@@ -84,6 +84,12 @@ Campos aceitos: `name|nome`, `phone|telefone|whatsapp`, `email`, `company|empres
 
 O servidor precisa estar num endereço público com HTTPS (Railway, Render, VPS…). Para testar local, use um túnel como `ngrok http 3000`.
 
+## Script de prospecção
+
+Em **Configurar IA → Script de prospecção e atendimento**, cole o seu roteiro: primeira mensagem, argumentos, respostas a objeções e quando passar para você. A IA segue o script com prioridade em todas as conversas (prospecção e leads que chegam).
+
+**Passagem para humano é silenciosa:** quando a IA decide que você deve assumir, ela para de responder e mostra "⚠ precisa de você" no painel. O lead não recebe aviso de transferência; você continua a conversa com o mesmo nome da atendente. (Se o lead perguntar sinceramente se fala com um robô, a IA não mente: diz que é a assistente virtual da agência.)
+
 ## Sobre a IA
 
 - Usa a API da Anthropic (`@anthropic-ai/sdk`) com saída estruturada: a cada rodada a IA devolve a mensagem **e** os dados do CRM num JSON validado.

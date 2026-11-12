@@ -86,6 +86,7 @@ const DEFAULT_SETTINGS = {
   tone: "Simpático, direto e profissional. Mensagens curtas, como no WhatsApp. No máximo 1 emoji por mensagem.",
   extra_rules:
     "Nunca prometa resultados garantidos. Não passe preço fechado: diga que depende do diagnóstico.",
+  sales_script: "",
   followup_hours: "24",
   max_followups: "2",
   // Prospecção ativa
