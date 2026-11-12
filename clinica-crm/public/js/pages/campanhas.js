@@ -6,7 +6,7 @@ export async function list(view) {
   const table = dataTable(view.querySelector('#tbl'), {
     id: 'campanhas', exportName: 'campanhas',
     columns: [
-      { key: 'nome', label: 'Nome da campanha', render: (r) => `<span class="dot" style="background:${esc(r.cor || '#0f766e')}"></span> ${esc(r.nome)}` },
+      { key: 'nome', label: 'Nome da campanha', render: (r) => `<span class="dot" style="background:${esc(r.cor || '#b3161b')}"></span> ${esc(r.nome)}` },
       { key: 'descricao', label: 'Descrição', render: (r) => `<span class="clip">${esc(r.descricao)}</span>` },
       { key: 'status', label: 'Status', render: (r) => `<span class="pill st-${esc(r.status)}">${esc(r.status)}</span>` },
       { key: 'chip_tipo', label: 'Chip' }, { key: 'template_nome', label: 'Modelo de mensagem' }, { key: 'meta_id', label: 'ID template Meta' },
@@ -54,7 +54,7 @@ export async function criar(view) {
   ];
   view.innerHTML = `${pageHeader('Criar campanha', '', backBtn('#/disparo/campanhas'))}
     <div class="grid-2">
-      ${card('Campanha', `<div id="fBase">${formHTML(base, { data: todayISO(), hora: '09:00', cor: '#0f766e', chip_tipo: 'Comercial' })}</div><div id="preview" class="tpl-preview"></div>`)}
+      ${card('Campanha', `<div id="fBase">${formHTML(base, { data: todayISO(), hora: '09:00', cor: '#b3161b', chip_tipo: 'Comercial' })}</div><div id="preview" class="tpl-preview"></div>`)}
       ${card('Filtro de Base de Dados', `<div id="fFiltro">${formHTML(filtro, { sem_ultimo_contato: 'Sim' })}</div>`)}
     </div>
     <div class="row end"><button class="btn" id="ver">Visualizar público</button><button class="btn btn-primary" id="criar">Criar campanha</button></div>
