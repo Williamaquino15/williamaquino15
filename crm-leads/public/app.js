@@ -38,7 +38,8 @@ async function loadStatus() {
   state.stages = s.stages;
   $("#status").innerHTML =
     `<span class="pill ${s.ai ? "ok" : "off"}">IA ${s.ai ? "ativa" : "sem chave"}</span>` +
-    `<span class="pill ${s.whatsapp ? "ok" : "off"}">WhatsApp ${s.whatsapp ? "conectado" : "simulador"}</span>`;
+    `<span class="pill ${s.whatsapp ? "ok" : "off"}">WhatsApp ${s.whatsapp ? "conectado" : "desconectado"}</span>` +
+    `<span class="pill ${s.places ? "ok" : "off"}">Google Maps ${s.places ? "ok" : "sem chave"}</span>`;
 }
 
 async function loadStats() {
@@ -142,6 +143,24 @@ async function refreshLead() {
   $("#dScore").textContent = lead.score || 0;
   $("#dScoreBar").style.width = `${lead.score || 0}%`;
   $("#dSummary").textContent = lead.summary || "A IA vai resumir o lead conforme a conversa avança.";
+  const link = (url, text) => `<a href="${esc(url)}" target="_blank" rel="noopener">${esc(text)}</a>`;
+  const facts = [
+    lead.owners && `Sócios: <b>${esc(lead.owners)}</b>`,
+    lead.alt_phone && `Tel. do CNPJ: <b>+${esc(lead.alt_phone)}</b>`,
+    lead.cnpj && `CNPJ: <b>${esc(lead.cnpj)}</b>`,
+    lead.rating && `Google: <b>${lead.rating}★</b> (${lead.reviews || 0})`,
+    lead.address && `${esc(lead.address)}`,
+    lead.website && link(lead.website, "Site"),
+    lead.maps_url && link(lead.maps_url, "Google Maps"),
+    lead.instagram && link(`https://instagram.com/${lead.instagram}`, "@" + lead.instagram),
+    lead.ig_sent_at && `Direct enviado em ${fmtTime(lead.ig_sent_at)}`,
+  ].filter(Boolean);
+  $("#dFacts").innerHTML = facts.map((f) => `<span>${f}</span>`).join("");
+  $("#dIg").classList.toggle("hidden", !lead.ig_draft);
+  if (lead.ig_draft && document.activeElement !== $("#dIgText")) $("#dIgText").value = lead.ig_draft;
+  $("#dIgOpen").href = lead.instagram ? `https://instagram.com/${lead.instagram}` : `https://www.instagram.com/explore/search/keyword/?q=${encodeURIComponent(lead.name || "")}`;
+  $("#dIgOpen").textContent = lead.instagram ? `Abrir @${lead.instagram} ↗` : "Procurar no Instagram ↗";
+
   const att = $("#dAttention");
   att.classList.toggle("hidden", !lead.needs_attention);
   att.textContent = lead.needs_attention ? `⚠ ${lead.attention_reason || "Este lead precisa de atenção."}` : "";
@@ -226,6 +245,84 @@ $("#dSim").addEventListener("submit", async (e) => {
   refreshLead();
 });
 
+// ---------- Pesquisa e Instagram ----------
+async function busyButton(btn, label, fn) {
+  const old = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = label;
+  try { await fn(); } catch (err) { alert(err.message); } finally { btn.disabled = false; btn.textContent = old; }
+}
+$("#dEnrich").addEventListener("click", (e) =>
+  busyButton(e.target, "Pesquisando…", async () => { await api(`/api/leads/${state.current}/enrich`, { method: "POST" }); refreshLead(); }));
+$("#dIgDraft").addEventListener("click", (e) =>
+  busyButton(e.target, "Escrevendo…", async () => { await api(`/api/leads/${state.current}/instagram`, { method: "POST" }); refreshLead(); }));
+$("#dIgCopy").addEventListener("click", async (e) => {
+  try { await navigator.clipboard.writeText($("#dIgText").value); e.target.textContent = "Copiado ✓"; }
+  catch { $("#dIgText").select(); }
+  setTimeout(() => (e.target.textContent = "Copiar"), 1500);
+});
+$("#dIgSent").addEventListener("click", async () => {
+  await api(`/api/leads/${state.current}`, { method: "PATCH", body: { ig_draft: $("#dIgText").value } });
+  await api(`/api/leads/${state.current}/instagram/sent`, { method: "POST" });
+  refreshLead();
+});
+
+// ---------- WhatsApp (QR Code) ----------
+function renderWa(st) {
+  const label = { conectado: `Conectado${st.me ? ` (+${st.me})` : ""} ✅`, aguardando_qr: "Escaneie o QR Code com o celular",
+    reconectando: "Reconectando…", desconectado: "Desconectado" }[st.status] || st.status;
+  $("#waStatus").textContent = st.mode === "cloud" ? "Usando a API oficial do WhatsApp (configurada no servidor)." : label + (st.error ? ` — ${st.error}` : "");
+  $("#waQr").classList.toggle("hidden", !st.qr);
+  $("#waHelp").classList.toggle("hidden", !st.qr);
+  if (st.qr) $("#waQr").src = st.qr;
+  $("#waConnect").classList.toggle("hidden", st.mode === "cloud" || st.status === "conectado" || !!st.qr);
+  $("#waLogout").classList.toggle("hidden", st.mode === "cloud" || st.status !== "conectado");
+  if (st.status === "conectado") loadStatus();
+}
+$("#btnWa").addEventListener("click", async () => { renderWa(await api("/api/whatsapp")); $("#waDialog").showModal(); });
+$("#waConnect").addEventListener("click", (e) => busyButton(e.target, "Gerando…", async () => renderWa(await api("/api/whatsapp/connect", { method: "POST" }))));
+$("#waLogout").addEventListener("click", async () => {
+  if (!confirm("Desconectar este WhatsApp do CRM?")) return;
+  renderWa(await api("/api/whatsapp/logout", { method: "POST" }));
+  loadStatus();
+});
+$("#waClose").addEventListener("click", () => $("#waDialog").close());
+
+// ---------- Prospecção e robô ----------
+function renderCampaign(c) {
+  const next = c.nextSendAt > Date.now() ? ` · próximo envio ~${new Date(c.nextSendAt).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}` : "";
+  $("#prStatus").innerHTML = `Hoje: <b>${c.sentToday}/${c.limit}</b> abordagens · Na fila: <b>${c.queue}</b> empresas · ${c.inWindow ? "dentro do horário" : "fora do horário de envio"}${next}<br>${esc(c.lastEvent)}`;
+  $("#prCampaign").elements.campaign_active.checked = c.active;
+}
+$("#btnProspect").addEventListener("click", async () => {
+  const [s, c] = await Promise.all([api("/api/settings"), api("/api/campaign")]);
+  for (const el of $("#prCampaign").elements) if (el.name && el.type !== "checkbox") el.value = s[el.name] ?? "";
+  renderCampaign(c);
+  $("#prDialog").showModal();
+});
+$("#prClose").addEventListener("click", () => $("#prDialog").close());
+$("#prSearch").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const body = Object.fromEntries(new FormData(e.target));
+  $("#prResult").textContent = "Buscando… pode levar alguns minutos com muitos bairros.";
+  busyButton($("#prSearchBtn"), "Buscando…", async () => {
+    try {
+      const r = await api("/api/prospect/search", { method: "POST", body });
+      $("#prResult").textContent = `${r.found} encontradas · ${r.added} novas no CRM · ${r.duplicates} já existiam · ${r.withoutPhone} sem telefone`;
+      renderCampaign(await api("/api/campaign"));
+      loadLeads();
+    } catch (err) {
+      $("#prResult").textContent = err.message;
+    }
+  });
+});
+$("#prCampaign").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const body = Object.fromEntries(new FormData(e.target));
+  body.campaign_active = e.target.elements.campaign_active.checked ? "1" : "0";
+  renderCampaign(await api("/api/campaign", { method: "PUT", body }));
+});
+
 // ---------- Novo lead ----------
 $("#btnNew").addEventListener("click", () => {
   $("#newForm").reset();
@@ -266,6 +363,8 @@ events.addEventListener("change", (e) => {
   reloadTimer = setTimeout(loadLeads, 200);
   if (leadId === state.current) refreshLead();
 });
+events.addEventListener("whatsapp", (e) => { if ($("#waDialog").open) renderWa({ mode: "qr", ...JSON.parse(e.data) }); loadStatus(); });
+events.addEventListener("campaign", (e) => { if ($("#prDialog").open) renderCampaign(JSON.parse(e.data)); });
 events.addEventListener("typing", (e) => {
   const { leadId, typing } = JSON.parse(e.data);
   if (leadId === state.current) $("#dTyping").classList.toggle("hidden", !typing);

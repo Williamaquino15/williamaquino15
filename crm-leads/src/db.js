@@ -50,6 +50,18 @@ CREATE TABLE IF NOT EXISTS settings (
 );
 `);
 
+// Migrações simples: adiciona colunas novas em bancos já existentes.
+const leadCols = db.prepare("PRAGMA table_info(leads)").all().map((c) => c.name);
+for (const [col, type] of [
+  ["wa_jid", "TEXT"], ["address", "TEXT"], ["website", "TEXT"], ["rating", "REAL"],
+  ["reviews", "INTEGER"], ["maps_url", "TEXT"], ["place_id", "TEXT"], ["prospected_at", "TEXT"],
+  ["cnpj", "TEXT"], ["instagram", "TEXT"], ["owners", "TEXT"], ["alt_phone", "TEXT"], ["enriched_at", "TEXT"],
+  ["ig_draft", "TEXT"], ["ig_sent_at", "TEXT"],
+]) {
+  if (!leadCols.includes(col)) db.exec(`ALTER TABLE leads ADD COLUMN ${col} ${type}`);
+}
+db.exec("CREATE UNIQUE INDEX IF NOT EXISTS idx_leads_place ON leads(place_id) WHERE place_id IS NOT NULL");
+
 export const STAGES = [
   "novo",
   "contatado",
@@ -76,6 +88,15 @@ const DEFAULT_SETTINGS = {
     "Nunca prometa resultados garantidos. Não passe preço fechado: diga que depende do diagnóstico.",
   followup_hours: "24",
   max_followups: "2",
+  // Prospecção ativa
+  prospect_angle:
+    "Ajudamos clínicas odontológicas a encher a agenda de avaliações (implante, lentes, ortodontia) com anúncios no Instagram e no Google.",
+  campaign_active: "0",
+  daily_limit: "25",
+  send_start_hour: "9",
+  send_end_hour: "18",
+  min_interval_min: "4",
+  max_interval_min: "12",
 };
 
 export function getSettings() {
@@ -110,6 +131,29 @@ export function getLeadByPhone(phone) {
   return db.prepare("SELECT * FROM leads WHERE phone = ?").get(normalizePhone(phone));
 }
 
+export function getLeadByJid(jid) {
+  return db.prepare("SELECT * FROM leads WHERE wa_jid = ?").get(jid);
+}
+
+export const isProspect = (lead) => lead?.source === "prospeccao";
+
+/** Próximo prospect da fila (clínica encontrada que ainda não recebeu mensagem). */
+export function nextProspect() {
+  return db
+    .prepare("SELECT * FROM leads WHERE source = 'prospeccao' AND stage = 'novo' AND ai_enabled = 1 ORDER BY id LIMIT 1")
+    .get();
+}
+
+export function prospectsContactedToday() {
+  return db
+    .prepare("SELECT COUNT(*) AS n FROM leads WHERE prospected_at IS NOT NULL AND date(prospected_at) = date('now')")
+    .get().n;
+}
+
+export function prospectQueueSize() {
+  return db.prepare("SELECT COUNT(*) AS n FROM leads WHERE source = 'prospeccao' AND stage = 'novo'").get().n;
+}
+
 export function listLeads() {
   return db
     .prepare(
@@ -121,6 +165,8 @@ export function listLeads() {
 }
 
 const LEAD_FIELDS = [
+  "wa_jid", "address", "website", "rating", "reviews", "maps_url", "place_id", "prospected_at",
+  "cnpj", "instagram", "owners", "alt_phone", "enriched_at", "ig_draft", "ig_sent_at",
   "name", "email", "company", "niche", "budget", "source", "stage", "score",
   "summary", "notes", "ai_enabled", "needs_attention", "attention_reason",
   "followups_sent", "last_inbound_at", "last_outbound_at",
@@ -131,13 +177,21 @@ export function createLead(data) {
   if (phone.length < 10) throw new Error("Telefone inválido");
   const existing = getLeadByPhone(phone);
   if (existing) return { lead: existing, created: false };
+  if (data.place_id) {
+    const byPlace = db.prepare("SELECT * FROM leads WHERE place_id = ?").get(data.place_id);
+    if (byPlace) return { lead: byPlace, created: false };
+  }
   const info = db
     .prepare(
-      "INSERT INTO leads (name, phone, email, company, niche, budget, source, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+      `INSERT INTO leads (name, phone, email, company, niche, budget, source, notes,
+         address, website, rating, reviews, maps_url, place_id)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     )
     .run(
       data.name || null, phone, data.email || null, data.company || null,
       data.niche || null, data.budget || null, data.source || "manual", data.notes || null,
+      data.address || null, data.website || null, data.rating ?? null, data.reviews ?? null,
+      data.maps_url || null, data.place_id || null,
     );
   return { lead: getLead(info.lastInsertRowid), created: true };
 }

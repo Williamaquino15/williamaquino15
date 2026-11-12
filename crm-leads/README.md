@@ -1,6 +1,22 @@
 # CRM de Leads com IA para agência de tráfego
 
-CRM simples para captar leads e deixar uma IA (Claude, da Anthropic) **puxar conversa, responder e qualificar** cada lead pelo WhatsApp, até agendar a reunião. Quando precisa de você, ela avisa e pausa.
+CRM para captar e **prospectar** leads e deixar uma IA (Claude, da Anthropic) **puxar conversa, responder e qualificar** cada lead pelo WhatsApp, até agendar a reunião. Quando precisa de você, ela avisa e pausa.
+
+## Prospecção automática (novo)
+
+1. **Conecte o seu WhatsApp** pelo botão **WhatsApp** → **Gerar QR Code** → no celular: *Dispositivos conectados → Conectar dispositivo*.
+2. Em **Prospecção**, escolha o tipo de empresa (ex.: "clínica odontológica"), a cidade (ex.: "Recife") e, se quiser mais resultados, uma lista de bairros. O CRM busca no Google Maps e coloca cada empresa na coluna **Novo**.
+3. Ligue o **Robô**. Em dias úteis, no horário que você definir, ele pega uma empresa por vez e:
+   - abre o site da empresa e procura **CNPJ** e **Instagram**;
+   - consulta o CNPJ na base pública da Receita (BrasilAPI) e traz **sócios** e **telefone cadastrado**;
+   - tenta primeiro o **telefone do CNPJ** (costuma ser do dono) e depois o da clínica; quem não tem WhatsApp vai para **Perdido**;
+   - a IA escreve uma primeira mensagem personalizada (nome da clínica, bairro, nome do sócio) e envia;
+   - as respostas são tratadas pela IA, e os follow-ups saem sozinhos.
+4. **Instagram**: no painel do lead, **Gerar direct do Instagram** cria uma mensagem para o perfil da clínica. Você clica em *Abrir*, cola, envia e marca como enviado — fica registrado na conversa.
+
+**Travas de segurança do robô** (para não queimar seu número): limite diário de empresas novas (padrão 25), intervalo aleatório entre envios (4 a 12 min), só seg–sex em horário comercial (horário de Recife), "digitando…" antes de cada mensagem, para sozinho após 3 falhas seguidas ou se o WhatsApp limitar contatos novos, e nunca insiste depois de um "não".
+
+> ⚠️ O WhatsApp por QR Code usa uma biblioteca não oficial (Baileys). Mandar mensagens para quem não tem seu número salvo pode levar a bloqueio. Use um número exclusivo para prospecção, comece com poucos envios por dia (10–20) e aumente aos poucos. Respeite pedidos para não receber mensagens (LGPD).
 
 ## O que ele faz
 
@@ -53,7 +69,13 @@ curl -X POST "https://SEU-DOMINIO/api/capture?token=SEU_CAPTURE_TOKEN" \
 
 Campos aceitos: `name|nome`, `phone|telefone|whatsapp`, `email`, `company|empresa`, `niche|nicho`, `budget|investimento`, `source|origem|utm_source`, `message|mensagem`.
 
-## Conectar o WhatsApp (API oficial da Meta)
+## Chave do Google Maps (para a prospecção)
+
+1. Acesse console.cloud.google.com, crie um projeto e ative o faturamento (o Google dá crédito mensal gratuito).
+2. Em *APIs e serviços → Biblioteca*, ative **Places API (New)**.
+3. Em *Credenciais → Criar credenciais → Chave de API*, copie a chave e coloque em `GOOGLE_PLACES_API_KEY`.
+
+## Alternativa: API oficial do WhatsApp (Meta)
 
 1. Crie um app em developers.facebook.com, adicione o produto **WhatsApp** e um número.
 2. Preencha no `.env`: `WHATSAPP_TOKEN` (token permanente de usuário do sistema), `WHATSAPP_PHONE_NUMBER_ID` e um `WHATSAPP_VERIFY_TOKEN` qualquer.
@@ -75,7 +97,9 @@ O servidor precisa estar num endereço público com HTTPS (Railway, Render, VPS�
 src/server.js    rotas HTTP, webhook, captação, painel
 src/engine.js    orquestra: primeiro contato, respostas, follow-ups, handoff
 src/ai.js        prompt e chamada ao Claude
-src/whatsapp.js  envio/recebimento pela WhatsApp Cloud API
+src/whatsapp.js  WhatsApp por QR Code (Baileys) ou API oficial
+src/prospect.js  busca de empresas no Google Maps (Places API)
+src/enrich.js    site da empresa → CNPJ/Instagram → sócios e telefone (BrasilAPI)
 src/db.js        SQLite (leads, mensagens, configurações)
 public/          painel (HTML/CSS/JS puro)
 ```

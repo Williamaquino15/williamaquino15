@@ -66,6 +66,17 @@ ${s.tone}
 - Se for uma mensagem de follow-up, retome o assunto de forma leve e diferente das mensagens anteriores, sem ser insistente.
 ${s.extra_rules ? `- ${s.extra_rules}` : ""}
 
+# Prospecção ativa (leads com origem "prospeccao")
+Esses leads NÃO pediram contato: são empresas que encontramos no Google Maps. Você está fazendo uma abordagem fria a uma empresa (B2B).
+Ângulo da abordagem: ${s.prospect_angle}
+- Na primeira mensagem: cumprimente, diga quem você é e de qual agência, cite o nome da empresa (e o bairro, se souber) para mostrar que não é disparo em massa, e faça UMA pergunta leve e fácil de responder (ex.: se quem cuida do marketing/agenda é o próprio dono). Nada de link, preço ou texto longo. Máximo 3 frases curtas.
+- Diga de forma natural que, se não fizer sentido, é só avisar que você não manda mais mensagens.
+- Quem responde pode ser a recepcionista/secretária: seja cordial e peça o WhatsApp direto ou o melhor horário para falar com o(a) responsável/dono(a). Se te passarem outro número, registre no resumo e marque handoff=true para a equipe abordar esse número.
+- A mensagem pode ter ido para o telefone cadastrado da empresa, que às vezes é do próprio dono: não presuma quem está do outro lado; pergunte com naturalidade.
+- Se pedirem para parar, se disserem que não têm interesse ou que já têm agência: agradeça, encerre e marque "perdido". Nunca insista depois de um "não".
+- Se souber o nome do(a) sócio(a), peça para falar com ele(a) pelo nome (use "Dr./Dra." + primeiro nome quando for clínica de saúde). Não diga de onde tirou o nome.
+- Avaliação e número de avaliações no Google podem ser usados com tato como gancho ("vi que vocês têm ótimas avaliações"), nunca para criticar.
+
 # Etapas
 contatado = já enviamos mensagem mas o lead ainda não respondeu de verdade; em_conversa = lead respondendo; qualificado = tem perfil e interesse; reuniao = reunião aceita/agendada; perdido = sem perfil ou sem interesse.`;
 }
@@ -84,7 +95,12 @@ function leadCard(lead) {
     `Empresa: ${lead.company || "?"}`,
     `Nicho: ${lead.niche || "?"}`,
     `Investimento: ${lead.budget || "?"}`,
-    `Origem: ${lead.source || "?"}`,
+    `Origem: ${lead.source || "?"}${lead.source === "prospeccao" ? " (abordagem fria, encontrada no Google Maps)" : ""}`,
+    `Endereço: ${lead.address || "?"}`,
+    `Site: ${lead.website || "?"}`,
+    `Sócios (dados públicos do CNPJ): ${lead.owners || "?"}`,
+    `Instagram da empresa: ${lead.instagram ? "@" + lead.instagram : "?"}`,
+    `Avaliação no Google: ${lead.rating ? `${lead.rating} (${lead.reviews || 0} avaliações)` : "?"}`,
     `Etapa atual: ${lead.stage}`,
     `Observações da equipe: ${lead.notes || "-"}`,
   ].join("\n");
@@ -93,13 +109,14 @@ function leadCard(lead) {
 const TASKS = {
   first: "Este lead acabou de chegar no CRM. Escreva a PRIMEIRA mensagem: apresente-se, cite de onde ele veio (origem) se fizer sentido e faça uma pergunta aberta para iniciar a conversa.",
   reply: "O lead mandou mensagem. Responda a(s) última(s) mensagem(ns) dele e avance a qualificação rumo ao objetivo.",
+  prospect: "Esta empresa foi encontrada no Google Maps e nunca falou conosco. Escreva a PRIMEIRA mensagem de prospecção seguindo as regras de prospecção ativa.",
   followup: "O lead não respondeu à nossa última mensagem. Escreva um follow-up curto e leve.",
 };
 
 /**
  * Pede para a IA decidir a próxima mensagem para o lead.
  * @param {object} lead
- * @param {"first"|"reply"|"followup"} kind
+ * @param {"first"|"prospect"|"reply"|"followup"} kind
  */
 export async function decideNextMessage(lead, kind) {
   const settings = getSettings();
@@ -141,4 +158,25 @@ export function describeAiError(err) {
   if (err instanceof Anthropic.BadRequestError) return `Requisição inválida: ${err.message}`;
   if (err instanceof Anthropic.APIError) return `Erro da API (${err.status}): ${err.message}`;
   return err?.message || String(err);
+}
+
+const IgDraft = z.object({ message: z.string().describe("Texto do direct, pronto para colar.") });
+
+/** Escreve um direct de Instagram para o perfil da empresa (o envio é feito por você, manualmente). */
+export async function writeInstagramDm(lead) {
+  const settings = getSettings();
+  const response = await getClient().beta.messages.parse({
+    model: MODEL,
+    max_tokens: 16000,
+    betas: ["server-side-fallback-2026-07-01"],
+    fallbacks: "default",
+    output_config: { effort: EFFORT, format: betaZodOutputFormat(IgDraft) },
+    system: [{ type: "text", text: systemPrompt(settings), cache_control: { type: "ephemeral" } }],
+    messages: [{
+      role: "user",
+      content: `# Dados do lead\n${leadCard(lead)}\n\n# Conversa no WhatsApp até agora\n${transcript(lead, getMessages(lead.id))}\n\n# Tarefa\nEscreva um direct curto (até 3 frases) para o Instagram DA EMPRESA, no mesmo tom das regras de prospecção. Se já houver conversa no WhatsApp, mencione de leve que mandou mensagem por lá também.`,
+    }],
+  });
+  if (response.stop_reason === "refusal" || !response.parsed_output) throw new Error("A IA não conseguiu escrever o direct.");
+  return response.parsed_output.message.trim();
 }

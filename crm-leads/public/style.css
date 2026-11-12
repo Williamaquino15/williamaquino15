@@ -154,3 +154,23 @@ dialog::backdrop { background: rgba(0,0,0,.4); }
   .actions input { flex: 1; width: auto; }
   .grid { grid-template-columns: 1fr; }
 }
+
+/* Prospecção, WhatsApp e Instagram */
+.facts { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 12.5px; color: var(--muted); }
+.facts b { color: var(--text); font-weight: 500; }
+.facts a { color: var(--primary); }
+.lead-tools { display: flex; flex-wrap: wrap; gap: 6px; }
+.lead-tools button { font-size: 12.5px; padding: 5px 10px; }
+.ig { display: flex; flex-direction: column; gap: 6px; padding: 8px; border: 1px solid var(--border); border-radius: 8px; }
+.ig-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.ig-actions a { color: var(--primary); margin-right: auto; }
+.wa, .pr { display: flex; flex-direction: column; gap: 10px; }
+.wa h3, .pr h3 { margin: 0; }
+.wa img { width: 280px; max-width: 100%; align-self: center; border-radius: 8px; background: #fff; padding: 6px; }
+.wa ol { margin: 0; padding-left: 20px; }
+.warn { background: var(--warn-bg); color: var(--warn-text); padding: 8px 10px; border-radius: 8px; font-size: 12.5px; margin: 0; }
+.pr h4 { margin: 4px 0 0; font-size: 14px; }
+.pr form + form { border-top: 1px solid var(--border); padding-top: 12px; }
+.pair { display: flex; align-items: center; gap: 6px; color: var(--muted); }
+.campaign-box { display: flex; flex-direction: column; gap: 4px; padding: 10px; border: 1px solid var(--border); border-radius: 8px; }
+label.toggle.big { font-size: 15px; font-weight: 600; }

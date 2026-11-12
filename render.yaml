@@ -17,6 +17,10 @@ services:
         value: "22"
       - key: DB_PATH
         value: /var/data/crm.db
+      - key: WA_AUTH_DIR
+        value: /var/data/wa-auth   # sessão do WhatsApp (QR Code) fica salva no disco
+      - key: GOOGLE_PLACES_API_KEY
+        sync: false          # chave do Google para buscar empresas no Maps
       - key: ADMIN_PASSWORD
         sync: false          # o Render pede para você digitar na hora
       - key: ANTHROPIC_API_KEY

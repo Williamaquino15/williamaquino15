@@ -2,9 +2,14 @@ import express from "express";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import * as db from "./db.js";
-import { aiConfigured } from "./ai.js";
-import { whatsappConfigured, parseWebhook } from "./whatsapp.js";
-import { bus, firstContact, handleInbound, runAi, sendOutbound, startFollowupLoop } from "./engine.js";
+import { existsSync } from "node:fs";
+import { aiConfigured, writeInstagramDm, describeAiError } from "./ai.js";
+import { MODE, whatsappConfigured, whatsappStatus, parseWebhook, startQr, logoutQr } from "./whatsapp.js";
+import { placesConfigured, findBusinesses } from "./prospect.js";
+import { enrichLead } from "./enrich.js";
+import {
+  bus, firstContact, handleInbound, runAi, sendOutbound, startLoops, campaignStatus, systemNote,
+} from "./engine.js";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -74,8 +79,64 @@ app.use(express.static(path.join(here, "..", "public")));
 
 // ---------- API do painel ----------
 app.get("/api/status", (req, res) => {
-  res.json({ ai: aiConfigured(), whatsapp: whatsappConfigured(), stages: db.STAGES });
+  res.json({ ai: aiConfigured(), whatsapp: whatsappConfigured(), waMode: MODE, places: placesConfigured(), stages: db.STAGES });
 });
+
+// ----- WhatsApp por QR Code
+app.get("/api/whatsapp", (req, res) => res.json(whatsappStatus()));
+app.post("/api/whatsapp/connect", wrap(async (req, res) => {
+  await startQr({ onInbound: inboundFromQr, onStatus: (st) => bus.emit("whatsapp", st) });
+  res.json(whatsappStatus());
+}));
+app.post("/api/whatsapp/logout", wrap(async (req, res) => {
+  await logoutQr();
+  res.json(whatsappStatus());
+}));
+
+// ----- Prospecção (Google Maps) e robô
+app.post("/api/prospect/search", wrap(async (req, res) => {
+  const { query, city, areas, niche } = req.body;
+  if (!query?.trim() || !city?.trim()) throw new Error("Informe o tipo de empresa e a cidade.");
+  const list = String(areas || "").split(/[\n,]/).map((a) => a.trim()).filter(Boolean).slice(0, 40);
+  const result = await findBusinesses({ query: query.trim(), city: city.trim(), areas: list, niche: niche?.trim() });
+  bus.emit("change", {});
+  res.json(result);
+}));
+app.get("/api/campaign", (req, res) => res.json(campaignStatus()));
+app.put("/api/campaign", (req, res) => {
+  db.saveSettings(req.body);
+  const st = campaignStatus();
+  bus.emit("campaign", st);
+  res.json(st);
+});
+
+app.post("/api/leads/:id/enrich", wrap(async (req, res) => {
+  const lead = db.getLead(req.params.id);
+  if (!lead) throw new Error("lead não encontrado");
+  const info = await enrichLead(lead);
+  systemNote(lead.id, `Pesquisa: ${info}`);
+  res.json(db.getLead(lead.id));
+}));
+
+// Direct de Instagram: a IA escreve, você envia pelo seu Instagram.
+app.post("/api/leads/:id/instagram", wrap(async (req, res) => {
+  const lead = db.getLead(req.params.id);
+  if (!lead) throw new Error("lead não encontrado");
+  try {
+    const text = await writeInstagramDm(lead);
+    res.json(db.updateLead(lead.id, { ig_draft: text }));
+  } catch (err) {
+    throw new Error(describeAiError(err));
+  }
+}));
+app.post("/api/leads/:id/instagram/sent", wrap(async (req, res) => {
+  const lead = db.getLead(req.params.id);
+  if (!lead?.ig_draft) throw new Error("sem direct para registrar");
+  db.addMessage(lead.id, { direction: "out", author: "human", body: `[Instagram] ${lead.ig_draft}`, status: "enviado no Instagram" });
+  const updated = db.updateLead(lead.id, { ig_sent_at: new Date().toISOString().slice(0, 19).replace("T", " ") });
+  bus.emit("change", { leadId: lead.id });
+  res.json(updated);
+}));
 
 app.get("/api/stats", (req, res) => res.json(db.stats()));
 app.get("/api/leads", (req, res) => res.json(db.listLeads()));
@@ -119,9 +180,10 @@ app.post("/api/leads/:id/send", wrap(async (req, res) => {
 app.post("/api/leads/:id/ai", wrap(async (req, res) => {
   const lead = db.getLead(req.params.id);
   if (!lead) throw new Error("lead não encontrado");
-  const msgs = db.getMessages(lead.id).filter((m) => m.author !== "system");
+  // Considera só a conversa do WhatsApp (ignora notas do sistema e directs do Instagram).
+  const msgs = db.getMessages(lead.id).filter((m) => m.author !== "system" && !m.body.startsWith("[Instagram]"));
   const last = msgs.at(-1);
-  const kind = !msgs.length ? "first" : last.direction === "in" ? "reply" : "followup";
+  const kind = !msgs.length ? (db.isProspect(lead) ? "prospect" : "first") : last.direction === "in" ? "reply" : "followup";
   if (!lead.ai_enabled) db.updateLead(lead.id, { ai_enabled: 1, needs_attention: 0 });
   runAi(lead.id, kind);
   res.json({ ok: true, kind });
@@ -145,19 +207,33 @@ app.get("/api/events", (req, res) => {
   const send = (type) => (data) => res.write(`event: ${type}\ndata: ${JSON.stringify(data)}\n\n`);
   const onChange = send("change");
   const onTyping = send("typing");
+  const onCampaign = send("campaign");
+  const onWa = send("whatsapp");
   bus.on("change", onChange);
   bus.on("typing", onTyping);
+  bus.on("campaign", onCampaign);
+  bus.on("whatsapp", onWa);
   const ping = setInterval(() => res.write(": ping\n\n"), 25000);
   req.on("close", () => {
     clearInterval(ping);
     bus.off("change", onChange);
     bus.off("typing", onTyping);
+    bus.off("campaign", onCampaign);
+    bus.off("whatsapp", onWa);
   });
 });
+
+function inboundFromQr(m) {
+  handleInbound({ phone: m.phone, jid: m.jid, altJid: m.altJid, name: m.name, text: m.text, waId: m.id });
+}
 
 const PORT = Number(process.env.PORT || 3000);
 app.listen(PORT, () => {
   console.log(`CRM rodando em http://localhost:${PORT}`);
-  console.log(`IA: ${aiConfigured() ? "ativa" : "NÃO configurada (ANTHROPIC_API_KEY)"} | WhatsApp: ${whatsappConfigured() ? "conectado" : "modo simulador"}`);
-  startFollowupLoop();
+  console.log(`IA: ${aiConfigured() ? "ativa" : "NÃO configurada (ANTHROPIC_API_KEY)"} | WhatsApp: ${MODE === "cloud" ? "API oficial" : "QR Code"} | Google Maps: ${placesConfigured() ? "ok" : "sem chave"}`);
+  // Se já conectou por QR antes, reconecta sozinho.
+  if (MODE === "qr" && existsSync(`${process.env.WA_AUTH_DIR || "./data/wa-auth"}/creds.json`)) {
+    startQr({ onInbound: inboundFromQr, onStatus: (st) => bus.emit("whatsapp", st) }).catch((e) => console.error("[whatsapp]", e));
+  }
+  startLoops();
 });

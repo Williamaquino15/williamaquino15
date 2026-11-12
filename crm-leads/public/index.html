@@ -15,6 +15,8 @@
     <div class="stats" id="stats"></div>
     <div class="actions">
       <input id="search" type="search" placeholder="Buscar nome, telefone, nicho…" />
+      <button id="btnWa">WhatsApp</button>
+      <button id="btnProspect">Prospecção</button>
       <button id="btnNew" class="primary">+ Novo lead</button>
       <button id="btnSettings">Configurar IA</button>
     </div>
@@ -42,6 +44,19 @@
         </div>
         <div class="score"><span>Score</span><div class="bar"><i id="dScoreBar"></i></div><b id="dScore">0</b></div>
         <p id="dSummary" class="summary"></p>
+        <div id="dFacts" class="facts"></div>
+        <div class="lead-tools">
+          <button type="button" id="dEnrich">Pesquisar CNPJ e Instagram</button>
+          <button type="button" id="dIgDraft">Gerar direct do Instagram</button>
+        </div>
+        <div id="dIg" class="ig hidden">
+          <textarea id="dIgText" rows="3"></textarea>
+          <div class="ig-actions">
+            <a id="dIgOpen" target="_blank" rel="noopener">Abrir Instagram ↗</a>
+            <button type="button" id="dIgCopy">Copiar</button>
+            <button type="button" id="dIgSent">Marcar como enviado</button>
+          </div>
+        </div>
         <details>
           <summary>Dados do lead</summary>
           <form id="dForm" class="grid">
@@ -94,6 +109,58 @@
         <button value="ok" class="primary">Criar</button>
       </div>
     </form>
+  </dialog>
+
+  <!-- WhatsApp por QR Code -->
+  <dialog id="waDialog">
+    <div class="wa">
+      <h3>Conectar WhatsApp</h3>
+      <p id="waStatus" class="muted"></p>
+      <img id="waQr" class="hidden" alt="QR Code do WhatsApp" />
+      <ol id="waHelp" class="muted hidden">
+        <li>Abra o WhatsApp no celular</li>
+        <li>Toque em ⋮ (ou Configurações) → <b>Dispositivos conectados</b> → <b>Conectar dispositivo</b></li>
+        <li>Aponte a câmera para este QR Code</li>
+      </ol>
+      <p class="warn">Use de preferência um número exclusivo para prospecção. O WhatsApp pode bloquear números que mandam muitas mensagens para quem não tem você nos contatos.</p>
+      <div class="form-actions">
+        <button type="button" id="waLogout" class="danger">Desconectar</button>
+        <span>
+          <button type="button" id="waConnect" class="primary">Gerar QR Code</button>
+          <button type="button" id="waClose">Fechar</button>
+        </span>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Prospecção e robô -->
+  <dialog id="prDialog" class="wide">
+    <div class="pr">
+      <h3>Prospecção automática</h3>
+      <form id="prSearch" class="grid">
+        <h4 class="full">1. Encontrar empresas no Google Maps</h4>
+        <label>Tipo de empresa <input name="query" value="clínica odontológica" required /></label>
+        <label>Cidade <input name="city" value="Recife" required /></label>
+        <label class="full">Bairros (um por linha — amplia a busca; deixe vazio para buscar a cidade toda)
+          <textarea name="areas" rows="3" placeholder="Boa Viagem&#10;Casa Forte&#10;Espinheiro&#10;Graças&#10;Madalena"></textarea></label>
+        <div class="full form-actions"><span id="prResult" class="muted"></span><button class="primary" id="prSearchBtn">Buscar e adicionar ao CRM</button></div>
+      </form>
+
+      <form id="prCampaign" class="grid">
+        <h4 class="full">2. Robô de abordagem pelo WhatsApp</h4>
+        <div class="full campaign-box">
+          <label class="toggle big"><input type="checkbox" name="campaign_active" /> Robô ligado</label>
+          <div id="prStatus" class="muted"></div>
+        </div>
+        <label class="full">Ângulo da abordagem (o que a IA oferece) <textarea name="prospect_angle" rows="2"></textarea></label>
+        <label>Máx. de empresas novas por dia <input name="daily_limit" type="number" min="1" max="200" /></label>
+        <label>Intervalo entre envios (min) <span class="pair"><input name="min_interval_min" type="number" min="1" /> a <input name="max_interval_min" type="number" min="1" /></span></label>
+        <label>Começa às (hora) <input name="send_start_hour" type="number" min="0" max="23" /></label>
+        <label>Para às (hora) <input name="send_end_hour" type="number" min="1" max="24" /></label>
+        <p class="full muted">O robô só envia de segunda a sexta, no horário acima (horário de Recife). Antes de cada abordagem ele pesquisa o site e o CNPJ da empresa, tenta primeiro o telefone do CNPJ e depois o da clínica.</p>
+        <div class="full form-actions"><button type="button" id="prClose">Fechar</button><button class="primary">Salvar robô</button></div>
+      </form>
+    </div>
   </dialog>
 
   <!-- Configurações -->
