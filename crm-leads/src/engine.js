@@ -48,7 +48,7 @@ export async function runAi(leadId, kind) {
   const lead = db.getLead(leadId);
   if (!lead || !lead.ai_enabled) return false;
   if (!aiConfigured()) {
-    systemNote(leadId, "IA não configurada: defina ANTHROPIC_API_KEY no arquivo .env.");
+    systemNote(leadId, "IA não configurada: coloque sua chave em OPENAI_API_KEY no arquivo .env e reinicie o CRM.");
     return false;
   }
   busy.add(leadId);

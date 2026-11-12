@@ -23,8 +23,8 @@ services:
         sync: false          # chave do Google para buscar empresas no Maps
       - key: ADMIN_PASSWORD
         sync: false          # o Render pede para você digitar na hora
-      - key: ANTHROPIC_API_KEY
-        sync: false          # o Render pede para você colar na hora
+      - key: OPENAI_API_KEY
+        sync: false          # chave da OpenAI — o Render pede para você colar na hora
       - key: CAPTURE_TOKEN
         generateValue: true
       - key: WHATSAPP_VERIFY_TOKEN

@@ -25,7 +25,7 @@ if [ "$MAJOR" -lt 22 ] || { [ "$MAJOR" -eq 22 ] && [ "$MINOR" -lt 13 ]; }; then
 fi
 
 # 2) Instala as dependências na primeira vez
-if [ ! -d node_modules ]; then
+if [ ! -d node_modules ] || [ package.json -nt node_modules/.package-lock.json ]; then
   echo "📦 Instalando (só na primeira vez, leva 1 a 2 minutos)..."
   npm install --no-fund --no-audit || { read -r -p "Deu erro na instalação. Aperte Enter para fechar."; exit 1; }
 fi
@@ -35,7 +35,7 @@ if [ ! -f .env ]; then
   cp .env.example .env
   echo
   echo "📝 Abri o arquivo de configuração (.env) no TextEdit."
-  echo "   Cole sua chave da Anthropic depois de ANTHROPIC_API_KEY= e, se tiver,"
+  echo "   Cole sua chave da OpenAI depois de OPENAI_API_KEY= e, se tiver,"
   echo "   a do Google depois de GOOGLE_PLACES_API_KEY=. Salve (Cmd+S) e feche o TextEdit."
   open -e .env
   read -r -p "Quando terminar, aperte Enter aqui para ligar o CRM."

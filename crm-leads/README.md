@@ -1,6 +1,6 @@
 # CRM de Leads com IA para agência de tráfego
 
-CRM para captar e **prospectar** leads e deixar uma IA (Claude, da Anthropic) **puxar conversa, responder e qualificar** cada lead pelo WhatsApp, até agendar a reunião. Quando precisa de você, ela avisa e pausa.
+CRM para captar e **prospectar** leads e deixar uma IA (OpenAI) **puxar conversa, responder e qualificar** cada lead pelo WhatsApp, até agendar a reunião. Quando precisa de você, ela avisa e pausa.
 
 ## Prospecção automática (novo)
 
@@ -38,7 +38,7 @@ Requer **Node.js 22.13+** (usa o SQLite embutido do Node, sem banco externo).
 ```bash
 cd crm-leads
 npm install
-cp .env.example .env   # preencha ANTHROPIC_API_KEY e ADMIN_PASSWORD
+cp .env.example .env   # preencha OPENAI_API_KEY e ADMIN_PASSWORD
 npm start
 ```
 
@@ -92,8 +92,10 @@ Em **Configurar IA → Script de prospecção e atendimento**, cole o seu roteir
 
 ## Sobre a IA
 
-- Usa a API da Anthropic (`@anthropic-ai/sdk`) com saída estruturada: a cada rodada a IA devolve a mensagem **e** os dados do CRM num JSON validado.
-- Modelo padrão `claude-opus-5-5` com esforço `low` (rápido e barato para chat). Ajuste com `AI_MODEL` e `AI_EFFORT` no `.env`.
+- Usa a API da OpenAI (`openai`, Responses API) com saída estruturada: a cada rodada a IA devolve a mensagem **e** os dados do CRM num JSON validado.
+- Modelo padrão `gpt-5.4-mini` com esforço `low` (rápido e barato para chat). Para mais qualidade, use `AI_MODEL=gpt-5.5` no `.env`.
+- A chave é criada em platform.openai.com/api-keys e cobrada por uso (créditos em *Billing*), separada da assinatura do ChatGPT.
+- Também funciona com o Claude (Anthropic): `AI_PROVIDER=anthropic` e `ANTHROPIC_API_KEY` no `.env`.
 - O prompt é montado a partir das suas configurações (botão **Configurar IA**) — edite lá, sem mexer em código. O campo *Observações* de cada lead também é lido pela IA.
 - A IA nunca move um lead para "Cliente": isso é com você.
 
@@ -102,7 +104,7 @@ Em **Configurar IA → Script de prospecção e atendimento**, cole o seu roteir
 ```
 src/server.js    rotas HTTP, webhook, captação, painel
 src/engine.js    orquestra: primeiro contato, respostas, follow-ups, handoff
-src/ai.js        prompt e chamada ao Claude
+src/ai.js        prompt e chamada à IA (OpenAI ou Claude)
 src/whatsapp.js  WhatsApp por QR Code (Baileys) ou API oficial
 src/prospect.js  busca de empresas no Google Maps (Places API)
 src/enrich.js    site da empresa → CNPJ/Instagram → sócios e telefone (BrasilAPI)

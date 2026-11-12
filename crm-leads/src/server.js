@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import * as db from "./db.js";
 import { existsSync } from "node:fs";
-import { aiConfigured, writeInstagramDm, describeAiError } from "./ai.js";
+import { aiConfigured, aiLabel, writeInstagramDm, describeAiError } from "./ai.js";
 import { MODE, whatsappConfigured, whatsappStatus, parseWebhook, startQr, logoutQr } from "./whatsapp.js";
 import { placesConfigured, findBusinesses } from "./prospect.js";
 import { enrichLead } from "./enrich.js";
@@ -79,7 +79,7 @@ app.use(express.static(path.join(here, "..", "public")));
 
 // ---------- API do painel ----------
 app.get("/api/status", (req, res) => {
-  res.json({ ai: aiConfigured(), whatsapp: whatsappConfigured(), waMode: MODE, places: placesConfigured(), stages: db.STAGES });
+  res.json({ ai: aiConfigured(), aiLabel: aiLabel(), whatsapp: whatsappConfigured(), waMode: MODE, places: placesConfigured(), stages: db.STAGES });
 });
 
 // ----- WhatsApp por QR Code
@@ -230,7 +230,7 @@ function inboundFromQr(m) {
 const PORT = Number(process.env.PORT || 3000);
 app.listen(PORT, () => {
   console.log(`CRM rodando em http://localhost:${PORT}`);
-  console.log(`IA: ${aiConfigured() ? "ativa" : "NÃO configurada (ANTHROPIC_API_KEY)"} | WhatsApp: ${MODE === "cloud" ? "API oficial" : "QR Code"} | Google Maps: ${placesConfigured() ? "ok" : "sem chave"}`);
+  console.log(`IA: ${aiConfigured() ? aiLabel() : "NÃO configurada (OPENAI_API_KEY)"} | WhatsApp: ${MODE === "cloud" ? "API oficial" : "QR Code"} | Google Maps: ${placesConfigured() ? "ok" : "sem chave"}`);
   // Se já conectou por QR antes, reconecta sozinho.
   if (MODE === "qr" && existsSync(`${process.env.WA_AUTH_DIR || "./data/wa-auth"}/creds.json`)) {
     startQr({ onInbound: inboundFromQr, onStatus: (st) => bus.emit("whatsapp", st) }).catch((e) => console.error("[whatsapp]", e));

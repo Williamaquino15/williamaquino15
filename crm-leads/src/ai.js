@@ -1,19 +1,58 @@
+import OpenAI from "openai";
+import { zodTextFormat } from "openai/helpers/zod";
 import Anthropic from "@anthropic-ai/sdk";
-import { z } from "zod";
 import { betaZodOutputFormat } from "@anthropic-ai/sdk/helpers/beta/zod";
+import { z } from "zod";
 import { getSettings, getMessages } from "./db.js";
 
-const MODEL = process.env.AI_MODEL || "claude-opus-5-5";
+// Qual IA usar: OpenAI (padrão quando OPENAI_API_KEY existe) ou Claude/Anthropic.
+export const PROVIDER =
+  process.env.AI_PROVIDER || (process.env.OPENAI_API_KEY ? "openai" : process.env.ANTHROPIC_API_KEY ? "anthropic" : "openai");
+const MODEL = process.env.AI_MODEL || (PROVIDER === "openai" ? "gpt-5.4-mini" : "claude-opus-5-5");
 // "low" deixa as respostas rápidas e baratas — ideal para chat. Suba para "medium" se quiser mais capricho.
 const EFFORT = process.env.AI_EFFORT || "low";
 
-let client = null;
 export function aiConfigured() {
-  return Boolean(process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_AUTH_TOKEN);
+  return PROVIDER === "openai"
+    ? Boolean(process.env.OPENAI_API_KEY)
+    : Boolean(process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_AUTH_TOKEN);
 }
-function getClient() {
-  if (!client) client = new Anthropic();
-  return client;
+export const aiLabel = () => `${PROVIDER === "openai" ? "OpenAI" : "Claude"} (${MODEL})`;
+
+let openai = null;
+let anthropic = null;
+
+/** Chama a IA com instruções fixas + mensagem do caso, e devolve o JSON já validado pelo schema. */
+async function askStructured({ system, user, schema, name }) {
+  if (PROVIDER === "openai") {
+    openai ??= new OpenAI();
+    const response = await openai.responses.parse({
+      model: MODEL,
+      instructions: system, // texto fixo primeiro: a OpenAI reaproveita em cache e cobra menos
+      input: user,
+      reasoning: { effort: EFFORT },
+      text: { format: zodTextFormat(schema, name) },
+    });
+    if (!response.output_parsed) {
+      const refusal = response.output?.flatMap((o) => o.content || []).find((c) => c.type === "refusal");
+      throw new Error(refusal ? "A IA recusou responder esta conversa." : `Resposta da IA não pôde ser lida (status=${response.status}).`);
+    }
+    return response.output_parsed;
+  }
+
+  anthropic ??= new Anthropic();
+  const response = await anthropic.beta.messages.parse({
+    model: MODEL,
+    max_tokens: 16000,
+    betas: ["server-side-fallback-2026-07-01"],
+    fallbacks: "default", // se o modelo recusar algo por segurança, o servidor tenta outro modelo automaticamente
+    output_config: { effort: EFFORT, format: betaZodOutputFormat(schema) },
+    system: [{ type: "text", text: system, cache_control: { type: "ephemeral" } }],
+    messages: [{ role: "user", content: user }],
+  });
+  if (response.stop_reason === "refusal") throw new Error("A IA recusou responder esta conversa.");
+  if (!response.parsed_output) throw new Error(`Resposta da IA não pôde ser lida (stop_reason=${response.stop_reason}).`);
+  return response.parsed_output;
 }
 
 // O que a IA devolve a cada rodada: a mensagem para o lead + atualização do CRM.
@@ -143,32 +182,20 @@ ${transcript(lead, messages)}
 # Tarefa
 ${TASKS[kind]}`;
 
-  const response = await getClient().beta.messages.parse({
-    model: MODEL,
-    max_tokens: 16000,
-    betas: ["server-side-fallback-2026-07-01"],
-    fallbacks: "default", // se o modelo recusar algo por segurança, o servidor tenta outro modelo automaticamente
-    output_config: { effort: EFFORT, format: betaZodOutputFormat(AiDecision) },
-    system: [{ type: "text", text: systemPrompt(settings), cache_control: { type: "ephemeral" } }],
-    messages: [{ role: "user", content: userContent }],
-  });
-
-  if (response.stop_reason === "refusal") {
-    throw new Error("A IA recusou responder esta conversa.");
-  }
-  if (!response.parsed_output) {
-    throw new Error(`Resposta da IA não pôde ser lida (stop_reason=${response.stop_reason}).`);
-  }
-  const d = response.parsed_output;
+  const d = await askStructured({ system: systemPrompt(settings), user: userContent, schema: AiDecision, name: "decisao_crm" });
   d.score = Math.max(0, Math.min(100, d.score));
   return d;
 }
 
 export function describeAiError(err) {
-  if (err instanceof Anthropic.AuthenticationError) return "Chave da API da Anthropic inválida.";
-  if (err instanceof Anthropic.RateLimitError) return "Limite de uso da API atingido; tente de novo em instantes.";
-  if (err instanceof Anthropic.BadRequestError) return `Requisição inválida: ${err.message}`;
-  if (err instanceof Anthropic.APIError) return `Erro da API (${err.status}): ${err.message}`;
+  const who = PROVIDER === "openai" ? "OpenAI" : "Anthropic";
+  for (const SDK of [OpenAI, Anthropic]) {
+    if (err instanceof SDK.AuthenticationError) return `Chave da API da ${who} inválida.`;
+    if (err instanceof SDK.RateLimitError) return `Limite de uso ou créditos da ${who} esgotados; confira o saldo e tente de novo.`;
+    if (err instanceof SDK.NotFoundError) return `Modelo "${MODEL}" não encontrado na sua conta da ${who}. Ajuste AI_MODEL no .env.`;
+    if (err instanceof SDK.BadRequestError) return `Requisição inválida: ${err.message}`;
+    if (err instanceof SDK.APIError) return `Erro da API (${err.status}): ${err.message}`;
+  }
   return err?.message || String(err);
 }
 
@@ -177,18 +204,11 @@ const IgDraft = z.object({ message: z.string().describe("Texto do direct, pronto
 /** Escreve um direct de Instagram para o perfil da empresa (o envio é feito por você, manualmente). */
 export async function writeInstagramDm(lead) {
   const settings = getSettings();
-  const response = await getClient().beta.messages.parse({
-    model: MODEL,
-    max_tokens: 16000,
-    betas: ["server-side-fallback-2026-07-01"],
-    fallbacks: "default",
-    output_config: { effort: EFFORT, format: betaZodOutputFormat(IgDraft) },
-    system: [{ type: "text", text: systemPrompt(settings), cache_control: { type: "ephemeral" } }],
-    messages: [{
-      role: "user",
-      content: `# Dados do lead\n${leadCard(lead)}\n\n# Conversa no WhatsApp até agora\n${transcript(lead, getMessages(lead.id))}\n\n# Tarefa\nEscreva um direct curto (até 3 frases) para o Instagram DA EMPRESA, no mesmo tom das regras de prospecção. Se já houver conversa no WhatsApp, mencione de leve que mandou mensagem por lá também.`,
-    }],
+  const r = await askStructured({
+    system: systemPrompt(settings),
+    user: `# Dados do lead\n${leadCard(lead)}\n\n# Conversa no WhatsApp até agora\n${transcript(lead, getMessages(lead.id))}\n\n# Tarefa\nEscreva um direct curto (até 3 frases) para o Instagram DA EMPRESA, no mesmo tom das regras de prospecção. Se já houver conversa no WhatsApp, mencione de leve que mandou mensagem por lá também.`,
+    schema: IgDraft,
+    name: "direct_instagram",
   });
-  if (response.stop_reason === "refusal" || !response.parsed_output) throw new Error("A IA não conseguiu escrever o direct.");
-  return response.parsed_output.message.trim();
+  return r.message.trim();
 }

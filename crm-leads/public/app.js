@@ -37,7 +37,7 @@ async function loadStatus() {
   const s = await api("/api/status");
   state.stages = s.stages;
   $("#status").innerHTML =
-    `<span class="pill ${s.ai ? "ok" : "off"}">IA ${s.ai ? "ativa" : "sem chave"}</span>` +
+    `<span class="pill ${s.ai ? "ok" : "off"}" title="${esc(s.aiLabel || "")}">IA ${s.ai ? "ativa" : "sem chave"}</span>` +
     `<span class="pill ${s.whatsapp ? "ok" : "off"}">WhatsApp ${s.whatsapp ? "conectado" : "desconectado"}</span>` +
     `<span class="pill ${s.places ? "ok" : "off"}">Google Maps ${s.places ? "ok" : "sem chave"}</span>`;
 }
