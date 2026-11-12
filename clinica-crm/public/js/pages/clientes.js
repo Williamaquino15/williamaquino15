@@ -45,7 +45,7 @@ export async function list(view) {
       <input id="qs" maxlength="50" placeholder="Buscar por nome, telefone ou ID" value="${esc(filters.q || '')}">
       <button class="btn btn-primary" id="go">Buscar</button><button class="btn" id="dia">Contatos do dia</button>
       <button class="btn" id="toggleF">Filtros</button><button class="btn" id="clearF">Limpar filtros</button></div></div>
-    <div id="fbox" hidden></div><div id="tbl"></div>`;
+    <div id="fbox" hidden></div><div class="kpis" id="totais"></div><div id="tbl"></div>`;
   const ffields = [
     { name: 'name', label: 'Buscar por nome', col: 3 }, { name: 'phone', label: 'Telefone', col: 3 },
     { name: 'reg_de', label: 'Data de registro (mín.)', type: 'date', col: 3 }, { name: 'reg_ate', label: 'Data de registro (máx.)', type: 'date', col: 3 },
@@ -83,6 +83,13 @@ export async function list(view) {
       const rows = await api.get('/clients', filters);
       table.setRows(rows);
       view.querySelector('#count').textContent = `${rows.length} cliente(s)`;
+      // Fechado = cliente com ao menos um orçamento fechado.
+      const fechados = rows.filter((r) => r.primeiro_fechamento || r.valor_fechado > 0);
+      view.querySelector('#totais').innerHTML =
+        kpi('Total não fechados', String(rows.length - fechados.length), 'clientes sem orçamento fechado')
+        + kpi('Total fechados', String(fechados.length), 'clientes com orçamento fechado')
+        + kpi('Valor orçado', fmtMoney(rows.reduce((t, r) => t + (r.valor_orcado || 0), 0)), 'soma dos orçamentos')
+        + kpi('Valor total fechado', fmtMoney(rows.reduce((t, r) => t + (r.valor_fechado || 0), 0)), 'soma dos fechamentos');
     } catch (e) { errToast(e); }
   }
   await load();
