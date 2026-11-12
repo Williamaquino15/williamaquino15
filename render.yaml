@@ -1,0 +1,29 @@
+# Configuração para publicar o CRM no Render com um clique (botão "Deploy to Render").
+services:
+  - type: web
+    name: crm-leads
+    runtime: node
+    plan: starter            # plano pago (~US$ 7/mês): fica sempre ligado e permite guardar os dados no disco
+    rootDir: crm-leads
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    disk:
+      name: crm-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: NODE_VERSION
+        value: "22"
+      - key: DB_PATH
+        value: /var/data/crm.db
+      - key: ADMIN_PASSWORD
+        sync: false          # o Render pede para você digitar na hora
+      - key: ANTHROPIC_API_KEY
+        sync: false          # o Render pede para você colar na hora
+      - key: CAPTURE_TOKEN
+        generateValue: true
+      - key: WHATSAPP_VERIFY_TOKEN
+        generateValue: true
+      - key: REPLY_DELAY_SECONDS
+        value: "8"

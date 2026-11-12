@@ -16,6 +16,8 @@ const wrap = (fn) => (req, res) =>
 
 // ---------- Rotas públicas ----------
 
+app.get("/health", (req, res) => res.json({ ok: true }));
+
 // Verificação do webhook (Meta chama uma vez ao configurar)
 app.get("/webhook/whatsapp", (req, res) => {
   if (req.query["hub.mode"] === "subscribe" && req.query["hub.verify_token"] === process.env.WHATSAPP_VERIFY_TOKEN) {
