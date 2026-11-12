@@ -19,7 +19,7 @@ const plugin = {
 (async () => {
   const out = await esbuild.build({
     entryPoints: [path.join(__dirname, 'entry.js')], bundle: true, write: false, format: 'iife', platform: 'browser', target: 'es2020',
-    minify: true, plugins: [plugin], define: { __dirname: '"/"' }, banner: { js: 'globalThis.process=globalThis.process||{env:{}};' }, logLevel: 'warning',
+    minify: true, plugins: [plugin], external: ['playwright'], define: { __dirname: '"/"' }, banner: { js: 'globalThis.process=globalThis.process||{env:{}};' }, logLevel: 'warning',
   });
   const js = out.outputFiles[0].text.replace(/<\/script/gi, '<\\/script');
   const css = fs.readFileSync(path.join(root, 'public/css/app.css'), 'utf8');

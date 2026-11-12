@@ -327,3 +327,4 @@ label.kanban-item { justify-content: flex-start; cursor: pointer; }
 .demo-bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 8px 20px; background: var(--warn-soft); color: var(--warn); font-size: 13px; border-bottom: 1px solid var(--border); }
 .demo-bar .btn { margin-left: auto; }
 .demo-hint { background: var(--gold-soft); color: var(--text); border-radius: 8px; padding: 8px 10px; font-size: 13px; }
+.log { white-space: pre-wrap; background: var(--surface-2); padding: 12px; border-radius: 8px; max-height: 360px; overflow: auto; font-size: 12px; }

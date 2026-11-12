@@ -78,6 +78,34 @@ async function session(base, email, password) {
     await A('PUT', `/users/${u.body.id}`, { active: 0 });
     assert.strictEqual((await V('GET', '/leads')).status, 401, 'desativado perde a sessão');
 
+    // sincronização Clinicorp: importa, reimporta sem duplicar e liga agendamento/orçamento ao paciente
+    const lote = {
+      pacientes: [{ id: 'P1', nome: 'Paciente Clinicorp', telefone: '(11) 97777-1111', origem: 'Google' }],
+      agendamentos: [{ id: 'A1', paciente_id: 'P1', data: today, inicio: '09:00', fim: '09:30', status: 'Atendido' }],
+      orcamentos: [{ id: 'O1', paciente_id: 'P1', data: today, status: 'Aprovado', valor_orcado: 'R$ 3.500,00' }, { id: 'O2', paciente_id: 'X', valor_orcado: 1 }],
+    };
+    const s1 = (await A('POST', '/sync/import', lote)).body;
+    assert.deepStrictEqual([s1.novos, s1.erros], [3, 1], 'importa e aponta o orçamento sem paciente');
+    const s2 = (await A('POST', '/sync/import', lote)).body;
+    assert.deepStrictEqual([s2.novos, s2.atualizados], [0, 3], 'reimportar não duplica');
+    const pc = (await A('GET', '/clients')).body.find((c) => c.name === 'Paciente Clinicorp');
+    assert.strictEqual(pc.valor_fechado, 3500, 'orçamento aprovado entra como fechado');
+    const run = await A('POST', '/sync/run');
+    assert.strictEqual(run.status, 500);
+    assert.match(run.body.error, /credenciais/);
+    // paciente só com agendamento entra como lead; depois, com orçamento, vira cliente sem duplicar
+    const l2 = { pacientes: [{ id: 'tel:11966665555', nome: 'Só Agendou', telefone: '11966665555', tipo: 'lead' }],
+      agendamentos: [{ id: 'A2', paciente_id: 'tel:11966665555', data: today, inicio: '10:00', status: 'Agendado' }] };
+    assert.strictEqual((await A('POST', '/sync/import', l2)).body.erros, 0);
+    assert.ok(!(await A('GET', '/clients')).body.some((c) => c.name === 'Só Agendou'), 'só agendou = lead');
+    const l3 = { pacientes: [{ id: '900', nome: 'Só Agendou', telefone: '+55 11 96666-5555', tipo: 'cliente' }], orcamentos: [{ id: 'O9', paciente_id: '900', valor_orcado: 100 }] };
+    assert.strictEqual((await A('POST', '/sync/import', l3)).body.erros, 0);
+    assert.strictEqual((await A('GET', '/leads?q=' + encodeURIComponent('Só Agendou'))).body.length, 1, 'não duplica o lead');
+    assert.ok((await A('GET', '/clients')).body.some((c) => c.name === 'Só Agendou'), 'com orçamento vira cliente');
+    const stt = (await A('GET', '/sync/status')).body;
+    assert.strictEqual(stt.execucoes.find((r) => r.origem === 'clinicorp').status, 'Falhou');
+    assert.strictEqual(stt.vinculados.pacientes, 2);
+
     console.log('OK: testes de API passaram');
   } catch (e) {
     console.error('FALHOU:', e.message);

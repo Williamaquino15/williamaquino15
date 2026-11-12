@@ -1,11 +1,11 @@
-# Blueprint do Render: publica o Clínica CRM com disco persistente para o banco SQLite.
+# Blueprint do Render: sistema + sincronização com a API do Clinicorp, com disco persistente para o banco.
 services:
   - type: web
-    name: clinica-crm
+    name: exclusive-odontologia
     runtime: node
     rootDir: clinica-crm
     plan: starter
-    buildCommand: npm ci
+    buildCommand: npm ci --omit=dev
     startCommand: npm start
     healthCheckPath: /healthz
     envVars:
@@ -18,6 +18,10 @@ services:
       - key: ADMIN_EMAIL
         sync: false
       - key: ADMIN_PASSWORD
+        sync: false
+      - key: CLINICORP_USER
+        sync: false
+      - key: CLINICORP_TOKEN
         sync: false
     disk:
       name: crm-data

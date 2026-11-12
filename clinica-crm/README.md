@@ -105,12 +105,24 @@ Toda lista tem paginação (4 a Todos), busca, ordenação por coluna, escolha d
 
 Chaves por usuário: administrador, Leads, Clientes, Dashboard, dados financeiros da Dashboard e Aulas. Sem a chave financeira, os valores em R$ do painel não são enviados ao navegador.
 
+## Sincronização com o Clinicorp
+
+Usa a API oficial do Clinicorp (https://sistema.clinicorp.com/api-docs/). No Clinicorp, em **Gerenciar Assinatura › Acesso Externo e Integrações**, copie o **Usuário API** e o **Token API** e configure no servidor:
+
+- `CLINICORP_USER`: Usuário API
+- `CLINICORP_TOKEN`: Token API
+- `CLINICORP_SUBSCRIBER_ID` (opcional): só se o identificador do assinante for diferente do usuário
+
+Em **Gerenciar › Sincronização Clinicorp**: **Testar acesso**, **Sincronizar agora** e a sincronização automática (de 15 minutos a 1 vez por dia). A primeira sincronização traz os últimos 12 meses e os próximos 90 dias de agenda; as seguintes trazem só o período desde a última.
+
+Regras: quem tem orçamento ou compareceu vira **cliente**; quem só agendou entra como **lead**. Orçamento aprovado entra como **Fechado**, reprovado como **Reprovado**, follow-up como **Em Acompanhamento**. Nada é duplicado: o sistema usa o código do Clinicorp e, na falta dele, o telefone. A mesma tela importa planilhas do Clinicorp no mesmo formato.
+
 ## Integrações externas: o que falta
 
 Estas partes têm tela e dados salvos, mas **não se conectam a serviços reais** sem desenvolvimento adicional e contas nos fornecedores:
 
 - **WhatsApp**: mensagens e disparos de campanha ficam no histórico do sistema. O envio real exige a API do WhatsApp (por exemplo, WhatsApp Business Platform) e a troca da função `runCampaign`/envio de mensagens em `server/index.js` por chamadas a ela. O QR Code da tela de chips é ilustrativo.
 - **IA de agendamento e voz**: os parâmetros são salvos; falta ligar um provedor de IA e de voz.
-- **Clinicorp, Cloudia, ICOMBOT, Controle Odonto**: credenciais salvas; falta a sincronização com a API de cada um.
+- **Cloudia, ICOMBOT, Controle Odonto**: credenciais salvas; falta a sincronização com a API de cada um.
 - **Pagamento**: cria pedidos "Pendente"; a cobrança exige um meio de pagamento.
 - **Importação**: aceita CSV (no Excel: Salvar como › CSV).

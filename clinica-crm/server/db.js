@@ -149,6 +149,17 @@ CREATE INDEX IF NOT EXISTS ix_contacts_lead ON contacts(lead_id);
 CREATE INDEX IF NOT EXISTS ix_budgets_client ON budgets(client_id);
 `);
 
+// Migrações: identificador externo (Clinicorp) e histórico de sincronizações.
+for (const t of ['leads', 'clients', 'appointments', 'budgets']) {
+  const cols = db.prepare(`PRAGMA table_info(${t})`).all().map((c) => c.name);
+  if (!cols.includes('ext_id')) db.exec(`ALTER TABLE ${t} ADD COLUMN ext_id TEXT`);
+  db.exec(`CREATE INDEX IF NOT EXISTS ix_${t}_ext ON ${t}(ext_id)`);
+}
+db.exec(`CREATE TABLE IF NOT EXISTS sync_runs (
+  id INTEGER PRIMARY KEY, origem TEXT, started_at TEXT, finished_at TEXT, status TEXT,
+  novos INTEGER DEFAULT 0, atualizados INTEGER DEFAULT 0, erros INTEGER DEFAULT 0, log TEXT
+)`);
+
 const getSetting = (k, def) => {
   const r = db.prepare('SELECT value FROM settings WHERE key=?').get(k);
   return r ? JSON.parse(r.value) : def;
@@ -189,6 +200,7 @@ function seed() {
   setSetting('integracoes', { cloudia: { link: '', sobrescrever: false }, clinicorp: { ativo: false, usuario: '', token: '', clinica: '', categorias: '' }, icombot: { ativo: false }, controle_odonto: { ativo: false } });
   setSetting('ia', { nome: 'Exclusive Odontologia', secretaria: 'Ana', cidade: '', estado: '', dias_agendar: 7 });
   setSetting('metricas', { dias: [1, 2, 3, 4, 5] });
+  setSetting('sync', { ativo: false, intervalo_min: 60 });
 }
 seed();
 

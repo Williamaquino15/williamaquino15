@@ -48,7 +48,7 @@ const ROUTES = [
   ['/usuarios', gerenciar.usuarios, 'admin'], ['/gerenciar/configuracoes', gerenciar.configuracoes, 'admin'],
   ['/gerenciar/configuracao-ia', gerenciar.ia, 'admin'], ['/gerenciar/listas', gerenciar.listas, 'admin'],
   ['/gerenciar/grupos-de-origem', gerenciar.grupos, 'admin'], ['/gerenciar/whatsapp', gerenciar.whatsapp, 'admin'],
-  ['/gerenciar/modelos', gerenciar.modelos, 'admin'], ['/gerenciar/clinicas', gerenciar.clinicas, 'admin'],
+  ['/gerenciar/modelos', gerenciar.modelos, 'admin'], ['/gerenciar/sincronizacao', gerenciar.sincronizacao, 'admin'], ['/gerenciar/clinicas', gerenciar.clinicas, 'admin'],
   ['/relatorios', relatorios.home], ['/relatorios/:name', relatorios.render], ['/ferramenta-comercial', relatorios.ferramenta],
   ['/ajuda', misc.ajuda], ['/atualizacoes', misc.atualizacoes], ['/aulas', misc.aulas, 'aulas'], ['/transmissao', misc.transmissao, 'aulas'],
 ];

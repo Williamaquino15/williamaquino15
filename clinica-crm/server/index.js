@@ -5,6 +5,7 @@ const express = require('express');
 const { db, hashPassword, checkPassword, getSetting, setSetting } = require('./db');
 const { now, today, digits, toArr, toIntArr, parseJSON, pick } = require('./util');
 const reports = require('./reports');
+const sync = require('./sync');
 
 const app = express();
 app.use(express.json({ limit: '20mb' }));
@@ -856,7 +857,7 @@ app.post('/api/linked-users', admin, h((req) => {
 app.delete('/api/linked-users/:id', admin, h((req) => { db.prepare('DELETE FROM linked_users WHERE id=?').run(+req.params.id); return { ok: true }; }));
 
 // ---------------------------------------------------------------- configurações, pagamento, chips
-const SETTING_KEYS = ['clinica', 'leads', 'integracoes', 'ia', 'metricas'];
+const SETTING_KEYS = ['clinica', 'leads', 'integracoes', 'ia', 'metricas', 'sync'];
 app.get('/api/settings/:key', h((req) => {
   if (!SETTING_KEYS.includes(req.params.key)) throw fail(404, 'Configuração inexistente');
   return getSetting(req.params.key, {});
@@ -906,10 +907,36 @@ app.get('/api/notifications', h((req) => {
   return items;
 }));
 
+// ---------------------------------------------------------------- sincronização (Clinicorp)
+app.get('/api/sync/status', admin, h(() => ({
+  config: getSetting('sync', {}),
+  rodando: sync.isRunning(),
+  credenciais: require('./sync/clinicorp').configured(),
+  vinculados: {
+    pacientes: db.prepare('SELECT COUNT(*) c FROM clients WHERE ext_id IS NOT NULL').get().c,
+    agendamentos: db.prepare('SELECT COUNT(*) c FROM appointments WHERE ext_id IS NOT NULL').get().c,
+    orcamentos: db.prepare('SELECT COUNT(*) c FROM budgets WHERE ext_id IS NOT NULL').get().c,
+  },
+  execucoes: db.prepare('SELECT * FROM sync_runs ORDER BY id DESC LIMIT 30').all(),
+})));
+const asyncH = (fn) => (req, res) => Promise.resolve().then(() => fn(req, res)).then((out) => res.json(out))
+  .catch((e) => { if (!e.status) console.error(e); res.status(e.status || 500).json({ error: e.message || 'Erro interno' }); });
+app.post('/api/sync/run', admin, asyncH((req) => sync.runSync('clinicorp', req.user.id)));
+app.post('/api/sync/test', admin, asyncH(() => require('./sync/clinicorp').testLogin()));
+// Importação manual no mesmo formato do robô (planilhas exportadas do Clinicorp).
+app.post('/api/sync/import', admin, h((req) => {
+  const runId = db.prepare("INSERT INTO sync_runs(origem,started_at,status) VALUES('arquivo',?,'Em andamento')").run(now()).lastInsertRowid;
+  const st = sync.applyBatch(req.body || {}, req.user.id);
+  db.prepare('UPDATE sync_runs SET finished_at=?, status=?, novos=?, atualizados=?, erros=?, log=? WHERE id=?')
+    .run(now(), st.erros ? 'Concluída com erros' : 'Concluída', st.novos, st.atualizados, st.erros, st.log.join('\n'), runId);
+  return st;
+}));
+
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, '..', 'public', 'index.html')));
 
 const PORT = process.env.PORT || 3000;
 if (typeof require !== 'undefined' && require.main === module) {
   app.listen(PORT, () => console.log(`CRM rodando em http://localhost:${PORT}`));
+  sync.startScheduler();
 }
 module.exports = app;

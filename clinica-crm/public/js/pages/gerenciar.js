@@ -1,7 +1,7 @@
 // Gerenciar: perfil, pagamento, usuários/permissões, configurações, IA, listas, grupos, WhatsApp, modelos e clínicas.
 import {
   state, api, esc, toast, errToast, modal, formModal, formHTML, readForm, initMulti, dataTable, pageHeader, backBtn, card,
-  confirmDialog, fmtDateTime, fmtMoney, fmtPhone, fmtDate, opts, loadBoot, bind,
+  confirmDialog, fmtDateTime, fmtMoney, fmtPhone, fmtDate, opts, loadBoot, bind, kpi, parseCSV, pickFile,
 } from '../core.js';
 
 const back = backBtn('#/gerenciar');
@@ -18,6 +18,7 @@ export async function home(view) {
     ['Grupos de origem', 'Agrupe origens para os relatórios', '#/gerenciar/grupos-de-origem', a],
     ['Configuração WhatsApp', 'Chips conectados (até três)', '#/gerenciar/whatsapp', a],
     ['Modelos de mensagem', 'Templates usados nos disparos', '#/gerenciar/modelos', a],
+    ['Sincronização Clinicorp', 'Traz pacientes, agendamentos e orçamentos pela API', '#/gerenciar/sincronizacao', a],
     ['Campanhas', 'Disparos agendados de WhatsApp', '#/disparo/campanhas', true],
   ].filter((c) => c[3]);
   view.innerHTML = `${pageHeader('Gerenciar', 'Configurações, integrações e cadastros auxiliares')}
@@ -337,4 +338,67 @@ export async function clinicas(view) {
     { key: 'id', label: 'Id' }, { key: 'nome', label: 'Nome' }, { key: 'cnpj', label: 'CNPJ' }, { key: 'email', label: 'E-mail' },
     { key: 'telefone', label: 'Telefone', render: (r) => esc(fmtPhone(r.telefone)) }, { key: 'cidade', label: 'Cidade' }] });
 }
+// ---------------------------------------------------------------- sincronização Clinicorp
+const SYNC_COLS = {
+  pacientes: ['id', 'nome', 'telefone', 'origem', 'profissao', 'cadastro', 'primeira_consulta', 'ultima_consulta'],
+  agendamentos: ['id', 'paciente_id', 'data', 'inicio', 'fim', 'profissional', 'status', 'descricao'],
+  orcamentos: ['id', 'paciente_id', 'data', 'data_aprovacao', 'tratamento', 'avaliador', 'status', 'valor_orcado', 'valor_fechado', 'forma_pagamento', 'parcelas'],
+};
+export async function sincronizacao(view) {
+  const st = await api.get('/sync/status');
+  const last = st.execucoes.find((r) => r.origem === 'clinicorp');
+  const demo = !!window.__DEMO__;
+  view.innerHTML = `${pageHeader('Sincronização Clinicorp', 'Traz pacientes, agendamentos e orçamentos do Clinicorp pela API oficial', back)}
+    ${demo ? '<div class="card"><div class="card-body"><b>A sincronização automática só funciona na versão hospedada (Render).</b> <span class="muted">Nesta demonstração dá para testar a importação por planilha.</span></div></div>' : ''}
+    <div class="kpis">
+      ${kpi('Sincronização automática', st.config.ativo ? 'Ligado' : 'Desligado', st.config.ativo ? `a cada ${st.config.intervalo_min} min` : 'ligue abaixo')}
+      ${kpi('Acesso ao Clinicorp', st.credenciais ? 'Configurado' : 'Pendente', st.credenciais ? 'credenciais no servidor' : 'variáveis do servidor')}
+      ${kpi('Última sincronização', last ? fmtDateTime(last.started_at) : '—', last ? esc(last.status) : 'nunca rodou')}
+      ${kpi('Vinculados ao Clinicorp', String(st.vinculados.pacientes), `${st.vinculados.agendamentos} agendamentos · ${st.vinculados.orcamentos} orçamentos`)}
+    </div>
+    <div class="grid-2">
+      ${card('Sincronização automática', `<div id="fcfg">${formHTML(cfgFields, st.config)}</div>
+        <div class="row wrap"><button class="btn btn-primary" id="save">Salvar</button><button class="btn" id="test" ${demo ? 'disabled' : ''}>Testar acesso</button>
+        <button class="btn" id="run" ${demo || st.rodando ? 'disabled' : ''}>${st.rodando ? 'Sincronizando…' : 'Sincronizar agora'}</button></div>
+        <p class="muted small">O Usuário API e o Token API do Clinicorp (Gerenciar Assinatura › Acesso Externo e Integrações) ficam só nas variáveis secretas do servidor, CLINICORP_USER e CLINICORP_TOKEN, nunca nesta tela. A primeira sincronização traz os últimos 12 meses; as seguintes trazem só as mudanças recentes.</p>`)}
+      ${card('Importar planilha do Clinicorp', `<p class="muted small">Mesmo caminho da sincronização automática: não duplica pacientes (usa o código do Clinicorp e, na falta dele, o telefone). Importe primeiro os pacientes.</p>
+        <div id="fimp">${formHTML(impFields, { tipo: 'pacientes' })}</div><p class="small">Colunas: <code id="cols">${SYNC_COLS.pacientes.join('; ')}</code></p>
+        <div class="row wrap"><button class="btn btn-primary" id="imp">Escolher arquivo CSV</button></div>`)}
+    </div>
+    ${card('Histórico', '<div id="tbl"></div>')}`;
+  initMulti(view);
+  const runs = dataTable(view.querySelector('#tbl'), { id: 'sync', exportName: 'sincronizacoes', rows: st.execucoes, sortKey: 'id', sortDir: -1, columns: [
+    { key: 'started_at', label: 'Início', render: (r) => fmtDateTime(r.started_at) }, { key: 'origem', label: 'Origem', render: (r) => (r.origem === 'arquivo' ? 'Planilha' : 'API Clinicorp') },
+    { key: 'status', label: 'Status', render: (r) => `<span class="pill ${r.status === 'Concluída' ? 'ok' : r.status === 'Falhou' ? 'warn' : ''}">${esc(r.status)}</span>` },
+    { key: 'novos', label: 'Novos', cls: 'num' }, { key: 'atualizados', label: 'Atualizados', cls: 'num' }, { key: 'erros', label: 'Erros', cls: 'num' }],
+  actions: (r) => (r.log ? `<button class="btn btn-sm" data-log="${r.id}">Detalhes</button>` : '') });
+  view.querySelector('#tbl').addEventListener('click', (e) => {
+    const b = e.target.closest('[data-log]');
+    if (b) { const r = st.execucoes.find((x) => x.id === +b.dataset.log); modal({ title: 'Detalhes da sincronização', body: `<pre class="log">${esc(r.log)}</pre>` }); }
+  });
+  view.querySelector('[name=tipo]').onchange = (e) => { view.querySelector('#cols').textContent = SYNC_COLS[e.target.value].join('; '); };
+  const reload = () => sincronizacao(view);
+  bind(view, {
+    '#save': async () => { const v = readForm(view.querySelector('#fcfg'), cfgFields); await api.put('/settings/sync', { ativo: !!v.ativo, intervalo_min: v.intervalo_min }); toast('Configuração salva'); reload(); },
+    '#test': async () => { toast('Testando o acesso ao Clinicorp…'); try { const r = await api.post('/sync/test'); toast(`Acesso ao Clinicorp funcionando${r.clinicas && r.clinicas.length ? ': ' + r.clinicas.join(', ') : ''}`); } catch (e) { errToast(e); } },
+    '#run': async () => { toast('Sincronização iniciada'); try { const r = await api.post('/sync/run'); toast(`Concluída: ${r.novos} novos, ${r.atualizados} atualizados, ${r.erros} erros`); } catch (e) { errToast(e); } reload(); },
+    '#imp': async () => {
+      const tipo = view.querySelector('[name=tipo]').value;
+      const f = await pickFile('.csv,text/csv');
+      if (!f) return;
+      const rows = parseCSV(await f.text());
+      if (!rows.length) return toast('Arquivo vazio ou sem cabeçalho', 'err');
+      try { const r = await api.post('/sync/import', { [tipo]: rows }); toast(`${r.novos} novos, ${r.atualizados} atualizados, ${r.erros} erros`); } catch (e) { errToast(e); }
+      reload();
+    },
+  });
+  void runs;
+}
+const cfgFields = [
+  { name: 'ativo', label: 'Sincronizar automaticamente', type: 'switch' },
+  { name: 'intervalo_min', label: 'Intervalo', type: 'select', numeric: true, noEmpty: true,
+    options: [[15, 'A cada 15 minutos'], [30, 'A cada 30 minutos'], [60, 'A cada hora'], [120, 'A cada 2 horas'], [360, 'A cada 6 horas'], [1440, 'Uma vez por dia']].map(([v, l]) => ({ value: v, label: l })) },
+];
+const impFields = [{ name: 'tipo', label: 'O que o arquivo contém', type: 'select', noEmpty: true,
+  options: [{ value: 'pacientes', label: 'Pacientes' }, { value: 'agendamentos', label: 'Agendamentos' }, { value: 'orcamentos', label: 'Orçamentos' }] }];
 export { fmtDate };
