@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CRM de Leads</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <strong>CRM de Leads</strong>
+      <span id="status" class="status"></span>
+    </div>
+    <div class="stats" id="stats"></div>
+    <div class="actions">
+      <input id="search" type="search" placeholder="Buscar nome, telefone, nicho…" />
+      <button id="btnNew" class="primary">+ Novo lead</button>
+      <button id="btnSettings">Configurar IA</button>
+    </div>
+  </header>
+
+  <main id="board" class="board"></main>
+
+  <!-- Painel do lead -->
+  <aside id="drawer" class="drawer hidden" aria-label="Detalhes do lead">
+    <div class="drawer-head">
+      <div>
+        <h2 id="dName">Lead</h2>
+        <div class="muted" id="dPhone"></div>
+      </div>
+      <button class="icon" id="dClose" aria-label="Fechar">✕</button>
+    </div>
+
+    <div id="dAttention" class="attention hidden"></div>
+
+    <div class="drawer-body">
+      <section class="lead-info">
+        <div class="row">
+          <label>Etapa <select id="dStage"></select></label>
+          <label class="toggle"><input type="checkbox" id="dAi" /> IA respondendo</label>
+        </div>
+        <div class="score"><span>Score</span><div class="bar"><i id="dScoreBar"></i></div><b id="dScore">0</b></div>
+        <p id="dSummary" class="summary"></p>
+        <details>
+          <summary>Dados do lead</summary>
+          <form id="dForm" class="grid">
+            <label>Nome <input name="name" /></label>
+            <label>E-mail <input name="email" /></label>
+            <label>Empresa <input name="company" /></label>
+            <label>Nicho <input name="niche" /></label>
+            <label>Investimento <input name="budget" /></label>
+            <label>Origem <input name="source" /></label>
+            <label class="full">Observações (a IA lê) <textarea name="notes" rows="2"></textarea></label>
+            <div class="full form-actions">
+              <button type="button" id="dDelete" class="danger">Excluir lead</button>
+              <button type="submit">Salvar</button>
+            </div>
+          </form>
+        </details>
+      </section>
+
+      <section class="chat" id="dChat"></section>
+      <div id="dTyping" class="typing hidden">IA escrevendo…</div>
+
+      <form id="dSend" class="composer">
+        <textarea id="dMsg" rows="2" placeholder="Escrever como humano (pausa a IA)…"></textarea>
+        <div class="composer-actions">
+          <button type="button" id="dAiNow" title="A IA envia a próxima mensagem agora">🤖 IA agir agora</button>
+          <button type="submit" class="primary">Enviar</button>
+        </div>
+      </form>
+      <form id="dSim" class="simulator">
+        <input id="dSimText" placeholder="Simular mensagem do lead (teste sem WhatsApp)…" />
+        <button type="submit">Simular</button>
+      </form>
+    </div>
+  </aside>
+
+  <!-- Novo lead -->
+  <dialog id="newDialog">
+    <form method="dialog" id="newForm" class="grid">
+      <h3 class="full">Novo lead</h3>
+      <label>Nome <input name="name" required /></label>
+      <label>WhatsApp (com DDD) <input name="phone" required placeholder="11 99999-9999" /></label>
+      <label>Empresa <input name="company" /></label>
+      <label>Nicho <input name="niche" /></label>
+      <label>Origem <input name="source" placeholder="instagram, indicação…" /></label>
+      <label>Investimento <input name="budget" /></label>
+      <label class="full">Observações <textarea name="notes" rows="2"></textarea></label>
+      <label class="full toggle"><input type="checkbox" name="start_ai" checked /> IA já envia a primeira mensagem</label>
+      <div class="full form-actions">
+        <button value="cancel" formnovalidate>Cancelar</button>
+        <button value="ok" class="primary">Criar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Configurações -->
+  <dialog id="setDialog" class="wide">
+    <form method="dialog" id="setForm" class="grid">
+      <h3 class="full">Configurar a IA pré-vendedora</h3>
+      <label>Nome da agência <input name="agency_name" /></label>
+      <label>Nome da atendente (IA) <input name="agent_name" /></label>
+      <label class="full">O que a agência vende <textarea name="offer" rows="3"></textarea></label>
+      <label class="full">Cliente ideal <textarea name="ideal_client" rows="2"></textarea></label>
+      <label class="full">Perguntas de qualificação <textarea name="qualification" rows="3"></textarea></label>
+      <label class="full">Objetivo da conversa <textarea name="goal" rows="2"></textarea></label>
+      <label class="full">Link de agendamento (Calendly etc.) <input name="meeting_link" /></label>
+      <label class="full">Tom de voz <textarea name="tone" rows="2"></textarea></label>
+      <label class="full">Regras extras <textarea name="extra_rules" rows="2"></textarea></label>
+      <label>Follow-up após (horas) <input name="followup_hours" type="number" min="1" /></label>
+      <label>Máx. de follow-ups <input name="max_followups" type="number" min="0" /></label>
+      <div class="full form-actions">
+        <button value="cancel" formnovalidate>Cancelar</button>
+        <button value="ok" class="primary">Salvar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
