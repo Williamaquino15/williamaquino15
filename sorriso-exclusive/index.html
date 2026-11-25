@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Simule seu sorriso | Exclusive Odontologia</title>
+<meta name="description" content="Tire uma foto e veja uma simulação do seu sorriso com clareamento. Exclusive Odontologia.">
+<style>
+  :root{
+    --bg:#0f1115; --surface:#181b22; --surface-2:#20242d; --text:#f3f1ec; --muted:#a8adb8;
+    --gold:#c9a45c; --gold-2:#e3c78a; --line:#2b303b; --danger:#ff7a7a; --ok:#6fd39a;
+    --radius:16px;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100dvh}
+  .wrap{max-width:560px;margin:0 auto;padding:20px 16px 56px}
+  header{display:flex;align-items:center;justify-content:center;padding:8px 0 20px}
+  .brand{font-family:Georgia,"Times New Roman",serif;letter-spacing:.18em;text-transform:uppercase;text-align:center;line-height:1.15}
+  .brand b{display:block;font-size:22px;color:var(--gold-2);font-weight:400}
+  .brand span{display:block;font-size:11px;color:var(--muted);letter-spacing:.38em;margin-top:4px}
+  h1{font-family:Georgia,serif;font-weight:400;font-size:30px;line-height:1.15;margin:8px 0 12px;text-align:center}
+  p.lead{color:var(--muted);text-align:center;margin:0 0 24px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+  .steps{display:flex;gap:8px;justify-content:center;margin:0 0 20px;padding:0;list-style:none}
+  .steps li{width:34px;height:4px;border-radius:2px;background:var(--line)}
+  .steps li.on{background:var(--gold)}
+  button,.btn{font:inherit;cursor:pointer;border:0;border-radius:999px;padding:14px 22px;min-height:48px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+  .primary{background:linear-gradient(135deg,var(--gold),var(--gold-2));color:#1a1407;width:100%}
+  .secondary{background:transparent;color:var(--text);border:1px solid var(--line);width:100%}
+  .primary:disabled{opacity:.5;cursor:not-allowed}
+  button:focus-visible,input:focus-visible{outline:2px solid var(--gold-2);outline-offset:2px}
+  .stack{display:grid;gap:12px}
+  .hidden{display:none!important}
+  .tips{margin:0 0 20px;padding:0;list-style:none;display:grid;gap:10px;color:var(--muted);font-size:15px}
+  .tips li{display:flex;gap:10px}
+  .tips li::before{content:"✓";color:var(--gold-2)}
+  .stage{position:relative;border-radius:var(--radius);overflow:hidden;background:#000;aspect-ratio:3/4}
+  .stage video,.stage canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+  video.mirror{transform:scaleX(-1)}
+  .guide{position:absolute;inset:0;pointer-events:none;display:flex;align-items:flex-end;justify-content:center;padding-bottom:12%}
+  .guide span{background:rgba(0,0,0,.55);padding:6px 12px;border-radius:999px;font-size:14px}
+  .cmp{position:relative;border-radius:var(--radius);overflow:hidden;background:#000;aspect-ratio:3/4;touch-action:none}
+  .cmp canvas{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+  #after{clip-path:inset(0 0 0 50%)}
+  .handle{position:absolute;top:0;bottom:0;left:50%;width:2px;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.3);pointer-events:none}
+  .handle::after{content:"↔";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:38px;height:38px;border-radius:50%;background:#fff;color:#111;display:grid;place-items:center;font-size:18px}
+  .tag{position:absolute;top:10px;padding:4px 10px;border-radius:999px;background:rgba(0,0,0,.6);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+  .tag.l{left:10px}.tag.r{right:10px}
+  label.f{display:block;font-size:14px;color:var(--muted);margin-bottom:6px}
+  input[type=text],input[type=tel]{width:100%;font:inherit;color:var(--text);background:var(--surface-2);border:1px solid var(--line);border-radius:12px;padding:14px;min-height:48px}
+  input[type=range]{width:100%;accent-color:var(--gold)}
+  .row{display:grid;gap:6px}
+  .check{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--muted)}
+  .check input{margin-top:3px;width:18px;height:18px;accent-color:var(--gold);flex:none}
+  .note{font-size:12.5px;color:var(--muted);text-align:center;margin:14px 0 0}
+  .err{color:var(--danger);font-size:14px;min-height:1.2em}
+  .ok{color:var(--ok)}
+  .loader{display:grid;place-items:center;gap:12px;padding:40px 0;color:var(--muted)}
+  .spin{width:34px;height:34px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--gold-2);animation:s 1s linear infinite}
+  @keyframes s{to{transform:rotate(360deg)}}
+  @media (prefers-reduced-motion:reduce){.spin{animation-duration:3s}}
+  a{color:var(--gold-2)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand"><b>Exclusive</b><span>Odontologia</span></div>
+  </header>
+
+  <ol class="steps" aria-hidden="true"><li class="on"></li><li></li><li></li></ol>
+
+  <!-- PASSO 1: início -->
+  <section id="s-start">
+    <h1>Veja como seu sorriso pode ficar</h1>
+    <p class="lead">Tire uma selfie sorrindo ou envie uma foto e receba uma simulação em segundos.</p>
+    <div class="card">
+      <ul class="tips">
+        <li>Boa iluminação, de frente para a luz</li>
+        <li>Rosto de frente e dentes aparecendo</li>
+        <li>Sua foto é processada no seu aparelho e não é enviada</li>
+      </ul>
+      <div class="stack">
+        <button class="primary" id="btn-camera">Abrir câmera</button>
+        <button class="secondary" id="btn-upload">Enviar uma foto</button>
+        <input type="file" id="file" accept="image/*" capture="user" class="hidden">
+      </div>
+      <p class="err" id="err-start" role="alert"></p>
+    </div>
+  </section>
+
+  <!-- PASSO 1b: câmera -->
+  <section id="s-camera" class="hidden">
+    <div class="stage">
+      <video id="video" playsinline muted></video>
+      <div class="guide"><span>Sorria mostrando os dentes</span></div>
+    </div>
+    <div class="stack" style="margin-top:14px">
+      <button class="primary" id="btn-shot">Tirar foto</button>
+      <button class="secondary" id="btn-cancel">Voltar</button>
+    </div>
+  </section>
+
+  <!-- processando -->
+  <section id="s-loading" class="hidden">
+    <div class="card loader" role="status"><div class="spin"></div><div id="load-msg">Analisando seu sorriso…</div></div>
+  </section>
+
+  <!-- PASSO 2: resultado -->
+  <section id="s-result" class="hidden">
+    <h1>Seu sorriso simulado</h1>
+    <p class="lead">Arraste para comparar o antes e o depois.</p>
+    <div class="cmp" id="cmp">
+      <canvas id="before"></canvas>
+      <canvas id="after"></canvas>
+      <div class="handle" id="handle"></div>
+      <span class="tag l">Antes</span><span class="tag r">Depois</span>
+    </div>
+    <div class="card" style="margin-top:14px">
+      <div class="row">
+        <label class="f" for="intensity">Intensidade do clareamento</label>
+        <input type="range" id="intensity" min="0" max="100" value="60">
+      </div>
+    </div>
+    <div class="stack" style="margin-top:14px">
+      <button class="primary" id="btn-contact">Quero uma avaliação</button>
+      <button class="secondary" id="btn-again">Tirar outra foto</button>
+    </div>
+    <p class="note">Imagem ilustrativa. O resultado real depende de avaliação profissional.</p>
+  </section>
+
+  <!-- PASSO 3: contato -->
+  <section id="s-lead" class="hidden">
+    <h1>Fale com nossa equipe</h1>
+    <p class="lead">Deixe seu contato e a Exclusive Odontologia retorna para agendar sua avaliação.</p>
+    <form class="card stack" id="form" novalidate>
+      <div class="row">
+        <label class="f" for="name">Nome</label>
+        <input type="text" id="name" name="name" autocomplete="name" required>
+      </div>
+      <div class="row">
+        <label class="f" for="phone">Telefone / WhatsApp</label>
+        <input type="tel" id="phone" name="phone" inputmode="tel" autocomplete="tel" placeholder="(00) 00000-0000" required>
+      </div>
+      <label class="check"><input type="checkbox" id="consent" required>
+        <span>Autorizo a Exclusive Odontologia a entrar em contato comigo pelo telefone informado, conforme a LGPD. Minha foto não é enviada.</span>
+      </label>
+      <p class="err" id="err-form" role="alert"></p>
+      <button class="primary" type="submit" id="btn-send">Enviar</button>
+      <button class="secondary" type="button" id="btn-back">Voltar ao resultado</button>
+    </form>
+  </section>
+
+  <!-- final -->
+  <section id="s-done" class="hidden">
+    <div class="card" style="text-align:center">
+      <h1>Recebemos seu contato</h1>
+      <p class="lead ok" style="margin-bottom:0">Nossa equipe fala com você em breve. Obrigado!</p>
+    </div>
+  </section>
+</div>
+
+<script>
+/* ============================ CONFIGURAÇÃO ============================ */
+const CONFIG = {
+  // Número do WhatsApp da clínica (DDI+DDD+número, só dígitos). TROCAR pelo número real.
+  whatsapp: "5500000000000",
+  // URL que recebe o lead por POST em JSON (Google Apps Script, n8n, Make, Zapier, backend próprio...).
+  // Se ficar vazio, o contato é enviado abrindo o WhatsApp da clínica com a mensagem pronta.
+  endpoint: "",
+  clinic: "Exclusive Odontologia",
+};
+/* ===================================================================== */
+
+const $ = id => document.getElementById(id);
+const sections = ["s-start","s-camera","s-loading","s-result","s-lead","s-done"];
+function show(id){
+  sections.forEach(s => $(s).classList.toggle("hidden", s !== id));
+  const step = {"s-start":0,"s-camera":0,"s-loading":0,"s-result":1,"s-lead":2,"s-done":2}[id];
+  document.querySelectorAll(".steps li").forEach((li,i)=>li.classList.toggle("on", i<=step));
+  window.scrollTo({top:0});
+}
+
+/* ----------------------------- Câmera ----------------------------- */
+let stream = null;
+async function openCamera(){
+  $("err-start").textContent = "";
+  if(!navigator.mediaDevices?.getUserMedia){
+    $("err-start").textContent = "Câmera indisponível neste navegador. Envie uma foto.";
+    return;
+  }
+  try{
+    stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:{ideal:1280},height:{ideal:1280}},audio:false});
+    const v = $("video"); v.srcObject = stream; v.classList.add("mirror");
+    await v.play(); show("s-camera");
+  }catch(e){
+    $("err-start").textContent = "Não foi possível acessar a câmera. Permita o acesso ou envie uma foto.";
+  }
+}
+function stopCamera(){ stream?.getTracks().forEach(t=>t.stop()); stream = null; }
+
+function shot(){
+  const v = $("video"), c = document.createElement("canvas");
+  c.width = v.videoWidth; c.height = v.videoHeight;
+  const x = c.getContext("2d"); x.translate(c.width,0); x.scale(-1,1); x.drawImage(v,0,0);
+  stopCamera(); analyze(c);
+}
+
+async function fromFile(file){
+  if(!file) return;
+  try{
+    const bmp = await createImageBitmap(file, {imageOrientation:"from-image"});
+    const c = document.createElement("canvas"); c.width = bmp.width; c.height = bmp.height;
+    c.getContext("2d").drawImage(bmp,0,0); analyze(c);
+  }catch(e){ $("err-start").textContent = "Não consegui ler essa imagem. Tente outra foto."; }
+}
+
+/* ------------------------ Detecção do sorriso ------------------------ */
+let landmarker = null;
+async function getLandmarker(){
+  if(landmarker) return landmarker;
+  const V = "0.10.14";
+  const vision = await import(`https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${V}/vision_bundle.mjs`);
+  const fileset = await vision.FilesetResolver.forVisionTasks(`https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${V}/wasm`);
+  landmarker = await vision.FaceLandmarker.createFromOptions(fileset,{
+    baseOptions:{modelAssetPath:"https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task"},
+    runningMode:"IMAGE", numFaces:1
+  });
+  return landmarker;
+}
+
+// contorno interno dos lábios (face mesh)
+const INNER_LIPS = [78,191,80,81,82,13,312,311,310,415,308,324,318,402,317,14,87,178,88,95];
+
+let base = null; // {w,h,orig:ImageData,mask:Float32Array}
+
+function fitCanvas(src, max=1280){
+  const s = Math.min(1, max/Math.max(src.width, src.height));
+  const c = document.createElement("canvas");
+  c.width = Math.round(src.width*s); c.height = Math.round(src.height*s);
+  c.getContext("2d").drawImage(src,0,0,c.width,c.height);
+  return c;
+}
+
+function buildMask(pts, w, h){
+  // polígono -> máscara, levemente reduzida e suavizada
+  const cx = pts.reduce((a,p)=>a+p.x,0)/pts.length, cy = pts.reduce((a,p)=>a+p.y,0)/pts.length;
+  const c = document.createElement("canvas"); c.width = w; c.height = h;
+  const x = c.getContext("2d"); x.fillStyle = "#fff"; x.beginPath();
+  pts.forEach((p,i)=>{ const px = cx+(p.x-cx)*0.97, py = cy+(p.y-cy)*0.9; i?x.lineTo(px,py):x.moveTo(px,py); });
+  x.closePath(); x.fill();
+  const d = x.getImageData(0,0,w,h).data, m = new Float32Array(w*h);
+  for(let i=0;i<m.length;i++) m[i] = d[i*4+3]/255;
+  const xs = pts.map(p=>p.x), ys = pts.map(p=>p.y);
+  const r = Math.max(2, Math.round((Math.max(...xs)-Math.min(...xs))/60));
+  return boxBlur(m,w,h,r,Math.min(...xs)-r*3,Math.min(...ys)-r*3,Math.max(...xs)+r*3,Math.max(...ys)+r*3);
+}
+function boxBlur(m,w,h,r,x0,y0,x1,y1){
+  x0=Math.max(0,x0|0);y0=Math.max(0,y0|0);x1=Math.min(w-1,x1|0);y1=Math.min(h-1,y1|0);
+  const t = new Float32Array(m.length), n = 2*r+1;
+  for(let pass=0;pass<2;pass++){
+    for(let y=y0;y<=y1;y++){ let s=0; for(let k=-r;k<=r;k++) s+=m[y*w+Math.min(x1,Math.max(x0,x0+k))];
+      for(let x=x0;x<=x1;x++){ t[y*w+x]=s/n; s+=m[y*w+Math.min(x1,x+r+1)]-m[y*w+Math.max(x0,x-r)]; } }
+    for(let x=x0;x<=x1;x++){ let s=0; for(let k=-r;k<=r;k++) s+=t[Math.min(y1,Math.max(y0,y0+k))*w+x];
+      for(let y=y0;y<=y1;y++){ m[y*w+x]=s/n; s+=t[Math.min(y1,y+r+1)*w+x]-t[Math.max(y0,y-r)*w+x]; } }
+  }
+  return m;
+}
+
+async function analyze(srcCanvas){
+  show("s-loading"); $("load-msg").textContent = "Carregando análise facial…";
+  try{
+    const c = fitCanvas(srcCanvas);
+    const lm = await getLandmarker();
+    $("load-msg").textContent = "Analisando seu sorriso…";
+    const res = lm.detect(c);
+    if(!res.faceLandmarks?.length) throw new Error("Não encontramos um rosto. Tente uma foto de frente e bem iluminada.");
+    const L = res.faceLandmarks[0], w = c.width, h = c.height;
+    const pts = INNER_LIPS.map(i=>({x:L[i].x*w,y:L[i].y*h}));
+    const mouthH = Math.abs(L[14].y-L[13].y)*h, mouthW = Math.abs(L[308].x-L[78].x)*w;
+    if(mouthH < mouthW*0.06) throw new Error("Não conseguimos ver seus dentes. Sorria mostrando os dentes e tente de novo.");
+    base = {w,h,orig:c.getContext("2d").getImageData(0,0,w,h),mask:buildMask(pts,w,h)};
+    $("before").width = $("after").width = w; $("before").height = $("after").height = h;
+    $("before").getContext("2d").putImageData(base.orig,0,0);
+    render(+$("intensity").value);
+    setSlider(50); show("s-result");
+  }catch(e){
+    show("s-start");
+    $("err-start").textContent = /Não /.test(e.message) ? e.message : "Não foi possível analisar a foto. Verifique sua conexão e tente de novo.";
+    console.error(e);
+  }
+}
+
+/* --------------------------- Clareamento --------------------------- */
+const sstep = (a,b,x)=>{ const t=Math.min(1,Math.max(0,(x-a)/(b-a))); return t*t*(3-2*t); };
+function render(pct){
+  const k = pct/100, {w,h,orig,mask} = base;
+  const out = new ImageData(new Uint8ClampedArray(orig.data), w, h), d = out.data;
+  for(let i=0;i<mask.length;i++){
+    const m = mask[i]; if(m<0.01) continue;
+    const j=i*4, r=d[j], g=d[j+1], b=d[j+2];
+    const lum = .299*r+.587*g+.114*b;
+    const red = (r-(g+b)/2)/255;                 // gengiva/língua são mais avermelhadas
+    const isTooth = sstep(55,120,lum) * (1-sstep(0.16,0.32,red));
+    const wgt = m*isTooth*k; if(wgt<=0) continue;
+    // tira o amarelado, aproxima do cinza e clareia
+    let nr = r+(lum-r)*0.55, ng = g+(lum-g)*0.45, nb = b+(lum-b)*0.15+ (lum*0.06);
+    const lift = 0.38;
+    nr += (255-nr)*lift; ng += (255-ng)*lift; nb += (255-nb)*lift;
+    d[j]   = r+(nr-r)*wgt; d[j+1] = g+(ng-g)*wgt; d[j+2] = b+(nb-b)*wgt;
+  }
+  $("after").getContext("2d").putImageData(out,0,0);
+}
+
+/* ----------------------- Slider antes/depois ----------------------- */
+function setSlider(p){
+  p = Math.min(100,Math.max(0,p));
+  $("after").style.clipPath = `inset(0 0 0 ${p}%)`; $("handle").style.left = p+"%";
+}
+(function(){
+  const cmp = $("cmp"); let drag = false;
+  const move = e => { const r = cmp.getBoundingClientRect(); setSlider((e.clientX-r.left)/r.width*100); };
+  cmp.addEventListener("pointerdown",e=>{drag=true;cmp.setPointerCapture(e.pointerId);move(e);});
+  cmp.addEventListener("pointermove",e=>{if(drag)move(e);});
+  cmp.addEventListener("pointerup",()=>drag=false);
+  cmp.addEventListener("pointercancel",()=>drag=false);
+})();
+$("intensity").addEventListener("input",e=>base&&render(+e.target.value));
+
+/* ----------------------------- Lead ----------------------------- */
+$("phone").addEventListener("input",e=>{
+  let v = e.target.value.replace(/\D/g,"").slice(0,11);
+  v = v.length>10 ? v.replace(/^(\d{2})(\d{5})(\d{0,4}).*/,"($1) $2-$3")
+     : v.length>6 ? v.replace(/^(\d{2})(\d{4})(\d{0,4}).*/,"($1) $2-$3")
+     : v.length>2 ? v.replace(/^(\d{2})(\d{0,5})/,"($1) $2") : v.replace(/^(\d*)/,"$1");
+  e.target.value = v;
+});
+
+$("form").addEventListener("submit", async e=>{
+  e.preventDefault();
+  const name = $("name").value.trim(), phone = $("phone").value, digits = phone.replace(/\D/g,"");
+  const err = $("err-form"); err.textContent = "";
+  if(name.length<2) return err.textContent = "Informe seu nome.";
+  if(digits.length<10) return err.textContent = "Informe um telefone válido com DDD.";
+  if(!$("consent").checked) return err.textContent = "É preciso autorizar o contato para continuar.";
+  const lead = {name, phone, intensity:+$("intensity").value, source:"simulador-sorriso", at:new Date().toISOString()};
+  const btn = $("btn-send"); btn.disabled = true; btn.textContent = "Enviando…";
+  try{
+    if(CONFIG.endpoint){
+      const r = await fetch(CONFIG.endpoint,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(lead)});
+      if(!r.ok) throw new Error("http "+r.status);
+    }else{
+      const msg = `Olá! Fiz a simulação de sorriso no site da ${CONFIG.clinic} e gostaria de agendar uma avaliação. Meu nome é ${name} (${phone}).`;
+      window.open(`https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(msg)}`,"_blank","noopener");
+    }
+    show("s-done");
+  }catch(x){
+    err.textContent = "Não foi possível enviar agora. Tente novamente em instantes.";
+    btn.disabled = false; btn.textContent = "Enviar";
+  }
+});
+
+/* --------------------------- Navegação --------------------------- */
+$("btn-camera").onclick = openCamera;
+$("btn-upload").onclick = ()=>$("file").click();
+$("file").onchange = e=>{ fromFile(e.target.files[0]); e.target.value=""; };
+$("btn-shot").onclick = shot;
+$("btn-cancel").onclick = ()=>{ stopCamera(); show("s-start"); };
+$("btn-again").onclick = ()=>show("s-start");
+$("btn-contact").onclick = ()=>show("s-lead");
+$("btn-back").onclick = ()=>show("s-result");
+</script>
+</body>
+</html>
