@@ -62,6 +62,19 @@
   .spin{width:34px;height:34px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--gold-2);animation:s 1s linear infinite}
   @keyframes s{to{transform:rotate(360deg)}}
   @media (prefers-reduced-motion:reduce){.spin{animation-duration:3s}}
+  h1{margin-bottom:10px}
+  p.sub{color:var(--text);text-align:center;font-weight:300;letter-spacing:.05em;font-size:18px;margin:0 0 18px}
+  .rule{height:4px;background:var(--gold);opacity:.7;margin:0 0 18px}
+  .pair{display:grid;grid-template-columns:1fr 1fr}
+  .pair img{width:100%;aspect-ratio:1/1;object-fit:cover;display:block}
+  .panel{background:#fff;color:#4a4a4a;padding:18px 20px 22px}
+  .panel .tips{color:#5b5b5b;margin:0 0 16px}
+  .linkbtn{background:none;color:#a56f00;font-weight:400;padding:6px 0;min-height:40px;margin-left:auto;display:flex;border-radius:0}
+  .linkbtn .chev{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:#a56f00;color:#fff}
+  .check.dark{color:#4a4a4a;font-size:15px;margin:10px 0 18px}
+  .secondary.dark{color:#4a4a4a;border-color:#cfcfcf}
+  button:disabled{opacity:.45;cursor:not-allowed}
+  .legal{font-size:12.5px;line-height:1.9;color:#e9e4da;margin:20px 4px 0}
   a{color:var(--gold-2)}
 </style>
 </head>
@@ -75,21 +88,28 @@
 
   <!-- PASSO 1: início -->
   <section id="s-start">
-    <h1>Veja como seu sorriso pode ficar</h1>
-    <p class="lead">Tire uma selfie sorrindo ou envie uma foto e receba uma simulação em segundos.</p>
-    <div class="card">
-      <ul class="tips">
+    <h1>Veja o que o tratamento da Exclusive Odontologia pode fazer por você!</h1>
+    <p class="sub">Tire uma foto sorrindo que nós vamos simular o seu possível novo sorriso.</p>
+    <div class="rule"></div>
+    <div class="pair hidden" id="pair"></div>
+    <div class="panel">
+      <button type="button" class="linkbtn" id="btn-tips" aria-expanded="false">Veja dicas para a foto <span class="chev">›</span></button>
+      <ul class="tips hidden" id="tips">
         <li>Boa iluminação, de frente para a luz</li>
-        <li>Rosto de frente e dentes aparecendo</li>
-        <li>Sua foto é processada no seu aparelho e não é enviada</li>
+        <li>Rosto de frente, sem óculos ou boné</li>
+        <li>Sorria mostrando os dentes</li>
       </ul>
+      <label class="check dark"><input type="checkbox" id="age">
+        <span>Ao selecionar essa caixa e clicar em "Tire a sua selfie", confirmo que tenho mais de 13 anos de idade.</span>
+      </label>
       <div class="stack">
-        <button class="primary" id="btn-camera">Abrir câmera</button>
-        <button class="secondary" id="btn-upload">Enviar uma foto</button>
+        <button class="primary" id="btn-camera" disabled>Tire a sua selfie</button>
+        <button class="secondary dark" id="btn-upload" disabled>Enviar uma foto</button>
         <input type="file" id="file" accept="image/*" capture="user" class="hidden">
       </div>
       <p class="err" id="err-start" role="alert"></p>
     </div>
+    <p class="legal">A Exclusive Odontologia respeita a sua privacidade. Sua foto é processada somente no seu aparelho e não é enviada nem armazenada. Esta é uma simulação gerada por computador de como o seu sorriso pode parecer depois de um tratamento. Os resultados reais podem variar.</p>
   </section>
 
   <!-- PASSO 1b: câmera -->
@@ -172,6 +192,9 @@ const CONFIG = {
   // Se ficar vazio, o contato é enviado abrindo o WhatsApp da clínica com a mensagem pronta.
   endpoint: "",
   clinic: "Exclusive Odontologia",
+  // Fotos de exemplo (antes/depois) DA CLÍNICA, com autorização do paciente. Ex.: "img/antes.jpg". Vazio = não mostra.
+  exampleBefore: "",
+  exampleAfter: "",
 };
 /* ===================================================================== */
 
@@ -363,6 +386,18 @@ $("form").addEventListener("submit", async e=>{
   }
 });
 
+/* tela inicial */
+(function(){
+  if(CONFIG.exampleBefore && CONFIG.exampleAfter){
+    $("pair").innerHTML = `<img src="${CONFIG.exampleBefore}" alt="Antes"><img src="${CONFIG.exampleAfter}" alt="Depois">`;
+    $("pair").classList.remove("hidden");
+  }
+  $("age").addEventListener("change",e=>{ $("btn-camera").disabled = $("btn-upload").disabled = !e.target.checked; });
+  $("btn-tips").addEventListener("click",()=>{
+    const t = $("tips"), o = t.classList.toggle("hidden") === false;
+    $("btn-tips").setAttribute("aria-expanded", o);
+  });
+})();
 /* --------------------------- Navegação --------------------------- */
 $("btn-camera").onclick = openCamera;
 $("btn-upload").onclick = ()=>$("file").click();
