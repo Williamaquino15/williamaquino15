@@ -109,15 +109,15 @@
   .tabs { display: flex; gap: 6px; background: var(--card); border: 1px solid var(--line); padding: 5px; border-radius: 999px; }
   .tabs button { border: 0; background: transparent; padding: 9px 20px; border-radius: 999px; cursor: pointer; font-size: .85rem; color: var(--muted); transition: all .25s; }
   .tabs button.active { background: var(--dark); color: #f1e8dc; }
-  .treat-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin: 48px 0 44px; }
-  .treat { position: relative; aspect-ratio: 3/4.3; border-radius: var(--radius); overflow: hidden; color: #fff; display: flex; flex-direction: column; justify-content: flex-end; padding: 18px; background: linear-gradient(170deg, #d9c2a0, #7d5d36); transition: transform .35s; }
+  .treat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin: 48px 0 44px; }
+  .treat { position: relative; aspect-ratio: 4/5; max-width: 100%; border-radius: var(--radius); overflow: hidden; color: #fff; display: flex; flex-direction: column; justify-content: flex-end; padding: 26px; background: linear-gradient(170deg, #d9c2a0, #7d5d36); transition: transform .35s; }
   .treat:nth-child(3n+2) { background: linear-gradient(170deg, #cbb08c, #5f4529); }
   .treat:nth-child(3n) { background: linear-gradient(170deg, #e2cfb4, #94744a); }
   .treat:hover { transform: translateY(-6px); }
   .treat img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .treat::before { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(30, 22, 15, .85) 0%, rgba(30, 22, 15, .1) 60%); z-index: 1; }
   .treat > * { position: relative; z-index: 2; }
-  .treat > img { position: absolute; z-index: 0; height: 70%; object-position: 50% 30%; -webkit-mask-image: linear-gradient(to bottom, #000 50%, transparent 100%); mask-image: linear-gradient(to bottom, #000 50%, transparent 100%); }
+  .treat > img { position: absolute; z-index: 0; object-position: 50% 30%; }
   .treat .tag { position: absolute; top: 14px; left: 14px; font-size: .66rem; letter-spacing: .12em; text-transform: uppercase; background: rgba(255,255,255,.2); backdrop-filter: blur(6px); padding: 4px 10px; border-radius: 999px; }
   .treat h3 { font-size: 1.35rem; margin-bottom: 6px; }
   .treat p { font-size: .76rem; opacity: .85; line-height: 1.45; margin-bottom: 10px; }
@@ -145,18 +145,15 @@
   /* How it works */
   .how { background: var(--dark); color: #f1e8dc; position: relative; overflow: hidden; }
   .how .lead { color: rgba(241, 232, 220, .65); }
-  .how-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 70px; align-items: center; }
+  .how-grid { display: grid; grid-template-columns: .85fr 1.15fr; gap: 70px; align-items: start; }
+  .how-cta { margin-top: 34px; }
+  .how-grid .timeline { margin-top: 6px; }
   .timeline { list-style: none; margin-top: 44px; position: relative; }
   .timeline::before { content: ""; position: absolute; left: 15px; top: 10px; bottom: 10px; width: 1px; background: linear-gradient(var(--gold), transparent); }
   .timeline li { display: grid; grid-template-columns: 32px 1fr; gap: 20px; padding-bottom: 26px; }
   .timeline .dot { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--gold); background: var(--dark); display: grid; place-items: center; font-size: .78rem; color: var(--gold-light); position: relative; }
   .timeline h3 { font-family: "Jost", sans-serif; font-weight: 500; font-size: 1rem; margin-bottom: 4px; }
   .timeline p { font-size: .87rem; opacity: .6; }
-  .price-card { background: linear-gradient(160deg, var(--dark-2), #241d18); border: 1px solid rgba(226, 199, 153, .25); border-radius: 22px; padding: 38px 34px; box-shadow: 0 40px 70px -30px rgba(0,0,0,.6); }
-  .price-card small { font-size: .7rem; letter-spacing: .2em; text-transform: uppercase; color: var(--gold-light); }
-  .price-card .price { font-family: "Cormorant Garamond", serif; font-size: 4rem; line-height: 1; margin: 12px 0 14px; }
-  .price-card p { font-size: .88rem; opacity: .7; margin-bottom: 28px; }
-  .price-card .btn { width: 100%; }
 
   /* About */
   .about-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 80px; align-items: center; }
@@ -260,7 +257,7 @@
 
   @media (max-width: 1024px) {
     .ba-track { grid-auto-columns: calc((100% - 24px) / 2); }
-    .treat-grid { grid-template-columns: repeat(3, 1fr); }
+    .treat-grid { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 900px) {
     section { padding: 80px 0; }
@@ -282,7 +279,7 @@
     .ba-track { grid-auto-columns: 82%; gap: 14px; }
     .container { padding: 0 16px; }
     .why-grid, .plans { grid-template-columns: 1fr; }
-    .treat-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .treat-grid { grid-template-columns: 1fr; gap: 14px; }
     .checks { grid-template-columns: 1fr; }
     .seal { width: 92px; height: 92px; left: -6px; }
     .seal svg { width: 84px; height: 84px; }
@@ -510,6 +507,9 @@
       <div class="reveal">
         <h2 class="title">Como funciona<br>a sua <em>consulta</em></h2>
         <p class="lead">Um encontro sem pressa para entender você, seus objetivos e montar o plano ideal.</p>
+        <a href="#" data-wa class="btn btn-gold how-cta">Agendar minha consulta →</a>
+      </div>
+      <div class="reveal">
         <ol class="timeline">
           <li><span class="dot">1</span><div><h3>Você conta o que incomoda</h3><p>Ouvimos suas queixas, expectativas e histórico.</p></div></li>
           <li><span class="dot">2</span><div><h3>Análise do conjunto</h3><p>Análise facial completa: estrutura, pele e proporções.</p></div></li>
@@ -517,12 +517,6 @@
           <li><span class="dot">4</span><div><h3>Plano por etapas</h3><p>Proposta clara de tratamentos, prazos e investimento.</p></div></li>
           <li><span class="dot">5</span><div><h3>Acompanhamento</h3><p>Retorno agendado para avaliar a evolução e ajustar se necessário.</p></div></li>
         </ol>
-      </div>
-      <div class="price-card reveal">
-        <small>Investimento na consulta</small>
-        <div class="price">R$ 150</div>
-        <p>Valor 100% abatido caso você realize um procedimento no mesmo dia ou dentro de 30 dias após a consulta.</p>
-        <a href="#" data-wa class="btn btn-gold">Quero agendar minha consulta →</a>
       </div>
     </div>
   </section>
